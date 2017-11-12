@@ -1,0 +1,79 @@
+/*------------------ Системные сущности  -----------------------*/
+
+/*Пользователи системы*/
+CREATE SEQUENCE sys_users_id_seq START WITH 1;
+
+CREATE TABLE "sys_users" (
+    id INTEGER NOT NULL default nextval('sys_users_id_seq'),
+	login VARCHAR(120) NOT NULL,
+	pass VARCHAR(32) NOT NULL
+);
+ALTER SEQUENCE sys_users_id_seq owned by "sys_users".id;
+
+/*Баланс денег пользователя системы*/
+/*
+CREATE SEQUENCE sys_balance_id_seq START WITH 1;
+
+CREATE TABLE "sys_balance" (
+    id INTEGER NOT NULL default nextval('sys_balance_id_seq'),
+);
+ALTER SEQUENCE sys_balance_id_seq owned by "sys_balance".id;
+*/
+
+
+/*------------------ Клиентские сущности ----------------------*/
+
+/*Роли пользователей*/
+CREATE SEQUENCE roles_id_seq START WITH 1;
+
+CREATE TABLE "roles" (
+    id INTEGER NOT NULL default nextval('roles_id_seq'),
+	role_name VARCHAR(240) NOT NULL
+);
+ALTER SEQUENCE roles_id_seq owned by "roles".id;
+
+INSERT INTO roles (id, role_name) VALUES
+(1, 'admin'),
+(2, 'manager'),
+(3, 'master'),
+(4, 'user');
+
+
+/*Пользователи*/
+CREATE SEQUENCE users_id_seq START WITH 1;
+
+CREATE TABLE "users" (
+    id INTEGER NOT NULL default nextval('users_id_seq'),
+    id_sys_client INTEGER NOT NULL,
+	login VARCHAR(120) NOT NULL,
+	pass VARCHAR(32) NOT NULL
+);
+ALTER SEQUENCE users_id_seq owned by "users".id;
+
+/*дополнительная таблица с данными пользователями
+или
+таблица с динамическими полями*/
+
+
+/*Услуги*/
+CREATE SEQUENCE service_id_seq START WITH 1;
+
+CREATE TABLE "service" (
+    id INTEGER NOT NULL default nextval('service_id_seq'),
+    id_sys_client INTEGER NOT NULL,
+	service_name VARCHAR(240) NOT NULL,
+	service_cost INTEGER DEFAULT 0
+);
+ALTER SEQUENCE service_id_seq owned by "service".id;
+
+
+/*
+CREATE SEQUENCE service_id_seq START WITH 1;
+
+CREATE TABLE "service" (
+    id INTEGER NOT NULL default nextval('service_id_seq'),
+    id_sys_client INTEGER NOT NULL,
+	service_name VARCHAR(240) NOT NULL
+);
+ALTER SEQUENCE service_id_seq owned by "service".id;
+

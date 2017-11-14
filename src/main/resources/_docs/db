@@ -1,14 +1,32 @@
 /*------------------ Системные сущности  -----------------------*/
 
+/*Роли системных пользователей*/
+CREATE SEQUENCE sys_role_id_seq START WITH 1;
+
+CREATE TABLE "sys_role" (
+    id INTEGER NOT NULL default nextval('sys_role_id_seq'),
+	role_name VARCHAR(240) NOT NULL
+);
+ALTER SEQUENCE sys_role_id_seq owned by "sys_role".id;
+
+INSERT INTO sys_role (id, role_name) VALUES
+(1, 'admin'),
+(2, 'user');
+
+
 /*Пользователи системы*/
 CREATE SEQUENCE sys_user_id_seq START WITH 1;
 
 CREATE TABLE "sys_user" (
     id INTEGER NOT NULL default nextval('sys_user_id_seq'),
-	login VARCHAR(120) NOT NULL,
-	pass VARCHAR(32) NOT NULL
+	email VARCHAR(120) NOT NULL,
+	phone VARCHAR(10) NOT NULL,
+	pass VARCHAR(32) NOT NULL,
+	role_id INTEGER NOT NULL
 );
 ALTER SEQUENCE sys_user_id_seq owned by "sys_user".id;
+
+INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(1, 'admin@myrecord.ru', '1111111111', MD5('000000'), 1);
 
 /*Баланс денег пользователя системы*/
 /*
@@ -44,9 +62,10 @@ CREATE SEQUENCE user_id_seq START WITH 1;
 
 CREATE TABLE "user" (
     id INTEGER NOT NULL default nextval('user_id_seq'),
-    id_sys_user INTEGER NOT NULL,
+    sys_user_id INTEGER NOT NULL,
 	login VARCHAR(120) NOT NULL,
-	pass VARCHAR(32) NOT NULL
+	pass VARCHAR(32) NOT NULL,
+	role_id INTEGER NOT NULL
 );
 ALTER SEQUENCE user_id_seq owned by "user".id;
 

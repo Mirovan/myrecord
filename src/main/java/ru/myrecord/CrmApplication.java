@@ -11,7 +11,7 @@ import ru.myrecord.front.config.JpaConfig;
 public class CrmApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CrmApplication.class, args);
-		//SpringApplication.run(new Class<?>[] {CrmApplication.class, JpaConfig.class}, args);
+		//SpringApplication.run(CrmApplication.class, args);
+		SpringApplication.run(new Class<?>[] {CrmApplication.class, JpaConfig.class}, args);
 	}
 }

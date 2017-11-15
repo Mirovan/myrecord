@@ -25,6 +25,7 @@ public class SysUser {
     @Column(name = "role_id")
     private int role_id;
 
+
     public int getId() {
         return id;
     }

@@ -8,16 +8,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Created by max on 12.11.2017.
  */
 
-@Configuration
-public class MVCConfig extends WebMvcConfigurerAdapter {
+//@Configuration
+public class MVCConfig /*extends WebMvcConfigurerAdapter*/ {
 
-    @Override
+//    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         String templatesDir = "default";
         templatesDir = "/" + templatesDir;
-        registry.addViewController(templatesDir + "/about/").setViewName("about");
-        registry.addViewController(templatesDir + "/contact/").setViewName("contact");
-        registry.addViewController(templatesDir + "/login/").setViewName("login");
+        templatesDir = "/";
+//        registry.addViewController(templatesDir + "/").setViewName("index");
+//        registry.addViewController(templatesDir + "/users/").setViewName("users");
+//        registry.addViewController(templatesDir + "/about/").setViewName("about");
+//        registry.addViewController(templatesDir + "/contact/").setViewName("contact");
+//        registry.addViewController(templatesDir + "/login/").setViewName("login");
     }
 
 }

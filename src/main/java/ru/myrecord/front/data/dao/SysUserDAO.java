@@ -1,4 +1,4 @@
-package ru.myrecord.front.data.repository;
+package ru.myrecord.front.data.dao;
 
 import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.SysUser;
@@ -8,7 +8,7 @@ import ru.myrecord.front.data.model.SysUser;
  */
 
 @Repository("sysUserRepository")
-public interface SysUserRepository {
+public interface SysUserDAO {
     void add(SysUser sysUser);
     SysUser getById(int id);
     SysUser getByAuthPhone(String phone, String pass);

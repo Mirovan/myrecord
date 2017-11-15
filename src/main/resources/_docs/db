@@ -27,6 +27,7 @@ CREATE TABLE "sys_user" (
 ALTER SEQUENCE sys_user_id_seq owned by "sys_user".id;
 
 INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(1, 'admin@myrecord.ru', '1111111111', MD5('000000'), 1);
+INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(2, 'mirovan@narod.ru', '9870670599', MD5('000000'), 1);
 
 /*Баланс денег пользователя системы*/
 /*

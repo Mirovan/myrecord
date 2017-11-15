@@ -32,14 +32,6 @@ public class IndexController/* implements ErrorController*/{
     }
 
 
-//    @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public ModelAndView index() {
-//        ModelAndView mav = new ModelAndView();
-//        mav.addObject("var", "Helooooooooo");
-//        mav.setViewName("index");
-//        return ( mav );
-//    }
-
     @RequestMapping(value = "/users/", method = RequestMethod.GET)
     public ModelAndView users() {
         ModelAndView mav = new ModelAndView();

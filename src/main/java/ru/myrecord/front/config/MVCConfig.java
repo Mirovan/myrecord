@@ -1,4 +1,4 @@
-package ru.myrecord;
+package ru.myrecord.front.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

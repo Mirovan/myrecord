@@ -42,6 +42,13 @@ public class IndexController/* implements ErrorController*/{
     }
 
 
+    @RequestMapping(value = "/login/", method = RequestMethod.GET)
+    public ModelAndView login() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("login");
+        return ( mav );
+    }
+
 //    @RequestMapping(value = "/error")
 //    public String error() {
 //        return "Error handling";

@@ -1,33 +1,44 @@
 /*------------------ Системные сущности  -----------------------*/
 
-/*Роли системных пользователей*/
-CREATE SEQUENCE sys_role_id_seq START WITH 1;
+/*Роли системных и всех пользователей*/
+CREATE SEQUENCE role_id_seq START WITH 1;
 
-CREATE TABLE "sys_role" (
-    id INTEGER NOT NULL default nextval('sys_role_id_seq'),
-	role_name VARCHAR(240) NOT NULL
+CREATE TABLE "role" (
+    id INTEGER NOT NULL default nextval('role_id_seq') PRIMARY KEY,
+	role VARCHAR(240) NOT NULL
 );
-ALTER SEQUENCE sys_role_id_seq owned by "sys_role".id;
+ALTER SEQUENCE role_id_seq owned by "role".id;
 
-INSERT INTO sys_role (id, role_name) VALUES
-(1, 'admin'),
-(2, 'user');
+INSERT INTO "role" (id, role) VALUES
+(1, 'ADMIN'),
+(2, 'SYSUSER'),
+(3, 'MANAGER'),
+(4, 'MASTER'),
+(5, 'CLIENT');
 
 
 /*Пользователи системы*/
-CREATE SEQUENCE sys_user_id_seq START WITH 1;
+CREATE SEQUENCE user_id_seq START WITH 1;
 
-CREATE TABLE "sys_user" (
-    id INTEGER NOT NULL default nextval('sys_user_id_seq'),
+CREATE TABLE "users" (
+    id INTEGER NOT NULL default nextval('user_id_seq') PRIMARY KEY,
 	email VARCHAR(120) NOT NULL,
 	phone VARCHAR(10) NOT NULL,
-	pass VARCHAR(32) NOT NULL,
-	role_id INTEGER NOT NULL
+	pass VARCHAR(255) NOT NULL
 );
-ALTER SEQUENCE sys_user_id_seq owned by "sys_user".id;
+ALTER SEQUENCE user_id_seq owned by "users".id;
 
+/*
 INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(1, 'admin@myrecord.ru', '1111111111', MD5('000000'), 1);
 INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(2, 'mirovan@narod.ru', '9870670599', MD5('000000'), 1);
+*/
+
+/*Роли пользователя*/
+CREATE TABLE "user_role" (
+    user_id INTEGER REFERENCES "users"(id),
+	role_id INTEGER REFERENCES "role"(id)
+);
+
 
 /*Баланс денег пользователя системы*/
 /*
@@ -43,6 +54,7 @@ ALTER SEQUENCE sys_balance_id_seq owned by "sys_balance".id;
 /*------------------ Клиентские сущности ----------------------*/
 
 /*Роли пользователей*/
+/*
 CREATE SEQUENCE role_id_seq START WITH 1;
 
 CREATE TABLE "role" (
@@ -56,19 +68,10 @@ INSERT INTO role (id, role_name) VALUES
 (2, 'manager'),
 (3, 'master'),
 (4, 'user');
+*/
 
 
 /*Пользователи*/
-CREATE SEQUENCE user_id_seq START WITH 1;
-
-CREATE TABLE "user" (
-    id INTEGER NOT NULL default nextval('user_id_seq'),
-    sys_user_id INTEGER NOT NULL,
-	login VARCHAR(120) NOT NULL,
-	pass VARCHAR(32) NOT NULL,
-	role_id INTEGER NOT NULL
-);
-ALTER SEQUENCE user_id_seq owned by "user".id;
 
 /*дополнительная таблица с данными пользователями
 или
@@ -80,7 +83,7 @@ CREATE SEQUENCE service_id_seq START WITH 1;
 
 CREATE TABLE "service" (
     id INTEGER NOT NULL default nextval('service_id_seq'),
-    id_sys_user INTEGER NOT NULL,
+    id_owner_user INTEGER NOT NULL,
 	service_name VARCHAR(240) NOT NULL,
 	service_cost INTEGER DEFAULT 0
 );

@@ -1,4 +1,4 @@
-package ru.myrecord.front.service;
+package ru.myrecord.front.service.iface;
 
 
 import ru.myrecord.front.data.model.User;

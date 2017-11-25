@@ -1,4 +1,4 @@
-package ru.myrecord.front.service;
+package ru.myrecord.front.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +10,11 @@ import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.Role;
 import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.service.iface.UserService;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-//@Qualifier("userService")
 @Service("userService")
 public class UserServiceImpl implements UserService {
 

@@ -3,8 +3,7 @@ package ru.myrecord.front.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import ru.myrecord.front.data.model.User;
-import ru.myrecord.front.service.UserService;
+import ru.myrecord.front.service.iface.UserService;
 
 /**
  * Created by max on 12.11.2017.

@@ -13,6 +13,7 @@ import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.Role;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.impl.UserDetailImpl;
+import ru.myrecord.front.service.impl.UserServiceImpl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,14 +29,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Qualifier("roleDAO")
     RoleDAO roleDAO;
 
+    @Autowired
+    UserServiceImpl userService;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDAO.findByEmail(email);
+        //User user = userDAO.findByEmail(email);
+        User user = userService.findUserByEmail(email);
         if (user == null) {
             //ToDo: пробуем найти юзера по телефону
             throw new UsernameNotFoundException("user not found");
         } else {
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+            //ToDo: пустой сет ролей - NPE
             for (Role role : user.getRoles()) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
             }

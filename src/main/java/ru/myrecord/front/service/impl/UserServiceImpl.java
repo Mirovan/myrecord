@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.Role;
@@ -32,8 +33,11 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
+    @Transactional
     public User findUserByEmail(String email) {
-        return userDAO.findByEmail(email);
+        User user = userDAO.findByEmail(email);
+        int size = user.getRoles().size();  //Для LAZY hibernate initialization
+        return user;
     }
 
     @Override

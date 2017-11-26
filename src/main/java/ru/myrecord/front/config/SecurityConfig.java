@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.myrecord.front.service.UserDetailsServiceImpl;
 
 /**
@@ -36,19 +37,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.
-                authorizeRequests().
-                    antMatchers("/").permitAll().
-                    antMatchers("/users/").permitAll().
-                    antMatchers("/admin/").permitAll().
-                    antMatchers("/register/").permitAll().
-                    anyRequest().authenticated().
-                    and().
-                formLogin().
-                    loginPage("/login/").
-                    permitAll().
-                    and().
-                logout().
-                    permitAll();
+                authorizeRequests()
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/users/").permitAll()
+                    .antMatchers("/admin/").permitAll()
+                    .antMatchers("/register/").permitAll()
+                    .anyRequest().authenticated()
+                .and()
+                    .csrf().disable()
+                    .formLogin()
+                    .loginPage("/login/")
+                    .failureUrl("/login/?error=true")
+                    .defaultSuccessUrl("/cabinet/")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .permitAll()
+                .and()
+                    .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/").and().exceptionHandling()
+                    .accessDeniedPage("/access-denied");
+//                    and().
+//                formLogin().
+//                    loginPage("/login/").
+//                    permitAll().
+//                    and().
+//                logout().
+//                    permitAll();
     }
 
 

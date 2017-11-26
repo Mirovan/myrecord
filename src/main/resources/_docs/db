@@ -28,10 +28,10 @@ CREATE TABLE "users" (
 );
 ALTER SEQUENCE user_id_seq owned by "users".id;
 
-/*
-INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(1, 'admin@myrecord.ru', '1111111111', MD5('000000'), 1);
-INSERT INTO sys_user (id, email, phone, pass, role_id) VALUES(2, 'mirovan@narod.ru', '9870670599', MD5('000000'), 1);
-*/
+/*дополнительная таблица с данными пользователями
+или
+таблица с динамическими полями*/
+
 
 /*Роли пользователя*/
 CREATE TABLE "user_role" (
@@ -53,38 +53,37 @@ ALTER SEQUENCE sys_balance_id_seq owned by "sys_balance".id;
 
 /*------------------ Клиентские сущности ----------------------*/
 
-/*Роли пользователей*/
-/*
-CREATE SEQUENCE role_id_seq START WITH 1;
+/*Помещения/залы/комнаты/рабочие места*/
+CREATE SEQUENCE room_id_seq START WITH 1;
 
-CREATE TABLE "role" (
-    id INTEGER NOT NULL default nextval('role_id_seq'),
-	role_name VARCHAR(240) NOT NULL
+CREATE TABLE "room" (
+    id INTEGER NOT NULL default nextval('room_id_seq') PRIMARY KEY,
+    user_id INTEGER REFERENCES "users"(id),
+	room VARCHAR(240) NOT NULL
 );
-ALTER SEQUENCE role_id_seq owned by "role".id;
-
-INSERT INTO role (id, role_name) VALUES
-(1, 'admin'),
-(2, 'manager'),
-(3, 'master'),
-(4, 'user');
-*/
-
-
-/*Пользователи*/
-
-/*дополнительная таблица с данными пользователями
-или
-таблица с динамическими полями*/
+ALTER SEQUENCE room_id_seq owned by "room".id;
 
 
 /*Услуги*/
 CREATE SEQUENCE service_id_seq START WITH 1;
 
 CREATE TABLE "service" (
-    id INTEGER NOT NULL default nextval('service_id_seq'),
-    id_owner_user INTEGER NOT NULL,
-	service_name VARCHAR(240) NOT NULL,
-	service_cost INTEGER DEFAULT 0
+    id INTEGER NOT NULL default nextval('service_id_seq') PRIMARY KEY,
+    user_id INTEGER REFERENCES "users"(id),
+	service VARCHAR(240) NOT NULL
 );
 ALTER SEQUENCE service_id_seq owned by "service".id;
+
+
+/*Услуги в помещении*/
+CREATE TABLE "service_room" (
+    service_id INTEGER REFERENCES "service"(id),
+	room_id INTEGER REFERENCES "room"(id)
+);
+
+
+/*Услуги пользователя - Профиль специалиста*/
+CREATE TABLE "user_room" (
+    user_id INTEGER REFERENCES "users"(id),
+	room_id INTEGER REFERENCES "room"(id)
+);

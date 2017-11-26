@@ -26,7 +26,6 @@ public class CabinetController/* implements ErrorController*/{
         return modelAndView;
     }
 
-
     @RequestMapping(value="/cabinet/users/", method = RequestMethod.GET)
     public ModelAndView users(){
         ModelAndView modelAndView = new ModelAndView();
@@ -34,10 +33,26 @@ public class CabinetController/* implements ErrorController*/{
         return modelAndView;
     }
 
+    @RequestMapping(value="/cabinet/rooms/", method = RequestMethod.GET)
+    public ModelAndView rooms(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("cabinet/rooms/index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.GET)
+    public ModelAndView roomsAdd(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("cabinet/rooms/add");
+        return modelAndView;
+    }
+
     @RequestMapping(value="/cabinet/services/", method = RequestMethod.GET)
     public ModelAndView services(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("cabinet/services");
+        modelAndView.setViewName("cabinet/service/index");
         return modelAndView;
     }
+
+
 }

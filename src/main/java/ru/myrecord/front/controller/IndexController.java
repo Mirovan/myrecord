@@ -3,6 +3,9 @@ package ru.myrecord.front.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.service.iface.UserService;
 
 /**
@@ -12,44 +15,11 @@ import ru.myrecord.front.service.iface.UserService;
 @Controller
 public class IndexController/* implements ErrorController*/{
 
-    @Autowired
-    @Qualifier("userService")
-    UserService UserService;
-
-//    @RequestMapping("/")
-//    public String welcome(Map<String, Object> model) {
-//        model.put("var", "ddddddddddddddddddd");
-//        return "index";
-//    }
-
-//
-//    @RequestMapping(value = "/users/", method = RequestMethod.GET)
-//    public ModelAndView users() {
-//        ModelAndView mav = new ModelAndView();
-//        //List<User> list = UserService.getAll();
-//        //mav.addObject("Users", list);
-//        mav.setViewName("users");
-//        return ( mav );
-//    }
-
-
-//    @RequestMapping(value = "/login/", method = RequestMethod.GET)
-//    public ModelAndView login() {
-//        ModelAndView mav = new ModelAndView();
-//        mav.setViewName("login");
-//        return ( mav );
-//    }
-
-
-
-//    @RequestMapping(value = "/error")
-//    public String error() {
-//        return "Error handling";
-//    }
-//
-//    @Override
-//    public String getErrorPath() {
-//        return "/error";
-//    }
+    @RequestMapping(value="/", method = RequestMethod.GET)
+    public ModelAndView cabinet(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
 
 }

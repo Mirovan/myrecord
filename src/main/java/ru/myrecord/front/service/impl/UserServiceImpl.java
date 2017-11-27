@@ -36,7 +36,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findUserByEmail(String email) {
         User user = userDAO.findByEmail(email);
-        int size = user.getRoles().size();  //Для LAZY hibernate initialization
+        if (user != null) {
+            int size = user.getRoles().size();  //Для LAZY hibernate initialization
+        }
         return user;
     }
 

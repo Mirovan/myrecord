@@ -15,7 +15,7 @@ public class Room {
     User user;
 
     @Column(name = "room")
-    private String room;
+    private String roomName;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Room {
         this.user = user;
     }
 
-    public String getRoom() {
-        return room;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

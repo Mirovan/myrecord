@@ -56,12 +56,12 @@ ALTER SEQUENCE sys_balance_id_seq owned by "sys_balance".id;
 /*Помещения/залы/комнаты/рабочие места*/
 CREATE SEQUENCE room_id_seq START WITH 1;
 
-CREATE TABLE "room" (
+CREATE TABLE "roomName" (
     id INTEGER NOT NULL default nextval('room_id_seq') PRIMARY KEY,
     user_id INTEGER REFERENCES "users"(id),
-	room VARCHAR(240) NOT NULL
+	roomName VARCHAR(240) NOT NULL
 );
-ALTER SEQUENCE room_id_seq owned by "room".id;
+ALTER SEQUENCE room_id_seq owned by "roomName".id;
 
 
 /*Услуги*/
@@ -78,12 +78,12 @@ ALTER SEQUENCE service_id_seq owned by "service".id;
 /*Услуги в помещении*/
 CREATE TABLE "service_room" (
     service_id INTEGER REFERENCES "service"(id),
-	room_id INTEGER REFERENCES "room"(id)
+	room_id INTEGER REFERENCES "roomName"(id)
 );
 
 
 /*Услуги пользователя - Профиль специалиста*/
 CREATE TABLE "user_room" (
     user_id INTEGER REFERENCES "users"(id),
-	room_id INTEGER REFERENCES "room"(id)
+	room_id INTEGER REFERENCES "roomName"(id)
 );

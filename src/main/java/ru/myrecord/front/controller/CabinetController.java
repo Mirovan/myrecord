@@ -3,6 +3,9 @@ package ru.myrecord.front.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -55,6 +58,7 @@ public class CabinetController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.GET)
     public ModelAndView roomAdd() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("room", new Room());
         modelAndView.setViewName("cabinet/room/edit");
         return modelAndView;
     }
@@ -65,7 +69,7 @@ public class CabinetController/* implements ErrorController*/{
         User user = userDAO.findByEmail( principal.getName() );
         room.setUser(user);
         roomDAO.save(room);
-        modelAndView.setViewName("cabinet/room/add");
+        modelAndView.setViewName("cabinet/room/edit");
         return modelAndView;
     }
 

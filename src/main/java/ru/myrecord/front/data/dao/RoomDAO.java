@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.Role;
 import ru.myrecord.front.data.model.Room;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository("roomDAO")
 public interface RoomDAO extends JpaRepository<Room, Integer> {
-	Room findById(Integer id);
+	Room findById(Long id);
+	List<Room> findByActiveTrue();
 }

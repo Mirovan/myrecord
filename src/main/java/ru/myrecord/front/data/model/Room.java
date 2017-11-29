@@ -14,8 +14,11 @@ public class Room {
     @JoinColumn(name = "user_id")
     User user;
 
-    @Column(name = "room")
-    private String roomName;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "active")
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -33,11 +36,19 @@ public class Room {
         this.user = user;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

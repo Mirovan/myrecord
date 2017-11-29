@@ -7,10 +7,14 @@
 
 <h1>Помещения</h1>
 
-<a href="/cabinet/rooms/add/">Добавить</a>
 
 <a href="/cabinet/rooms/add/">=Добавить=</a>
 <br />
+<br />
+
+<div th:each="room : ${rooms}" th:text="${room.name}" style="display: block;">
+</div>
+
 <br />
 <br />
 

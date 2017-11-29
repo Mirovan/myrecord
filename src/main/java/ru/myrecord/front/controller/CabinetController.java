@@ -13,6 +13,7 @@ import ru.myrecord.front.data.dao.RoomDAO;
 import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
@@ -25,12 +26,10 @@ import java.security.Principal;
 public class CabinetController/* implements ErrorController*/{
 
     @Autowired
-    @Qualifier("userDAO")
-    private UserDAO userDAO;
+    private UserService userService;
 
     @Autowired
-    @Qualifier("roomDAO")
-    private RoomDAO roomDAO;
+    private RoomService roomService;
 
 
 
@@ -51,6 +50,7 @@ public class CabinetController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/", method = RequestMethod.GET)
     public ModelAndView rooms(){
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject( "rooms", roomService.findByActive() );
         modelAndView.setViewName("cabinet/room/index");
         return modelAndView;
     }
@@ -66,9 +66,10 @@ public class CabinetController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.POST)
     public ModelAndView roomAddPost(Room room, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        User user = userDAO.findByEmail( principal.getName() );
+        User user = userService.findUserByEmail( principal.getName() );
         room.setUser(user);
-        roomDAO.save(room);
+        room.setActive(true);
+        roomService.add(room);
         modelAndView.setViewName("cabinet/room/edit");
         return modelAndView;
     }

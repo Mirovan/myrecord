@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void add(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
 //        user.setActive(1);
         Role userRole = roleDAO.findByRole("ADMIN");

@@ -8,4 +8,5 @@ public interface RoomService {
     public Room findRoomById(Long id);
     public List<Room> findByActive();
     public void add(Room room);
+    public void update(Room room);
 }

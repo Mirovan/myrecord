@@ -36,4 +36,9 @@ public class RoomServiceImpl implements RoomService {
     public void add(Room room) {
         roomDAO.save(room);
     }
+
+    @Override
+    public void update(Room room) {
+        roomDAO.save(room);
+    }
 }

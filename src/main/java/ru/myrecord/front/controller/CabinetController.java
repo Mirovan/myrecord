@@ -63,14 +63,27 @@ public class CabinetController/* implements ErrorController*/{
         return modelAndView;
     }
 
+    @RequestMapping(value="/cabinet/rooms/edit/{roomId}", method = RequestMethod.GET)
+    public ModelAndView roomUpdate(Long roomId, Room room) {
+        // TODO: сделать редактирование комнаты
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("room", room);
+        modelAndView.setViewName("cabinet/room/edit");
+        return modelAndView;
+    }
+
     @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.POST)
     public ModelAndView roomAddPost(Room room, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.findUserByEmail( principal.getName() );
-        room.setUser(user);
-        room.setActive(true);
-        roomService.add(room);
-        modelAndView.setViewName("cabinet/room/edit");
+        if (room.getId() == null) { //add
+            User user = userService.findUserByEmail(principal.getName());
+            room.setUser(user);
+            room.setActive(true);
+            roomService.add(room);
+        } else {    //edit
+            roomService.update(room);
+        }
+        modelAndView.setViewName("cabinet/room/index");
         return modelAndView;
     }
 

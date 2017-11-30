@@ -3,8 +3,8 @@ package ru.myrecord.front.data.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "room")
-public class Room {
+@Table(name = "service")
+public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -15,10 +15,10 @@ public class Room {
     User user;
 
     @Column(name = "name")
-    private String name;
+    private String roomName;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean isActive;
 
     public Long getId() {
         return id;
@@ -36,19 +36,19 @@ public class Room {
         this.user = user;
     }
 
-    public String getName() {
-        return name;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public Boolean getActive() {
-        return active;
+        return isActive;
     }
 
     public void setActive(Boolean active) {
-        this.active = active;
+        isActive = active;
     }
 }

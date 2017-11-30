@@ -58,7 +58,7 @@ CREATE SEQUENCE room_id_seq START WITH 1;
 
 CREATE TABLE "room" (
     id INTEGER NOT NULL default nextval('room_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    owner_user_id INTEGER REFERENCES "users"(id),
 	name VARCHAR(240) NOT NULL,
 	active BOOLEAN
 );
@@ -70,7 +70,7 @@ CREATE SEQUENCE service_id_seq START WITH 1;
 
 CREATE TABLE "service" (
     id INTEGER NOT NULL default nextval('service_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    owner_user_id INTEGER REFERENCES "users"(id),
 	name VARCHAR(240) NOT NULL,
     active BOOLEAN
 );

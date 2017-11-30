@@ -7,5 +7,5 @@ import ru.myrecord.front.data.model.Service;
 
 @Repository("serviceDAO")
 public interface ServiceDAO extends JpaRepository<Service, Integer> {
-	Service findById(Integer id);
+	Service findById(Long id);
 }

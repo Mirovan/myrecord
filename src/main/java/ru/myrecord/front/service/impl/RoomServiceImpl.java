@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.RoomDAO;
 import ru.myrecord.front.data.model.Room;
+import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> findByActive() {
-        return roomDAO.findByActiveTrueOrderByIdAsc();
+    public List<Room> findByActive(User user) {
+        return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user); /*AndActiveTrueOrderByIdAsc*/
     }
 
     @Override

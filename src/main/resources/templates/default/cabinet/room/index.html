@@ -17,6 +17,8 @@
         <span th:text="${room.name}"></span>
     </a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">[Edit]</a>
+    &nbsp;&nbsp;
     <a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a>
 </div>
 

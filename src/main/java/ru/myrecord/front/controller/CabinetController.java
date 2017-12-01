@@ -46,9 +46,10 @@ public class CabinetController/* implements ErrorController*/{
     }
 
     @RequestMapping(value="/cabinet/rooms/", method = RequestMethod.GET)
-    public ModelAndView rooms(){
+    public ModelAndView rooms(Principal principal) {
+        User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "rooms", roomService.findByActive() );
+        modelAndView.addObject( "rooms", roomService.findByActive(user) );
         modelAndView.setViewName("cabinet/room/index");
         return modelAndView;
     }
@@ -96,23 +97,24 @@ public class CabinetController/* implements ErrorController*/{
         return new ModelAndView("redirect:/cabinet/rooms/");
     }
 
-    @RequestMapping(value="/cabinet/rooms/delete/{roomId}/", method = RequestMethod.POST)
-    public ModelAndView roomPost(Room roomDel, Principal principal) {
-        Room room = roomService.findRoomById(roomDel.getId());
+    @RequestMapping(value="/cabinet/rooms/delete/{roomId}/", method = RequestMethod.GET)
+    public ModelAndView roomPost(@PathVariable Long roomId, Principal principal) {
+        Room room = roomService.findRoomById(roomId);
         User user = room.getUser();
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
             room.setActive(false);
+            roomService.update(room);
         }
         return new ModelAndView("redirect:/cabinet/rooms/");
     }
 
 
-    @RequestMapping(value="/cabinet/services/", method = RequestMethod.GET)
-    public ModelAndView services() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("cabinet/service/index");
-        return modelAndView;
-    }
+//    @RequestMapping(value="/cabinet/services/", method = RequestMethod.GET)
+//    public ModelAndView services() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("cabinet/service/index");
+//        return modelAndView;
+//    }
 
 
 }

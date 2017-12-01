@@ -12,5 +12,5 @@ import java.util.Set;
 @Repository("roomDAO")
 public interface RoomDAO extends JpaRepository<Room, Integer> {
 	Room findById(Long id);
-	List<Room> findByActiveTrue();
+	List<Room> findByActiveTrueOrderByIdAsc();
 }

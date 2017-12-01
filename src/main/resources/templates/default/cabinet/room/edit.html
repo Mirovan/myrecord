@@ -7,7 +7,8 @@
 
 <h1>Помещения - add/edit</h1>
 
-<form th:object="${room}" th:action="@{/cabinet/rooms/add/}" method="post">
+<form th:object="${room}" th:action="@{'/cabinet/rooms/' + ${action} + '/'}" method="post">
+    <input type="hidden" th:field="*{id}" /> <br/>
     <input type="text" th:field="*{name}" class="form-control" /> <br/>
     <input type="submit" />
 </form>

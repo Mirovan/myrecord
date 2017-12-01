@@ -40,7 +40,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("user not found");
         } else {
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            //ToDo: пустой сет ролей - NPE
             for (Role role : user.getRoles()) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
             }

@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.RoomDAO;
 import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.List;
@@ -29,7 +27,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> findByActive() {
-        return roomDAO.findByActiveTrue();
+        return roomDAO.findByActiveTrueOrderByIdAsc();
     }
 
     @Override
@@ -41,4 +39,5 @@ public class RoomServiceImpl implements RoomService {
     public void update(Room room) {
         roomDAO.save(room);
     }
+
 }

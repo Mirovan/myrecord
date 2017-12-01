@@ -12,7 +12,12 @@
 <br />
 <br />
 
-<div th:each="room : ${rooms}" th:text="${room.name}" style="display: block;">
+<div th:each="room : ${rooms}" style="display: block;">
+    <a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">
+        <span th:text="${room.name}"></span>
+    </a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a>
 </div>
 
 <br />

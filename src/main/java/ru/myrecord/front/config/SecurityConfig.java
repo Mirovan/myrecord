@@ -31,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
         //authManagerBuilder.authenticationProvider(new CustomAuthentificationProvider());
+//        authManagerBuilder.inMemoryAuthentication()
+//                .withUser("zzz@zzz.ru")
+//                .password("000000");
         authManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 

@@ -7,8 +7,11 @@
 
 <h1>Услуги - add/edit</h1>
 
-<div th:include="cabinet/inc/menu.inc::menu"></div>
-
+<form th:object="${service}" th:action="@{'/cabinet/services/' + ${action} + '/'}" method="post">
+    <input type="hidden" th:field="*{id}" /> <br/>
+    <input type="text" th:field="*{name}" class="form-control" /> <br/>
+    <input type="submit" />
+</form>
 
 </body>
 </html>

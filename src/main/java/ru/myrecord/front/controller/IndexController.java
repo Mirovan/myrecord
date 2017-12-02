@@ -16,9 +16,16 @@ import ru.myrecord.front.service.iface.UserService;
 public class IndexController/* implements ErrorController*/{
 
     @RequestMapping(value="/", method = RequestMethod.GET)
-    public ModelAndView cabinet(){
+    public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/cabinet/", method = RequestMethod.GET)
+    public ModelAndView cabinet() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("cabinet/index");
         return modelAndView;
     }
 

@@ -8,12 +8,26 @@
 <h1>Услуги</h1>
 
 
+<a href="/cabinet/services/add/">=Добавить=</a>
 <br />
+<br />
+
+<div th:each="service : ${services}" style="display: block;">
+    <a th:href="@{'/cabinet/services/edit/' + ${service.id} + '/'}">
+        <span th:text="${service.name}"></span>
+    </a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a th:href="@{'/cabinet/services/edit/' + ${service.id} + '/'}">[Edit]</a>
+    &nbsp;&nbsp;
+    <a th:href="@{'/cabinet/services/delete/' + ${service.id} + '/'}">[Delete]</a>
+</div>
+
 <br />
 <br />
 
 
 <div th:include="cabinet/inc/menu.inc::menu"></div>
+
 
 </body>
 </html>

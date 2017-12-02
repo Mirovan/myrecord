@@ -15,10 +15,10 @@ public class Service {
     User user;
 
     @Column(name = "name")
-    private String roomName;
+    private String name;
 
     @Column(name = "active")
-    private Boolean isActive;
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -36,19 +36,19 @@ public class Service {
         this.user = user;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Boolean getActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(Boolean active) {
-        isActive = active;
+        this.active = active;
     }
 }

@@ -1,13 +1,9 @@
 package ru.myrecord.front.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.dao.RoomDAO;
-import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
@@ -21,7 +17,7 @@ import ru.myrecord.front.Utils.Utils;
  */
 
 @Controller
-public class CabinetController/* implements ErrorController*/{
+public class CabinetRoomController/* implements ErrorController*/{
 
     @Autowired
     private UserService userService;
@@ -29,21 +25,6 @@ public class CabinetController/* implements ErrorController*/{
     @Autowired
     private RoomService roomService;
 
-
-
-    @RequestMapping(value="/cabinet/", method = RequestMethod.GET)
-    public ModelAndView cabinet() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("cabinet/index");
-        return modelAndView;
-    }
-
-    @RequestMapping(value="/cabinet/users/", method = RequestMethod.GET)
-    public ModelAndView users() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("cabinet/users");
-        return modelAndView;
-    }
 
     @RequestMapping(value="/cabinet/rooms/", method = RequestMethod.GET)
     public ModelAndView rooms(Principal principal) {
@@ -107,14 +88,5 @@ public class CabinetController/* implements ErrorController*/{
         }
         return new ModelAndView("redirect:/cabinet/rooms/");
     }
-
-
-//    @RequestMapping(value="/cabinet/services/", method = RequestMethod.GET)
-//    public ModelAndView services() {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("cabinet/service/index");
-//        return modelAndView;
-//    }
-
 
 }

@@ -32,7 +32,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
-    User user;
+    User ownerUser;
 
     @Column(name = "name")
     private String name;
@@ -42,7 +42,7 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "owner_user_id"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
@@ -82,12 +82,12 @@ public class User {
         this.pass = pass;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwnerUser() {
+        return ownerUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwnerUser(User ownerUser) {
+        this.ownerUser = ownerUser;
     }
 
     public String getName() {

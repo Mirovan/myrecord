@@ -9,10 +9,16 @@
 
 <form th:object="${user}" th:action="@{'/cabinet/users/' + ${action} + '/'}" method="post">
     <input type="hidden" th:field="*{id}" /> <br/>
+    Email: <input type="text" th:field="*{email}" class="form-control" /> <br/>
+    Password: <input type="text" th:field="*{pass}" class="form-control" /> <br/>
     Name: <input type="text" th:field="*{name}" class="form-control" /> <br/>
     Sirname: <input type="text" th:field="*{sirname}" class="form-control" /> <br/>
     Role:
-
+    <select name="roleid">
+        <option th:each="role : ${roles}"
+                th:value="${role.id}"
+                th:text="${role.roleAbout}">role</option>
+    </select>
     <br/><br/>
     <input type="submit" />
 </form>

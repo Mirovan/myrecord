@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
-//        user.setActive(1);
         Role userRole = roleDAO.findByRole("ADMIN");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userDAO.save(user);
@@ -54,7 +53,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addSimpleUser(User user) {
-
+        user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
+        userDAO.save(user);
     }
 
     @Override
@@ -64,6 +64,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findByActive(User user) {
-        return null;
+        return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(user);
     }
 }

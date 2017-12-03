@@ -47,7 +47,7 @@ public class LoginController {
 			modelAndView.setViewName("register");
 		} else {
 			if (user.getPhone() == null) user.setPhone("");
-			userService.add(user);
+			userService.addSysUser(user);
 
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());

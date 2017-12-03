@@ -30,6 +30,16 @@ public class User {
 //    @Transient
     private String pass;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_user_id")
+    User user;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "sirname")
+    private String sirname;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "owner_user_id"),
@@ -37,6 +47,8 @@ public class User {
     )
     private Set<Role> roles;
 
+    @Column(name = "active")
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -70,11 +82,43 @@ public class User {
         this.pass = pass;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSirname() {
+        return sirname;
+    }
+
+    public void setSirname(String sirname) {
+        this.sirname = sirname;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

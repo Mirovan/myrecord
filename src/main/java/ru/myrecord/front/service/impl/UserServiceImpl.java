@@ -15,6 +15,7 @@ import ru.myrecord.front.service.iface.UserService;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(User user) {
+    public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
 //        user.setActive(1);
         Role userRole = roleDAO.findByRole("ADMIN");
@@ -51,36 +52,18 @@ public class UserServiceImpl implements UserService {
         userDAO.save(user);
     }
 
-//    @Override
-//    public void add(SysUser element) {
-//    }
+    @Override
+    public void addSimpleUser(User user) {
 
-//    @Override
-//    public List<SysUser> getAll() {
-//        List<SysUser> list = new ArrayList<>();
-//
-//        SysUser sysUser = new SysUser();
-//        sysUser.setId(new Long(1));
-//        sysUser.setEmail("zzzzz@asdasd.ru");
-//        list.add(sysUser);
-//
-//        sysUser = new SysUser();
-//        sysUser.setId(new Long(2));
-//        sysUser.setEmail("xxxxxxxxx@dddddddddddd.ru");
-//        list.add(sysUser);
-//
-//        return list;
-//    }
+    }
 
-//    @Override
-//    public SysUser getByAuthPhone(String phone, String pass) {
-//        //return userDAO.getByAuthPhone(phone, pass);
-//        return null;
-//    }
+    @Override
+    public void update(User user) {
 
-//    @Override
-//    public SysUser getByAuthEmail(String email, String pass) {
-//        //return userDAO.getByAuthEmail(email, pass);
-//        return null;
-//    }
+    }
+
+    @Override
+    public List<User> findByActive(User user) {
+        return null;
+    }
 }

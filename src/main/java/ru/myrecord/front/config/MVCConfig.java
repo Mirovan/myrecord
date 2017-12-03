@@ -21,9 +21,9 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 
 //    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        String templatesDir = "default";
-        templatesDir = "/" + templatesDir;
-        templatesDir = "/";
+//        String templatesDir = "default";
+//        templatesDir = "/" + templatesDir;
+//        templatesDir = "/";
 //        registry.addViewController(templatesDir + "/").setViewName("index");
 //        registry.addViewController(templatesDir + "/users/").setViewName("users");
 //        registry.addViewController(templatesDir + "/about/").setViewName("about");

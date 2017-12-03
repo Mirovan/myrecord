@@ -13,6 +13,9 @@ public class Role {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "role_about")
+    private String roleAbout;
+
     public Long getId() {
         return id;
     }
@@ -27,5 +30,13 @@ public class Role {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getRoleAbout() {
+        return roleAbout;
+    }
+
+    public void setRoleAbout(String roleAbout) {
+        this.roleAbout = roleAbout;
     }
 }

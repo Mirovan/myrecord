@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spring Security Example </title>
+</head>
+<body>
+
+<h1>Сотрудники - add/edit</h1>
+
+<form th:object="${user}" th:action="@{'/cabinet/users/' + ${action} + '/'}" method="post">
+    <input type="hidden" th:field="*{id}" /> <br/>
+    Name: <input type="text" th:field="*{name}" class="form-control" /> <br/>
+    Sirname: <input type="text" th:field="*{sirname}" class="form-control" /> <br/>
+    Role:
+
+    <br/><br/>
+    <input type="submit" />
+</form>
+
+</body>
+</html>
+

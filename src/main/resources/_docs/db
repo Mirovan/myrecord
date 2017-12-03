@@ -5,16 +5,17 @@ CREATE SEQUENCE role_id_seq START WITH 1;
 
 CREATE TABLE "role" (
     id INTEGER NOT NULL default nextval('role_id_seq') PRIMARY KEY,
-	role VARCHAR(240) NOT NULL
+	role VARCHAR(240) NOT NULL,
+	role_about VARCHAR(240) NOT NULL
 );
 ALTER SEQUENCE role_id_seq owned by "role".id;
 
-INSERT INTO "role" (id, role) VALUES
-(1, 'ADMIN'),
-(2, 'SYSUSER'),
-(3, 'MANAGER'),
-(4, 'MASTER'),
-(5, 'CLIENT');
+INSERT INTO "role" (id, role, role_about) VALUES
+(1, 'ADMIN', 'Системный администратор'),
+(2, 'SYSUSER', 'Системный пользователь'),
+(3, 'MANAGER', 'Менеджер'),
+(4, 'MASTER', 'Мастер'),
+(5, 'CLIENT', 'Клиент');
 
 
 /*Пользователи системы*/
@@ -23,8 +24,12 @@ CREATE SEQUENCE user_id_seq START WITH 1;
 CREATE TABLE "users" (
     id INTEGER NOT NULL default nextval('user_id_seq') PRIMARY KEY,
 	email VARCHAR(120) NOT NULL,
-	phone VARCHAR(10) NOT NULL,
-	pass VARCHAR(255) NOT NULL
+	phone VARCHAR(10) DEFAULT NULL,
+	pass VARCHAR(255) NOT NULL,
+	owner_user_id INTEGER REFERENCES "users"(id) DEFAULT NULL,
+	name VARCHAR(255) DEFAULT NULL,
+	sirname VARCHAR(255) DEFAULT NULL,
+	active BOOLEAN
 );
 ALTER SEQUENCE user_id_seq owned by "users".id;
 
@@ -87,5 +92,5 @@ CREATE TABLE "service_room" (
 /*Услуги пользователя - Профиль специалиста*/
 CREATE TABLE "user_room" (
     user_id INTEGER REFERENCES "users"(id),
-	room_id INTEGER REFERENCES "room"(id)
+	service_id INTEGER REFERENCES "service"(id)
 );

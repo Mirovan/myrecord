@@ -123,6 +123,19 @@ public class CabinetUserController/* implements ErrorController*/{
     }
 
 
+    @RequestMapping(value="/cabinet/users/delete/{userId}/", method = RequestMethod.GET)
+    public ModelAndView roomPost(@PathVariable Integer userId, Principal principal) {
+        User user = userService.findUserById(userId);
+        User ownerUser = user.getOwnerUser();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+            user.setActive(false);
+            userService.update(user);
+        }
+        return new ModelAndView("redirect:/cabinet/users/");
+    }
+
+
     public Set<Role> getRolesForSysUser() {
         List<String> roleNames = new ArrayList<String>();
         roleNames.add("MASTER");

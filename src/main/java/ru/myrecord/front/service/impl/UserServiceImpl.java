@@ -55,14 +55,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addSimpleUser(User user) {
-        user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
         userDAO.save(user);
     }
 
 
     @Override
     public void update(User user) {
-
+        userDAO.save(user);
     }
 
 

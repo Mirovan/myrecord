@@ -28,6 +28,7 @@ public class CabinetServiceController/* implements ErrorController*/{
     @Autowired
     private ServiceService serviceService;
 
+
     @RequestMapping(value="/cabinet/services/", method = RequestMethod.GET)
     public ModelAndView services(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
@@ -36,6 +37,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         modelAndView.setViewName("cabinet/service/index");
         return modelAndView;
     }
+
 
     @RequestMapping(value="/cabinet/services/add/", method = RequestMethod.GET)
     public ModelAndView serviceAdd() {
@@ -46,6 +48,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         return modelAndView;
     }
 
+
     @RequestMapping(value="/cabinet/services/add/", method = RequestMethod.POST)
     public ModelAndView serviceAddPost(Service service, Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
@@ -54,6 +57,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         serviceService.add(service);
         return new ModelAndView("redirect:/cabinet/services/");
     }
+
 
     @RequestMapping(value="/cabinet/services/edit/{serviceId}/", method = RequestMethod.GET)
     public ModelAndView serviceUpdate(@PathVariable Integer serviceId, Principal principal) {
@@ -76,6 +80,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         }
     }
 
+
     @RequestMapping(value="/cabinet/services/edit/", method = RequestMethod.POST)
     public ModelAndView serviceEditPost(Service serviceUpd, Principal principal) {
         Service service = serviceService.findServiceById(serviceUpd.getId());
@@ -88,6 +93,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         return new ModelAndView("redirect:/cabinet/services/");
     }
 
+
     @RequestMapping(value="/cabinet/services/delete/{serviceId}/", method = RequestMethod.GET)
     public ModelAndView servicePost(@PathVariable Integer serviceId, Principal principal) {
         Service service = serviceService.findServiceById(serviceId);
@@ -99,6 +105,5 @@ public class CabinetServiceController/* implements ErrorController*/{
         }
         return new ModelAndView("redirect:/cabinet/services/");
     }
-
 
 }

@@ -35,6 +35,7 @@ public class CabinetRoomController/* implements ErrorController*/{
         return modelAndView;
     }
 
+
     @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.GET)
     public ModelAndView roomAdd() {
         ModelAndView modelAndView = new ModelAndView();
@@ -44,6 +45,7 @@ public class CabinetRoomController/* implements ErrorController*/{
         return modelAndView;
     }
 
+
     @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.POST)
     public ModelAndView roomAddPost(Room room, Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
@@ -52,6 +54,7 @@ public class CabinetRoomController/* implements ErrorController*/{
         roomService.add(room);
         return new ModelAndView("redirect:/cabinet/rooms/");
     }
+
 
     @RequestMapping(value="/cabinet/rooms/edit/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomUpdate(@PathVariable Integer roomId, Principal principal) {
@@ -73,6 +76,7 @@ public class CabinetRoomController/* implements ErrorController*/{
         }
     }
 
+
     @RequestMapping(value="/cabinet/rooms/edit/", method = RequestMethod.POST)
     public ModelAndView roomEditPost(Room roomUpd, Principal principal) {
         Room room = roomService.findRoomById(roomUpd.getId());
@@ -84,6 +88,7 @@ public class CabinetRoomController/* implements ErrorController*/{
         }
         return new ModelAndView("redirect:/cabinet/rooms/");
     }
+
 
     @RequestMapping(value="/cabinet/rooms/delete/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomPost(@PathVariable Integer roomId, Principal principal) {

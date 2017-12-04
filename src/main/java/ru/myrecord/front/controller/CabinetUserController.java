@@ -1,12 +1,14 @@
 package ru.myrecord.front.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.Role;
+import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoleService;
 import ru.myrecord.front.service.iface.UserService;
@@ -23,6 +25,9 @@ public class CabinetUserController/* implements ErrorController*/{
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @RequestMapping(value="/cabinet/users/", method = RequestMethod.GET)
@@ -57,12 +62,9 @@ public class CabinetUserController/* implements ErrorController*/{
         user.setOwnerUser(sysUser);
 
         //проверка - можем ли добавить данную роль для своего сотрудника
-        //Role role = roleService.findRoleById(roleid);
         Set<Role> rolesAvailable = getRolesForSysUser();
         if ( rolesAvailable.containsAll(user.getRoles()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
-            //Set<Role> roles = new HashSet<Role>();
-            //roles.add(role);
-            //user.setRoles(roles);
+            user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
             user.setActive(true);
             userService.addSimpleUser(user);
         }
@@ -74,7 +76,7 @@ public class CabinetUserController/* implements ErrorController*/{
     public ModelAndView serviceUpdate(@PathVariable Integer userId, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
-        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
@@ -97,6 +99,27 @@ public class CabinetUserController/* implements ErrorController*/{
         } else {
             return new ModelAndView("redirect:/cabinet/users/");
         }
+    }
+
+
+    @RequestMapping(value="/cabinet/users/edit/", method = RequestMethod.POST)
+    public ModelAndView roomEditPost(User userUpd, Principal principal) {
+        //Находим этого пользователя
+        User user = userService.findUserById(userUpd.getId());
+        User ownerUser = user.getOwnerUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+            //Обновляем данные
+            user.setName(userUpd.getName());
+            user.setSirname(userUpd.getSirname());
+            user.setRoles(userUpd.getRoles());
+            if (userUpd.getPass() != null) {
+                user.setPass(bCryptPasswordEncoder.encode(userUpd.getPass()));
+            }
+            user.setOwnerUser(ownerUser);
+            userService.update(user);
+        }
+        return new ModelAndView("redirect:/cabinet/users/");
     }
 
 

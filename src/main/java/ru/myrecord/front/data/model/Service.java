@@ -1,6 +1,7 @@
 package ru.myrecord.front.data.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "service")
@@ -16,6 +17,10 @@ public class Service {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
     @Column(name = "active")
     private Boolean active;
@@ -51,4 +56,6 @@ public class Service {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+
 }

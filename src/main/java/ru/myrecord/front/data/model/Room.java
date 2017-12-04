@@ -1,6 +1,7 @@
 package ru.myrecord.front.data.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -16,6 +17,9 @@ public class Room {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "room_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Service> services;
 
     @Column(name = "active")
     private Boolean active;
@@ -50,5 +54,13 @@ public class Room {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(Set<Service> services) {
+        this.services = services;
     }
 }

@@ -76,17 +76,20 @@ CREATE SEQUENCE service_id_seq START WITH 1;
 CREATE TABLE "service" (
     id INTEGER NOT NULL default nextval('service_id_seq') PRIMARY KEY,
     owner_user_id INTEGER REFERENCES "users"(id),
-	name VARCHAR(240) NOT NULL,
+    name VARCHAR(240) NOT NULL,
+    room_id INTEGER REFERENCES "room"(id),
     active BOOLEAN
 );
 ALTER SEQUENCE service_id_seq owned by "service".id;
 
 
 /*Услуги в помещении*/
+/*
 CREATE TABLE "service_room" (
     service_id INTEGER REFERENCES "service"(id),
 	room_id INTEGER REFERENCES "room"(id)
 );
+*/
 
 
 /*Услуги пользователя - Профиль специалиста*/

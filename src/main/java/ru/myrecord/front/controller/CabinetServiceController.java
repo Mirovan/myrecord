@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.Utils.Utils;
+import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.Service;
 import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
@@ -28,6 +30,8 @@ public class CabinetServiceController/* implements ErrorController*/{
     @Autowired
     private ServiceService serviceService;
 
+    @Autowired
+    private RoomService roomService;
 
     @RequestMapping(value="/cabinet/services/", method = RequestMethod.GET)
     public ModelAndView services(Principal principal) {
@@ -39,13 +43,32 @@ public class CabinetServiceController/* implements ErrorController*/{
     }
 
 
-    @RequestMapping(value="/cabinet/services/add/", method = RequestMethod.GET)
-    public ModelAndView serviceAdd() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("action", "add");
-        modelAndView.addObject("service", new Service());
-        modelAndView.setViewName("cabinet/service/edit");
-        return modelAndView;
+//    @RequestMapping(value="/cabinet/services/add/", method = RequestMethod.GET)
+//    public ModelAndView serviceAdd() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("action", "add");
+//        modelAndView.addObject("service", new Service());
+//        modelAndView.setViewName("cabinet/service/edit");
+//        return modelAndView;
+//    }
+
+
+    @RequestMapping(value="/cabinet/services/add/{roomId}/", method = RequestMethod.GET)
+    public ModelAndView serviceAdd(@PathVariable Integer roomId, Principal principal) {
+        Room room = roomService.findRoomById(roomId);
+        User user = room.getUser();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true ) { //активно ли помещение
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("action", "add");
+            modelAndView.addObject("roomid", roomId);
+            modelAndView.addObject("service", new Service());
+            modelAndView.setViewName("cabinet/service/edit");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/services/");
+        }
     }
 
 
@@ -61,13 +84,12 @@ public class CabinetServiceController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/services/edit/{serviceId}/", method = RequestMethod.GET)
     public ModelAndView serviceUpdate(@PathVariable Integer serviceId, Principal principal) {
-        Service room = serviceService.findServiceById(serviceId);
-        User user = room.getUser();
-        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        Service service = serviceService.findServiceById(serviceId);
+        User user = service.getUser();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
-            Service service = serviceService.findServiceById(serviceId);
             if (service.getActive() == true) {
                 modelAndView.addObject("service", service);
                 modelAndView.setViewName("cabinet/service/edit");

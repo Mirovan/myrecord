@@ -6,7 +6,7 @@ import ru.myrecord.front.data.model.User;
 import java.util.List;
 
 public interface RoomService {
-    public Room findRoomById(Long id);
+    public Room findRoomById(Integer id);
     public List<Room> findByActive(User user);
     public void add(Room room);
     public void update(Room room);

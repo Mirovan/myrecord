@@ -12,7 +12,7 @@ import java.util.Set;
 public interface RoleDAO extends JpaRepository<Role, Integer> {
 	Role findByRole(String role);
 
-	Role findById(Long id);
+	Role findById(Integer id);
 
 	@Query(value = "select u.email, r.role from users u inner join user_role ur on(u.id=ur.user_id) inner join role r on(ur.role_id=r.id) where u.email=?",
             nativeQuery = true)

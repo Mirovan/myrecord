@@ -8,7 +8,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
@@ -20,11 +20,11 @@ public class Room {
     @Column(name = "active")
     private Boolean active;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

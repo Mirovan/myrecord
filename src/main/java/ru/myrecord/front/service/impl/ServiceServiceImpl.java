@@ -21,7 +21,7 @@ public class ServiceServiceImpl implements ServiceService {
     private ServiceDAO serviceDAO;
 
     @Override
-    public Service findServiceById(Long id) {
+    public Service findServiceById(Integer id) {
         return serviceDAO.findById(id);
     }
 

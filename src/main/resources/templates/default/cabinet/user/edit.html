@@ -14,7 +14,7 @@
     Name: <input type="text" th:field="*{name}" class="form-control" /> <br/>
     Sirname: <input type="text" th:field="*{sirname}" class="form-control" /> <br/>
     Role:
-    <select name="roleid">
+    <select th:field="*{roles}" multiple="multiple">
         <option th:each="role : ${roles}"
                 th:value="${role.id}"
                 th:text="${role.roleAbout}">role</option>

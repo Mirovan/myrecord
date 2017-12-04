@@ -8,9 +8,9 @@ import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.UserService;
-
-import java.security.Principal;
 import ru.myrecord.front.Utils.Utils;
+import java.security.Principal;
+
 
 /**
  * Created by max on 12.11.2017.
@@ -54,23 +54,30 @@ public class CabinetRoomController/* implements ErrorController*/{
     }
 
     @RequestMapping(value="/cabinet/rooms/edit/{roomId}/", method = RequestMethod.GET)
-    public ModelAndView roomUpdate(@PathVariable Long roomId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("action", "edit");
+    public ModelAndView roomUpdate(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        if (room.getActive() == true) {
-            modelAndView.addObject("room", room);
-            modelAndView.setViewName("cabinet/room/edit");
+        User user = room.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("action", "edit");
+            if (room.getActive() == true) {
+                modelAndView.addObject("room", room);
+                modelAndView.setViewName("cabinet/room/edit");
+            } else {
+                return new ModelAndView("redirect:/cabinet/rooms/");
+            }
+            return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/rooms/");
         }
-        return modelAndView;
     }
 
     @RequestMapping(value="/cabinet/rooms/edit/", method = RequestMethod.POST)
     public ModelAndView roomEditPost(Room roomUpd, Principal principal) {
         Room room = roomService.findRoomById(roomUpd.getId());
         User user = room.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
             room.setName( roomUpd.getName() );
             roomService.update(room);
@@ -79,9 +86,10 @@ public class CabinetRoomController/* implements ErrorController*/{
     }
 
     @RequestMapping(value="/cabinet/rooms/delete/{roomId}/", method = RequestMethod.GET)
-    public ModelAndView roomPost(@PathVariable Long roomId, Principal principal) {
+    public ModelAndView roomPost(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
         User user = room.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
             room.setActive(false);
             roomService.update(room);

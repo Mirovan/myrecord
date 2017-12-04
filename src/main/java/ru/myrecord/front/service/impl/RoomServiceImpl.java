@@ -22,7 +22,7 @@ public class RoomServiceImpl implements RoomService {
     private RoomDAO roomDAO;
 
     @Override
-    public Room findRoomById(Long id) {
+    public Room findRoomById(Integer id) {
         return roomDAO.findById(id);
     }
 

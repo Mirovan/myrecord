@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface RoleService {
-    Role findRoleById(Long id);
+    Role findRoleById(Integer id);
     Set<Role> findRolesByRoleName(List<String> roleNames);
 }

@@ -20,12 +20,12 @@ public class Utils {
     /**
      * Приоверка - равны ли пользователи
      * */
-    public static Boolean userEquals(Long userId1, Long userId2) {
+    public static Boolean userEquals(Integer userId1, Integer userId2) {
         return userId1.equals(userId2);
     }
 
     //ToDO: как вызвать сервис из статичного метода
-//    public Set<Role> getRolesForSysUser() {
+//    public static Set<Role> getRolesForSysUser() {
 //        List<String> roleNames = new ArrayList<String>();
 //        roleNames.add("MASTER");
 //        roleNames.add("MANAGER");

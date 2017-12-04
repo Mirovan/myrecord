@@ -8,7 +8,7 @@ import ru.myrecord.front.data.model.User;
 import java.util.List;
 
 @Repository("serviceDAO")
-public interface ServiceDAO extends JpaRepository<Service, Long> {
-	Service findById(Long id);
+public interface ServiceDAO extends JpaRepository<Service, Integer> {
+	Service findById(Integer id);
 	List<Service> findByUserAndActiveTrueOrderByIdAsc(User user);
 }

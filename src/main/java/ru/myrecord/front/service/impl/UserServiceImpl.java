@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+
     @Override
     public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
@@ -51,19 +52,33 @@ public class UserServiceImpl implements UserService {
         userDAO.save(user);
     }
 
+
     @Override
     public void addSimpleUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
         userDAO.save(user);
     }
 
+
     @Override
     public void update(User user) {
 
     }
 
+
     @Override
     public List<User> findByActive(User user) {
         return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(user);
     }
+
+
+    @Override
+    public User findUserById(Integer id) {
+        User user = userDAO.findById(id);
+        if (user != null) {
+            int size = user.getRoles().size();  //Для LAZY hibernate initialization
+        }
+        return user;
+    }
+
 }

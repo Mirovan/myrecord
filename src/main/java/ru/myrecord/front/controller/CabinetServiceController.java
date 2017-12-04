@@ -56,23 +56,31 @@ public class CabinetServiceController/* implements ErrorController*/{
     }
 
     @RequestMapping(value="/cabinet/services/edit/{serviceId}/", method = RequestMethod.GET)
-    public ModelAndView serviceUpdate(@PathVariable Long serviceId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("action", "edit");
-        Service service = serviceService.findServiceById(serviceId);
-        if (service.getActive() == true) {
-            modelAndView.addObject("service", service);
-            modelAndView.setViewName("cabinet/service/edit");
+    public ModelAndView serviceUpdate(@PathVariable Integer serviceId, Principal principal) {
+        Service room = serviceService.findServiceById(serviceId);
+        User user = room.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("action", "edit");
+            Service service = serviceService.findServiceById(serviceId);
+            if (service.getActive() == true) {
+                modelAndView.addObject("service", service);
+                modelAndView.setViewName("cabinet/service/edit");
+            } else {
+                return new ModelAndView("redirect:/cabinet/services/");
+            }
+            return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/services/");
         }
-        return modelAndView;
     }
 
     @RequestMapping(value="/cabinet/services/edit/", method = RequestMethod.POST)
     public ModelAndView serviceEditPost(Service serviceUpd, Principal principal) {
         Service service = serviceService.findServiceById(serviceUpd.getId());
         User user = service.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
             service.setName( serviceUpd.getName() );
             serviceService.update(service);
@@ -81,9 +89,10 @@ public class CabinetServiceController/* implements ErrorController*/{
     }
 
     @RequestMapping(value="/cabinet/services/delete/{serviceId}/", method = RequestMethod.GET)
-    public ModelAndView servicePost(@PathVariable Long serviceId, Principal principal) {
+    public ModelAndView servicePost(@PathVariable Integer serviceId, Principal principal) {
         Service service = serviceService.findServiceById(serviceId);
         User user = service.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
             service.setActive(false);
             serviceService.update(service);

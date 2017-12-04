@@ -12,4 +12,5 @@ public interface UserService {
     public void addSimpleUser(User user);
     public void update(User user);
     public List<User> findByActive(User user);
+    public User findUserById(Integer id);
 }

@@ -6,9 +6,10 @@ import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository("roomDAO")
 public interface RoomDAO extends JpaRepository<Room, Integer> {
 	Room findById(Integer id);
-	List<Room> findByUserAndActiveTrueOrderByIdAsc(User user);
+	Set<Room> findByUserAndActiveTrueOrderByIdAsc(User user);
 }

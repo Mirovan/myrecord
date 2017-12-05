@@ -16,6 +16,9 @@ import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by max on 02.12.2017.
@@ -60,10 +63,14 @@ public class CabinetServiceController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
                 room.getActive() == true ) { //активно ли помещение
+            Set<Room> rooms = roomService.findByActive(user);
+            Service service = new Service();
+            service.setRoom(room);
+
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "add");
-            modelAndView.addObject("roomid", roomId);
-            modelAndView.addObject("service", new Service());
+            modelAndView.addObject("rooms", rooms);
+            modelAndView.addObject("service", service);
             modelAndView.setViewName("cabinet/service/edit");
             return modelAndView;
         } else {
@@ -74,11 +81,18 @@ public class CabinetServiceController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/services/add/", method = RequestMethod.POST)
     public ModelAndView serviceAddPost(Service service, Principal principal) {
+        Room room = service.getRoom();
         User user = userService.findUserByEmail(principal.getName());
-        service.setUser(user);
-        service.setActive(true);
-        serviceService.add(service);
-        return new ModelAndView("redirect:/cabinet/services/");
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true ) { //активно ли помещение
+            service.setUser(user);
+            service.setActive(true);
+            serviceService.add(service);
+            return new ModelAndView("redirect:/cabinet/services/");
+        } else {
+            return new ModelAndView("redirect:/cabinet/services/");
+        }
     }
 
 
@@ -87,15 +101,15 @@ public class CabinetServiceController/* implements ErrorController*/{
         Service service = serviceService.findServiceById(serviceId);
         User user = service.getUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                service.getActive() == true) {
+            Set<Room> rooms = roomService.findByActive(user);
+
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
-            if (service.getActive() == true) {
-                modelAndView.addObject("service", service);
-                modelAndView.setViewName("cabinet/service/edit");
-            } else {
-                return new ModelAndView("redirect:/cabinet/services/");
-            }
+            modelAndView.addObject("rooms", rooms);
+            modelAndView.addObject("service", service);
+            modelAndView.setViewName("cabinet/service/edit");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/services/");
@@ -108,8 +122,10 @@ public class CabinetServiceController/* implements ErrorController*/{
         Service service = serviceService.findServiceById(serviceUpd.getId());
         User user = service.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                service.getActive() == true) {
             service.setName( serviceUpd.getName() );
+            service.setRoom( serviceUpd.getRoom() );
             serviceService.update(service);
         }
         return new ModelAndView("redirect:/cabinet/services/");

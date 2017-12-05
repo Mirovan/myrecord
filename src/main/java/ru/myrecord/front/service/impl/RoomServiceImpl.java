@@ -11,6 +11,7 @@ import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.List;
+import java.util.Set;
 
 @Service("roomService")
 public class RoomServiceImpl implements RoomService {
@@ -27,7 +28,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> findByActive(User user) {
+    public Set<Room> findByActive(User user) {
         return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user); /*AndActiveTrueOrderByIdAsc*/
     }
 

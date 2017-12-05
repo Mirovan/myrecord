@@ -18,7 +18,7 @@ public class Room {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "room_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Service> services;
 
     @Column(name = "active")

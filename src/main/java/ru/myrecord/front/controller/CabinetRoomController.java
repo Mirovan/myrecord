@@ -61,7 +61,8 @@ public class CabinetRoomController/* implements ErrorController*/{
         Room room = roomService.findRoomById(roomId);
         User user = room.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
             if (room.getActive() == true) {
@@ -82,7 +83,8 @@ public class CabinetRoomController/* implements ErrorController*/{
         Room room = roomService.findRoomById(roomUpd.getId());
         User user = room.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true) {
             room.setName( roomUpd.getName() );
             roomService.update(room);
         }

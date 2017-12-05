@@ -27,15 +27,23 @@ public class RoomServiceImpl implements RoomService {
         return roomDAO.findById(id);
     }
 
+
     @Override
-    public Set<Room> findByActive(User user) {
-        return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user); /*AndActiveTrueOrderByIdAsc*/
+    public Set<Room> findRoomsByActive(User user) {
+        return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user);
     }
+
+
+//    @Override
+//    public Set<ru.myrecord.front.data.model.Service> findServicesByRoom(Room room) {
+//        return null;//roomDAO.findByRoom(room);
+//    }
 
     @Override
     public void add(Room room) {
         roomDAO.save(room);
     }
+
 
     @Override
     public void update(Room room) {

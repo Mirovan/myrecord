@@ -15,9 +15,6 @@ import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,7 +37,7 @@ public class CabinetServiceController/* implements ErrorController*/{
     public ModelAndView services(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("services", serviceService.findByActive(user));
+        modelAndView.addObject("services", serviceService.findServicesByUser(user));
         modelAndView.setViewName("cabinet/service/index");
         return modelAndView;
     }
@@ -63,7 +60,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
                 room.getActive() == true ) { //активно ли помещение
-            Set<Room> rooms = roomService.findByActive(user);
+            Set<Room> rooms = roomService.findRoomsByActive(user);
             Service service = new Service();
             service.setRoom(room);
 
@@ -103,7 +100,7 @@ public class CabinetServiceController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
                 service.getActive() == true) {
-            Set<Room> rooms = roomService.findByActive(user);
+            Set<Room> rooms = roomService.findRoomsByActive(user);
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");

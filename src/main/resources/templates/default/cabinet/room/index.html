@@ -14,7 +14,7 @@
 <br />
 
 <div th:each="room : ${rooms}" style="display: block;">
-    <a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">
+    <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
         <span th:text="${room.name}"></span>
     </a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -23,6 +23,8 @@
     <a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a>
     &nbsp;&nbsp;
     <a th:href="@{'/cabinet/services/add/' + ${room.id} + '/'}">=[Add Service]=</a>
+    &nbsp;&nbsp;
+    <a th:href="@{'/cabinet/rooms/addusers/' + ${room.id} + '/'}">=[Add User]=</a>
 </div>
 
 <br />

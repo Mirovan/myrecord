@@ -5,11 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.Room;
+import ru.myrecord.front.data.model.Service;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 import ru.myrecord.front.Utils.Utils;
 import java.security.Principal;
+import java.util.Set;
 
 
 /**
@@ -25,14 +28,36 @@ public class CabinetRoomController/* implements ErrorController*/{
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private ServiceService serviceService;
+
 
     @RequestMapping(value="/cabinet/rooms/", method = RequestMethod.GET)
-    public ModelAndView rooms(Principal principal) {
+    public ModelAndView index(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "rooms", roomService.findByActive(user) );
+        modelAndView.addObject( "rooms", roomService.findRoomsByActive(user) );
         modelAndView.setViewName("cabinet/room/index");
         return modelAndView;
+    }
+
+
+    @RequestMapping(value="/cabinet/rooms/{roomId}/", method = RequestMethod.GET)
+    public ModelAndView roomsShow(@PathVariable Integer roomId, Principal principal) {
+        Room room = roomService.findRoomById(roomId);
+        User user = room.getUser();
+        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true) {
+            Set<Service> services = serviceService.findServicesByRoom(room);
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("services", services);
+            modelAndView.setViewName("cabinet/room/services");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/rooms/");
+        }
     }
 
 

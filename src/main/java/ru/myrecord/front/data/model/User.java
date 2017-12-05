@@ -50,6 +50,13 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_room",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id")
+    )
+    private Set<Room> rooms;
+
     public Integer getId() {
         return id;
     }
@@ -120,5 +127,13 @@ public class User {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Set<Room> rooms) {
+        this.rooms = rooms;
     }
 }

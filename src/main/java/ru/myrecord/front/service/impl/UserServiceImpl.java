@@ -10,12 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.Role;
+import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -66,8 +68,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<User> findByActive(User user) {
-        return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(user);
+    public Set<User> findUsersByOwner(User ownerUser) {
+        return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 
 
@@ -80,4 +82,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public Set<User> findUsersByRoom(Room room) {
+        return userDAO.findByRoomId(room.getId());
+    }
 }

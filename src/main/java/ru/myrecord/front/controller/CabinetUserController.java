@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.Role;
 import ru.myrecord.front.data.model.Room;
+import ru.myrecord.front.data.model.Service;
 import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoleService;
+import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 import ru.myrecord.front.Utils.Utils;
 import java.security.Principal;
@@ -27,6 +30,12 @@ public class CabinetUserController/* implements ErrorController*/{
     private RoleService roleService;
 
     @Autowired
+    private RoomService roomService;
+
+    @Autowired
+    private ServiceService serviceService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -34,7 +43,7 @@ public class CabinetUserController/* implements ErrorController*/{
     public ModelAndView users(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "users", userService.findByActive(user) );
+        modelAndView.addObject( "users", userService.findUsersByOwner(user) );
         modelAndView.setViewName("cabinet/user/index");
         return modelAndView;
     }
@@ -47,8 +56,6 @@ public class CabinetUserController/* implements ErrorController*/{
 
         User user = new User();
         Set<Role> rolesAvailable = getRolesForSysUser();
-        //user.setRoles();
-        //modelAndView.addObject("role", new Role()); //Пустая роль для добавления нового пользователя
         modelAndView.addObject("roles", rolesAvailable); //Роли из БД
         modelAndView.addObject("user", user);
         modelAndView.setViewName("cabinet/user/edit");
@@ -142,6 +149,30 @@ public class CabinetUserController/* implements ErrorController*/{
         roleNames.add("MANAGER");
         Set<Role> roles = roleService.findRolesByRoleName( roleNames );
         return roles;
+    }
+
+
+    @RequestMapping(value="/cabinet/rooms/addusers/{roomId}/", method = RequestMethod.GET)
+    public ModelAndView addUserToRoom(@PathVariable Integer roomId, Principal principal) {
+        Room room = roomService.findRoomById(roomId);
+        User user = room.getUser();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true ) { //активна ли сущность
+            //Set<Room> rooms = roomService.findRoomsByActive(user);
+            // TODO: 05.12.2017 - add services to user
+            Set<Service> services = serviceService.findServicesByRoom(room);
+            //Set<User> users = userService.findUsersByRoom(room);
+            Set<User> users = userService.findUsersByOwner(user);
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("users", users);
+            //modelAndView.addObject("service", services);
+            modelAndView.setViewName("cabinet/room/adduser");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/services/");
+        }
     }
 
 }

@@ -14,4 +14,5 @@ public interface RoomDAO extends JpaRepository<Room, Integer> {
 	Room findById(Integer id);
 	Set<Room> findByUserAndActiveTrueOrderByIdAsc(User user);
 //	Set<Service> findByRoom(Room room);	//AndActiveTrueOrderByIdAsc
+	List<Room> findAll();
 }

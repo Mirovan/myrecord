@@ -33,6 +33,11 @@ public class RoomServiceImpl implements RoomService {
         return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user);
     }
 
+    @Override
+    public List<Room> findAll() {
+        return roomDAO.findAll();
+    }
+
 
 //    @Override
 //    public Set<ru.myrecord.front.data.model.Service> findServicesByRoom(Room room) {

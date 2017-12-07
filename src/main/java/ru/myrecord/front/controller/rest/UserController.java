@@ -9,10 +9,13 @@ import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by RuAV on 07.12.2017.
+ * Этот класс потом надо разделить на несколько,
+ * по логике
  */
 @RestController
 @RequestMapping("/rest")
@@ -41,9 +44,13 @@ public class UserController {
 
     @RequestMapping(value="/getRoom/{roomId}", method = RequestMethod.GET)
     public Room getRoom(@PathVariable Integer roomId) {
-        System.out.println("roomId = " + roomId);
-        System.out.println("roomById = " + roomService.findRoomById(roomId).toString());
         return roomService.findRoomById(roomId);
+    }
+
+    @RequestMapping(value="/getRooms", method = RequestMethod.GET)
+    public List<Room> getRooms() {
+        System.out.println("rooms " + roomService.findAll().toString());
+        return roomService.findAll();
     }
 
 }

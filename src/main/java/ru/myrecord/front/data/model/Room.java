@@ -63,4 +63,15 @@ public class Room {
     public void setServices(Set<Service> services) {
         this.services = services;
     }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", user=" + user +
+                ", name='" + name + '\'' +
+                ", services=" + services +
+                ", active=" + active +
+                '}';
+    }
 }

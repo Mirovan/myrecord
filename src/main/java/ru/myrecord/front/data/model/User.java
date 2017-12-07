@@ -136,4 +136,20 @@ public class User {
     public void setRooms(Set<Room> rooms) {
         this.rooms = rooms;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", pass='" + pass + '\'' +
+                ", ownerUser=" + ownerUser +
+                ", name='" + name + '\'' +
+                ", sirname='" + sirname + '\'' +
+                ", roles=" + roles +
+                ", active=" + active +
+                ", rooms=" + rooms +
+                '}';
+    }
 }

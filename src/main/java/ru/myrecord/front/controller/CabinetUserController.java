@@ -43,7 +43,8 @@ public class CabinetUserController/* implements ErrorController*/{
     public ModelAndView users(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "users", userService.findUsersByOwner(user) );
+        modelAndView.addObject( "users", userService.findUsersByOwner(user));
+        System.out.println("users = " + userService.findUsersByOwner(user));
         modelAndView.setViewName("cabinet/user/index");
         return modelAndView;
     }

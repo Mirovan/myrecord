@@ -2,16 +2,76 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Spring Security Example </title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
+<script th:inline="javascript">
+    var array = [];
 
+    /*<![CDATA[*/
+    $(document).ready(function() {
+
+        let users = [[${users}]];
+
+        console.log('users size = ' + users.length);
+
+/*
+        // более простой вариант заполнения выподающего меню
+        for(let i = 0; i < users.length; i++){
+            console.log(users[i]);
+            console.log('name = ' + users[i].name + ' surname = ' + users[i].sirname);
+            let str = users[i].name + ' ' + users[i].sirname;
+            array.push(str);
+        }
+
+        $("#tags").autocomplete({source:array});
+//*/
+
+
+//*
+        //заполнение массива в стиле js
+        $("#tags").autocomplete({
+            source: function (request, response) {
+                let term = request.term;
+                let pattern = new RegExp(term, "i");
+                let result = $.map(users, function (elem) {
+                    if (pattern.test(elem.name) || pattern.test(elem.sirname)) {
+                        return elem.name + ' ' + elem.sirname;
+                    }
+                });
+                response(result);
+            }
+        });
+//*/
+
+    });
+
+
+    /*]]>*/
+//    var array = [];
+//    let users = [[${users}]];
+//    console.log('users = ' + users);
+//    for(user in users){
+//        console.log('user = ' + user + ' name = ' + user.name + ' surname = ' + user.sirname);
+//        for(opt in user){
+//            console.log('opt = ' + opt);
+//        }
+//        let str = user.name + ' ' + user.sirname;
+//        array.push(str);
+//    }
+
+</script>
 <h1>Добавление пользователя в помещение</h1>
 
-<div th:each="user : ${users}" style="display: block;">
-    - <span th:text="@{*{user.name} + ' ' + *{user.sirname}}">user</span>
-    <br />
+<!--<div th:each="user : ${users}" style="display: block;">-->
+    <!-- - <span th:text="@{*{user.name} + ' ' + *{user.sirname}}">user</span>-->
+    <!--<br />-->
+<!--</div>-->
+<div>
+    <input id="tags" />
 </div>
-
 </body>
 </html>
 

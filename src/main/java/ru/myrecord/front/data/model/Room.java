@@ -1,5 +1,7 @@
 package ru.myrecord.front.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -13,12 +15,14 @@ public class Room {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
+//    @JsonIgnore
     User user;
 
     @Column(name = "name")
     private String name;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private Set<Service> services;
 
     @Column(name = "active")

@@ -36,9 +36,9 @@ public class UserController {
 
     @RequestMapping(value="/getUsersByRoom/{roomId}", method = RequestMethod.GET)
     public Set<User> getUsersByRoom(@PathVariable Integer roomId) {
-        System.out.println("roomId = " + roomId);
-        System.out.println("roomById = " + roomService.findRoomById(roomId).toString());
-        System.out.println("user = " + userService.findUsersByRoom(roomService.findRoomById(roomId)).toString());
+//        System.out.println("roomId = " + roomId);
+//        System.out.println("roomById = " + roomService.findRoomById(roomId).toString());
+//        System.out.println("user = " + userService.findUsersByRoom(roomService.findRoomById(roomId)).toString());
         return userService.findUsersByRoom(roomService.findRoomById(roomId));
     }
 
@@ -49,7 +49,7 @@ public class UserController {
 
     @RequestMapping(value="/getRooms", method = RequestMethod.GET)
     public List<Room> getRooms() {
-        System.out.println("rooms " + roomService.findAll().toString());
+//        System.out.println("rooms " + roomService.findAll().toString());
         return roomService.findAll();
     }
 

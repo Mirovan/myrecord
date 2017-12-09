@@ -1,5 +1,7 @@
 package ru.myrecord.front.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class Service {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
+    @JsonIgnore
     User user;
 
     @Column(name = "name")
@@ -20,6 +23,7 @@ public class Service {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonIgnore
     private Room room;
 
     @Column(name = "active")

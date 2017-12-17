@@ -1,5 +1,6 @@
 package ru.myrecord.front.controller;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -186,13 +187,13 @@ public class CabinetUserController/* implements ErrorController*/{
 
             //List<Schedule> scheduleUser = scheduleService.findByUser(user, Calendar.getInstance().getTime());
             //List<Schedule> scheduleAll = new ArrayList<>();
-            List<List<Integer>> scheduleAll = new ArrayList<>();
+            List<List<Schedule>> scheduleAll = new ArrayList<>();
 
             LocalDate date = LocalDate.now();   //текущая дата
             //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
             scheduleAll.add(new ArrayList<>());
             for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
-                scheduleAll.get(scheduleAll.size()-1).add(0);
+                scheduleAll.get(scheduleAll.size()-1).add( new Schedule() );
             }
             //Заполняем двуменрый массив датами
             for (int i=1; i<=date.lengthOfMonth(); i++) {
@@ -200,7 +201,10 @@ public class CabinetUserController/* implements ErrorController*/{
                 if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
                     scheduleAll.add(new ArrayList<>());
                 }
-                scheduleAll.get(scheduleAll.size()-1).add( date.withDayOfMonth(i).getDayOfWeek().getValue() );
+                //создаем День
+                Schedule schedule = new Schedule();
+                schedule.setSdate(date.withDayOfMonth(i));
+                scheduleAll.get(scheduleAll.size()-1).add( schedule );
             }
 
             modelAndView.addObject("scheduleList", scheduleAll);

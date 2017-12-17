@@ -25,7 +25,7 @@
 
     <tr th:each="scheduleItem : ${scheduleList}">
         <td th:each="schedule : ${scheduleItem}">
-            qweqwe - <span th:text="${schedule}"></span>
+            day - <span th:text="${schedule.sdate}"></span>
         </td>
     </tr>
     </tbody>

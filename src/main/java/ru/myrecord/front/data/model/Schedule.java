@@ -19,10 +19,18 @@ public class Schedule {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 
     @Column(name = "sdate")
-    LocalDate sdate;
+    private LocalDate sdate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;

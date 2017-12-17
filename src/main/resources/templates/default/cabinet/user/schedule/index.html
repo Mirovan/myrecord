@@ -11,7 +11,12 @@
 
 <br />
 
-<table id="example" class="display" width="70%" cellspacing="0" border="1">
+<a href="#prev"> << Prev</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#next">Next >> </a>
+
+<table id="scheduleTable" class="display" width="800" cellspacing="0" border="1">
+
     <tbody>
     <tr>
         <th>Пн</th>
@@ -24,23 +29,31 @@
     </tr>
 
     <tr th:each="scheduleItem : ${scheduleList}">
-        <td th:each="schedule : ${scheduleItem}">
-            day - <span th:text="${schedule.sdate}"></span>
+        <td th:each="schedule : ${scheduleItem}" th:text="${schedule.sdate}">
         </td>
     </tr>
     </tbody>
 </table>
 
 <script type="text/javascript" language="javascript">
-    $('#example').DataTable( {
-        select: {
-            style: 'os',
-            items: 'cell'
-        }
-    } );
+    $(document).ready(function() {
+        $('td').click( function() {
+            $(this).toggleClass("red-cell");
+        } );
 
-    $('#example tbody').on( 'click', 'td', function () {
-        alert( table.cell( this ).data() );
+
+//        $.get("/ajaxtest.php", {
+//                userId: 59,
+//                year: 2017,
+//                month: 11
+//            },
+//            onAjaxSuccess
+//        );
+//
+//        function onAjaxSuccess(data) {
+//            // Здесь мы получаем данные, отправленные сервером и выводим их на экран.
+//            alert(data);
+//        }
     } );
 </script>
 

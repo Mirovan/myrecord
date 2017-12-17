@@ -15,7 +15,6 @@ public class Room {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
-//    @JsonIgnore
     User user;
 
     @Column(name = "name")

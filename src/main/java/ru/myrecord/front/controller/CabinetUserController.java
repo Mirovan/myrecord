@@ -7,16 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.Role;
-import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.Service;
-import ru.myrecord.front.data.model.User;
-import ru.myrecord.front.service.iface.RoleService;
-import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.ServiceService;
-import ru.myrecord.front.service.iface.UserService;
+import ru.myrecord.front.data.model.*;
+import ru.myrecord.front.service.iface.*;
 import ru.myrecord.front.Utils.Utils;
 import java.security.Principal;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -34,6 +30,9 @@ public class CabinetUserController/* implements ErrorController*/{
 
     @Autowired
     private ServiceService serviceService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -173,6 +172,42 @@ public class CabinetUserController/* implements ErrorController*/{
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/services/");
+        }
+    }
+
+
+    @RequestMapping(value="/cabinet/users/{userId}/schedule/", method = RequestMethod.GET)
+    public ModelAndView scheduleView(@PathVariable Integer userId, Principal principal) {
+        User user = userService.findUserById(userId);
+        User ownerUser = user.getOwnerUser();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+            ModelAndView modelAndView = new ModelAndView();
+
+            //List<Schedule> scheduleUser = scheduleService.findByUser(user, Calendar.getInstance().getTime());
+            //List<Schedule> scheduleAll = new ArrayList<>();
+            List<List<Integer>> scheduleAll = new ArrayList<>();
+
+            LocalDate date = LocalDate.now();   //текущая дата
+            //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
+            scheduleAll.add(new ArrayList<>());
+            for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
+                scheduleAll.get(scheduleAll.size()-1).add(0);
+            }
+            //Заполняем двуменрый массив датами
+            for (int i=1; i<=date.lengthOfMonth(); i++) {
+                //увеличиваем размер массива
+                if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
+                    scheduleAll.add(new ArrayList<>());
+                }
+                scheduleAll.get(scheduleAll.size()-1).add( date.withDayOfMonth(i).getDayOfWeek().getValue() );
+            }
+
+            modelAndView.addObject("scheduleList", scheduleAll);
+            modelAndView.setViewName("cabinet/user/schedule/index");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/users/");
         }
     }
 

@@ -184,30 +184,10 @@ public class CabinetUserController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
             ModelAndView modelAndView = new ModelAndView();
-
-            //List<Schedule> scheduleUser = scheduleService.findByUser(user, Calendar.getInstance().getTime());
-            //List<Schedule> scheduleAll = new ArrayList<>();
-            List<List<Schedule>> scheduleAll = new ArrayList<>();
-
-            LocalDate date = LocalDate.now();   //текущая дата
-            //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
-            scheduleAll.add(new ArrayList<>());
-            for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
-                scheduleAll.get(scheduleAll.size()-1).add( new Schedule() );
-            }
-            //Заполняем двуменрый массив датами
-            for (int i=1; i<=date.lengthOfMonth(); i++) {
-                //увеличиваем размер массива
-                if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
-                    scheduleAll.add(new ArrayList<>());
-                }
-                //создаем День
-                Schedule schedule = new Schedule();
-                schedule.setSdate(date.withDayOfMonth(i));
-                scheduleAll.get(scheduleAll.size()-1).add( schedule );
-            }
-
-            modelAndView.addObject("scheduleList", scheduleAll);
+            LocalDate date = LocalDate.now();
+            modelAndView.addObject("year", date.getYear());
+            modelAndView.addObject("month", date.getMonthValue());
+            modelAndView.addObject("userId", userId);
             modelAndView.setViewName("cabinet/user/schedule/index");
             return modelAndView;
         } else {

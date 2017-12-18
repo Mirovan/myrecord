@@ -1,7 +1,8 @@
 $(document).ready(
     function() {
         //action cell click
-        $('td').click( function() {
+        $('#scheduleContainer').on("click", "td", function() {
+            //alert($(this).text);
             $(this).toggleClass("red-cell");
         } );
 
@@ -43,6 +44,8 @@ $(document).ready(
 
 
 function showSchedule() {
+
+
     $.getJSON(
         "/cabinet/users/schedule/",
         {
@@ -51,9 +54,11 @@ function showSchedule() {
             month: $('#monthInput').val()
         },
         function(data) {
-            $('#divScheduleContainer').html('');
+            $('#scheduleContainer').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
             $.each(data, function(key, valueList) {
-                $('#divScheduleContainer').append('<tr>');
+
+                //fill table
+                $('#scheduleContainer').append('<tr>');
                 $.each(valueList, function(key2, scheduleDay) {
                     var date = new Date();
                     if (scheduleDay.sdate != null) {
@@ -61,12 +66,12 @@ function showSchedule() {
                         var month = scheduleDay.sdate.monthValue - 1; // Month is 0-indexed
                         var year = scheduleDay.sdate.year;
                         date = new Date(year, month, day);
-                        $('#divScheduleContainer').append('<td>' + $.format.date(date, 'dd-MM-yyyy') + '</td>');
+                        $('#scheduleContainer tr:last').append('<td>' + $.format.date(date, 'dd-MM-yyyy') + '</td>');
                     } else {
-                        $('#divScheduleContainer').append('<td></td>');
+                        $('#scheduleContainer tr:last').append('<td></td>');
                     }
                 });
-                $('#divScheduleContainer').append('</tr>');
+                $('#scheduleContainer').append('</tr>');
             });
         }
     );

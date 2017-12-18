@@ -35,7 +35,11 @@ input[type="password"] {
   border-top-right-radius: 0;
 }
 
-#scheduleTable td { background: white; cursor: pointer; padding: 2px }
-#scheduleTable td.red-cell {
+#scheduleContainer td {
+  background: white;
+  cursor: pointer;
+  padding: 2px
+}
+#scheduleContainer td.red-cell {
   background: #F00; /* Or some other color */
 }

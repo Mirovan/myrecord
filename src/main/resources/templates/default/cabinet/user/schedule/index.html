@@ -15,40 +15,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a id="aNext" href="#next">Next</a>
 
-User: <input type="text" id="userInput" value="29" />
-<br />
-Year: <input type="text" id="yearInput" value="2017" />
-<br />
-Month: <input type="text" id="monthInput" value="12" />
+<input type="hidden" id="userInput" th:value="${userId}" />
+<input type="hidden" id="yearInput" th:value="${year}" />
+<input type="hidden" id="monthInput" th:value="${month}" />
 
 <br /><br /><br />
 
-<div id="scheduleDiv">
-    <table id="scheduleTable" class="display" width="800" cellspacing="0" border="1">
 
-        <tbody>
-        <tr>
-            <th>Пн</th>
-            <th>Вт</th>
-            <th>Ср</th>
-            <th>Чт</th>
-            <th>Пт</th>
-            <th>Сб</th>
-            <th>Вс</th>
-        </tr>
-
-        <tr id="trScheduleContainer" th:each="scheduleItem : ${scheduleList}">
-            <td th:each="schedule : ${scheduleItem}" th:text="${schedule.sdate}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<br />
-<hr />
-<br />
-
-<table id="divScheduleContainer" style="margin: 10px;" border="1"></table>
+<table id="scheduleContainer" style="margin: 10px;" border="1"></table>
 
 
 <script th:src="@{/js/script.js}"></script>

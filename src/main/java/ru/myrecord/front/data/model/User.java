@@ -1,5 +1,6 @@
 package ru.myrecord.front.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -45,6 +46,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonIgnore
     private Set<Role> roles;
 
     @Column(name = "active")
@@ -55,6 +57,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "room_id")
     )
+    @JsonIgnore
     private Set<Room> rooms;
 
     public Integer getId() {
@@ -135,5 +138,21 @@ public class User {
 
     public void setRooms(Set<Room> rooms) {
         this.rooms = rooms;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", pass='" + pass + '\'' +
+                ", ownerUser=" + ownerUser +
+                ", name='" + name + '\'' +
+                ", sirname='" + sirname + '\'' +
+                ", roles=" + roles +
+                ", active=" + active +
+                ", rooms=" + rooms +
+                '}';
     }
 }

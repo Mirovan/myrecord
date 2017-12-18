@@ -10,6 +10,7 @@ import java.util.Set;
 public interface RoomService {
     public Room findRoomById(Integer id);
     public Set<Room> findRoomsByActive(User user);
+    public List<Room> findAll();
     public void add(Room room);
     public void update(Room room);
 }

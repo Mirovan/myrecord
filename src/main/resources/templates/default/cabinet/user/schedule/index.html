@@ -11,51 +11,47 @@
 
 <br />
 
-<a href="#prev"> << Prev</a>
+<a id="aPrev" href="#prev">Prev</a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="#next">Next >> </a>
+<a id="aNext" href="#next">Next</a>
 
-<table id="scheduleTable" class="display" width="800" cellspacing="0" border="1">
+User: <input type="text" id="userInput" value="29" />
+<br />
+Year: <input type="text" id="yearInput" value="2017" />
+<br />
+Month: <input type="text" id="monthInput" value="12" />
 
-    <tbody>
-    <tr>
-        <th>Пн</th>
-        <th>Вт</th>
-        <th>Ср</th>
-        <th>Чт</th>
-        <th>Пт</th>
-        <th>Сб</th>
-        <th>Вс</th>
-    </tr>
+<br /><br /><br />
 
-    <tr th:each="scheduleItem : ${scheduleList}">
-        <td th:each="schedule : ${scheduleItem}" th:text="${schedule.sdate}">
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div id="scheduleDiv">
+    <table id="scheduleTable" class="display" width="800" cellspacing="0" border="1">
 
-<script type="text/javascript" language="javascript">
-    $(document).ready(function() {
-        $('td').click( function() {
-            $(this).toggleClass("red-cell");
-        } );
+        <tbody>
+        <tr>
+            <th>Пн</th>
+            <th>Вт</th>
+            <th>Ср</th>
+            <th>Чт</th>
+            <th>Пт</th>
+            <th>Сб</th>
+            <th>Вс</th>
+        </tr>
+
+        <tr id="trScheduleContainer" th:each="scheduleItem : ${scheduleList}">
+            <td th:each="schedule : ${scheduleItem}" th:text="${schedule.sdate}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<br />
+<hr />
+<br />
+
+<table id="divScheduleContainer" style="margin: 10px;" border="1"></table>
 
 
-//        $.get("/ajaxtest.php", {
-//                userId: 59,
-//                year: 2017,
-//                month: 11
-//            },
-//            onAjaxSuccess
-//        );
-//
-//        function onAjaxSuccess(data) {
-//            // Здесь мы получаем данные, отправленные сервером и выводим их на экран.
-//            alert(data);
-//        }
-    } );
-</script>
+<script th:src="@{/js/script.js}"></script>
 
 
 <br />

@@ -27,7 +27,6 @@ import java.util.Set;
  * по логике
  */
 @RestController
-@RequestMapping("/rest")
 public class UserController {
 
     @Autowired
@@ -42,7 +41,7 @@ public class UserController {
     @Autowired
     private ServiceService serviceService;
 
-
+/*
     @RequestMapping(value="/getUsersByRoom/{roomId}", method = RequestMethod.GET)
     public Set<User> getUsersByRoom(@PathVariable Integer roomId) {
 //        System.out.println("roomId = " + roomId);
@@ -63,10 +62,11 @@ public class UserController {
 //        System.out.println("rooms " + roomService.findAll().toString());
         return roomService.findAll();
     }
+*/
 
-
-    @RequestMapping(value="/cabinet/users/{userId}/schedule/{year}/{month}/", method = RequestMethod.GET)
-    public List<List<Schedule>> getUserSchedule(@PathVariable Integer userId, @PathVariable Integer year, @PathVariable Integer month, Principal principal) {
+    @RequestMapping(value="/cabinet/users/schedule/", method = RequestMethod.GET)
+    //@RequestMapping(value="/cabinet/users/schedule/", method = RequestMethod.GET)
+    public List<List<Schedule>> getUserSchedule(Integer userId, Integer year, Integer month, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
 

@@ -1,9 +1,14 @@
 $(document).ready(
     function() {
+        //action cell click
         $('td').click( function() {
             $(this).toggleClass("red-cell");
         } );
 
+        //load Schedule when page loaded
+        showSchedule();
+
+        //action - prev month click
         $('#aPrev').click (
             function () {
                 var month = parseInt($('#monthInput').val()) - 1;
@@ -19,6 +24,7 @@ $(document).ready(
             }
         );
 
+        //action - next month click
         $('#aNext').click (
             function () {
                 var month = parseInt($('#monthInput').val()) + 1;

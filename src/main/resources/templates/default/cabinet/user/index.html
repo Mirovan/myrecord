@@ -20,6 +20,8 @@
     <a th:href="@{'/cabinet/users/edit/' + ${user.id} + '/'}">[Edit]</a>
     &nbsp;&nbsp;
     <a th:href="@{'/cabinet/users/delete/' + ${user.id} + '/'}">[Delete]</a>
+    &nbsp;&nbsp;
+    <a th:href="@{'/cabinet/users/' + ${user.id} + '/schedule/'}">== Расписание ==</a>
 </div>
 
 <br />

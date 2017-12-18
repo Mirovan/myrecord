@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="cabinet/inc/head.inc :: head"></head>
+<body>
+
+<h1>Расписание</h1>
+
+
+<br />
+<br />
+
+<br />
+
+<a id="aPrev" href="#prev">Prev</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a id="aNext" href="#next">Next</a>
+
+<input type="hidden" id="userInput" th:value="${userId}" />
+<input type="hidden" id="yearInput" th:value="${year}" />
+<input type="hidden" id="monthInput" th:value="${month}" />
+
+<br /><br /><br />
+
+
+<table id="scheduleContainer" style="margin: 10px;" border="1"></table>
+
+
+<script th:src="@{/js/script.js}"></script>
+
+
+<br />
+<br />
+
+<div th:include="cabinet/inc/menu.inc :: menu"></div>
+
+
+</body>
+</html>
+

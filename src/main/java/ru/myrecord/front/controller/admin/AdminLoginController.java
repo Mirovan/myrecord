@@ -24,7 +24,7 @@ public class AdminLoginController implements ErrorController {
     /*
     * Страница логина в админке
     * */
-    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/index/"}, method = RequestMethod.GET)
     public ModelAndView indexGet() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/index");
@@ -34,7 +34,7 @@ public class AdminLoginController implements ErrorController {
     /*
     * Страница диаграм в админке
     * */
-    @RequestMapping(value = "/charts", method = RequestMethod.GET)
+    @RequestMapping(value = "/charts/", method = RequestMethod.GET)
     public ModelAndView chartsGet() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/charts");

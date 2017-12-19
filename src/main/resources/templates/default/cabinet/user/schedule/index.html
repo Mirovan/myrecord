@@ -15,12 +15,17 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a id="aNext" href="#next">Next</a>
 
-<input type="hidden" id="userInput" th:value="${userId}" />
-<input type="hidden" id="yearInput" th:value="${year}" />
-<input type="hidden" id="monthInput" th:value="${month}" />
-
 <br /><br /><br />
 
+<div id="divFormContainer">
+    <form th:action="@{'/cabinet/users/saveschedule/'}" method="post" id="selectDate">
+        <input type="hidden" id="userInput" name="userId" th:value="${userId}" />
+        <input type="hidden" id="yearInput" th:value="${year}" />
+        <input type="hidden" id="monthInput" th:value="${month}" />
+        <div id="divSelectContainer"></div>
+        <input type="submit" />
+    </form>
+</div>
 
 <table id="scheduleContainer" style="margin: 10px;" border="1"></table>
 

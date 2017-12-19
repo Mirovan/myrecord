@@ -4,10 +4,14 @@ $(document).ready(
         $('#scheduleContainer').on("click", "td", function() {
             //alert($(this).text);
             $(this).toggleClass("red-cell");
+            showSelectForm();
         } );
 
         //load Schedule when page loaded
         showSchedule();
+
+        //insert select form
+        //showSelectForm();
 
         //action - prev month click
         $('#aPrev').click (
@@ -44,8 +48,6 @@ $(document).ready(
 
 
 function showSchedule() {
-
-
     $.getJSON(
         "/cabinet/users/schedule/",
         {
@@ -76,3 +78,17 @@ function showSchedule() {
         }
     );
 }
+
+
+function showSelectForm() {
+    $('#divSelectContainer').html('');
+    var allTds = $("#scheduleContainer td.red-cell").map(function() {
+        return this.innerHTML;
+    }).get();
+
+    //showSelectForm();
+    for (var item in allTds) {
+        $('#divSelectContainer').append('<input type="checkbox" value="'+ allTds[item] +'" name="dates[]" />'+ allTds[item] +'<br/>');
+    }
+}
+

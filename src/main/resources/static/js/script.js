@@ -88,7 +88,7 @@ function showSelectForm() {
 
     //showSelectForm();
     for (var item in allTds) {
-        $('#divSelectContainer').append('<input type="checkbox" value="'+ allTds[item] +'" name="dates[]" />'+ allTds[item] +'<br/>');
+        $('#divSelectContainer').append('<input type="checkbox" value="'+ allTds[item] +'" name="dates[]" checked="checked" />'+ allTds[item] +'<br/>');
     }
 }
 

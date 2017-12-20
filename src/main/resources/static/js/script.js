@@ -2,16 +2,12 @@ $(document).ready(
     function() {
         //action cell click
         $('#scheduleContainer').on("click", "td", function() {
-            //alert($(this).text);
             $(this).toggleClass("red-cell");
             showSelectForm();
         } );
 
-        //load Schedule when page loaded
+        //load all Schedule when page loaded
         showSchedule();
-
-        //insert select form
-        //showSelectForm();
 
         //action - prev month click
         $('#aPrev').click (
@@ -48,6 +44,28 @@ $(document).ready(
 
 
 function showSchedule() {
+    $.getJSON(
+        "/cabinet/users/user-schedule/",
+        {
+            userId: $('#userInput').val(),
+            year: $('#yearInput').val(),
+            month: $('#monthInput').val()
+        },
+        function(data) {
+            $('#userScheduleContainer').html('user sched: <br />');
+            $.each(data, function(key, dateValue) {
+                if (dateValue.sdate != null) {
+                    var day = dateValue.sdate.dayOfMonth;
+                    var month = dateValue.sdate.monthValue - 1; // Month is 0-indexed
+                    var year = dateValue.sdate.year;
+                    date = new Date(year, month, day);
+                    $('#userScheduleContainer').append($.format.date(date, 'dd-MM-yyyy') + '<br />');
+                }
+            });
+        }
+    );
+
+
     $.getJSON(
         "/cabinet/users/schedule/",
         {
@@ -86,7 +104,6 @@ function showSelectForm() {
         return this.innerHTML;
     }).get();
 
-    //showSelectForm();
     for (var item in allTds) {
         $('#divSelectContainer').append('<input type="checkbox" value="'+ allTds[item] +'" name="dates[]" checked="checked" />'+ allTds[item] +'<br/>');
     }

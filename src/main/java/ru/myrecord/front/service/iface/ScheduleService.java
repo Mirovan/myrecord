@@ -7,6 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface ScheduleService {
-    List<Schedule> findByUser(User user, Date date);
+    List<Schedule> findByUser(User user);
     void add(Schedule schedule);
 }

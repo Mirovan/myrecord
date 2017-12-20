@@ -10,10 +10,7 @@ import ru.myrecord.front.Utils.Utils;
 import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.Schedule;
 import ru.myrecord.front.data.model.User;
-import ru.myrecord.front.service.iface.RoleService;
-import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.ServiceService;
-import ru.myrecord.front.service.iface.UserService;
+import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -33,13 +30,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private RoomService roomService;
-
-    @Autowired
-    private ServiceService serviceService;
+    private ScheduleService scheduleService;
 
 /*
     @RequestMapping(value="/getUsersByRoom/{roomId}", method = RequestMethod.GET)
@@ -65,19 +56,15 @@ public class UserController {
 */
 
     @RequestMapping(value="/cabinet/users/schedule/", method = RequestMethod.GET)
-    public List<List<Schedule>> getUserSchedule(Integer userId, Integer year, Integer month, Principal principal) {
+    public List<List<Schedule>> getMonthSchedule(Integer userId, Integer year, Integer month, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
 
         List<List<Schedule>> scheduleAll = new ArrayList<>();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            ModelAndView modelAndView = new ModelAndView();
-
-            //List<Schedule> scheduleUser = scheduleService.findByUser(user, Calendar.getInstance().getTime());
-            //List<Schedule> scheduleAll = new ArrayList<>();
-
             LocalDate date = LocalDate.of(year, month, 1);   //Дата по году и месяцу
+
             //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
             scheduleAll.add(new ArrayList<>());
             for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
@@ -96,6 +83,20 @@ public class UserController {
             }
         }
         return scheduleAll;
+    }
+
+
+    @RequestMapping(value="/cabinet/users/user-schedule/", method = RequestMethod.GET)
+    public List<Schedule> getUserSchedule(Integer userId, Integer year, Integer month, Principal principal) {
+        User user = userService.findUserById(userId);
+        User ownerUser = user.getOwnerUser();
+
+        List<Schedule> scheduleUser = new ArrayList<>();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+            scheduleUser = scheduleService.findByUser(user);
+        }
+        return scheduleUser;
     }
 
 }

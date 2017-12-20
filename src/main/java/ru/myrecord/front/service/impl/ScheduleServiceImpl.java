@@ -27,8 +27,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private ScheduleDAO scheduleDAO;
 
     @Override
-    public List<Schedule> findByUser(User user, Date date) {
-        return scheduleDAO.findByUser(user, date);
+    public List<Schedule> findByUser(User user) {
+        return scheduleDAO.findByUser(user);
     }
 
     @Override

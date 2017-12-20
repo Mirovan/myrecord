@@ -199,7 +199,11 @@ public class CabinetUserController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/users/saveschedule/", method = RequestMethod.POST)
-    public ModelAndView scheduleSave(@RequestParam(required = false) Integer userId, @RequestParam(value="dates[]", required = false) String[] dates, Principal principal) {
+    public ModelAndView scheduleSave(@RequestParam Integer userId,
+                                     @RequestParam Integer year,
+                                     @RequestParam Integer month,
+                                     @RequestParam(value="dates[]", required = false) String[] dates,
+                                     Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
@@ -210,7 +214,10 @@ public class CabinetUserController/* implements ErrorController*/{
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 LocalDate date = LocalDate.parse(dates[i], formatter);
                 schedule.setSdate(date);
-                scheduleService.add(schedule);
+                //Защита чтобы левые данные не добавляли, а только этого месяца
+                if ( date.getMonthValue() == month && date.getYear() == year ) {
+                    scheduleService.add(schedule);
+                }
             }
             return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/schedule/");
         } else {

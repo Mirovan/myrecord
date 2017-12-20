@@ -15,6 +15,7 @@ import ru.myrecord.front.Utils.Utils;
 import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -198,12 +199,20 @@ public class CabinetUserController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/users/saveschedule/", method = RequestMethod.POST)
-    public ModelAndView scheduleSave(Integer userId, @RequestParam(value="dates[]", required = false) String[] dates, Principal principal) {
+    public ModelAndView scheduleSave(@RequestParam(required = false) Integer userId, @RequestParam(value="dates[]", required = false) String[] dates, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            return new ModelAndView("redirect:/cabinet/users/" + userId + "/schedule/");
+            for (int i=0; i<dates.length; i++) {
+                Schedule schedule = new Schedule();
+                schedule.setUser(user);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate date = LocalDate.parse(dates[i], formatter);
+                schedule.setSdate(date);
+                scheduleService.add(schedule);
+            }
+            return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/schedule/");
         } else {
             return new ModelAndView("redirect:/cabinet/users/");
         }

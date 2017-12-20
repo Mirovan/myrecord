@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ScheduleService {
     List<Schedule> findByUser(User user, Date date);
+    void add(Schedule schedule);
 }

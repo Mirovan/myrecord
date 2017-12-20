@@ -12,5 +12,6 @@ import java.util.Set;
 
 @Repository("scheduleDAO")
 public interface ScheduleDAO extends JpaRepository<Schedule, Integer> {
+	Schedule findById(Integer id);
 	List<Schedule> findByUser(User user, Date date);
 }

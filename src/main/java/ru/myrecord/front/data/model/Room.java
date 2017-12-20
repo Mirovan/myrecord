@@ -15,7 +15,7 @@ public class Room {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
-    User user;
+    private User user;
 
     @Column(name = "name")
     private String name;

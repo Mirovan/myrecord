@@ -30,4 +30,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> findByUser(User user, Date date) {
         return scheduleDAO.findByUser(user, date);
     }
+
+    @Override
+    public void add(Schedule schedule) {
+        scheduleDAO.save(schedule);
+    }
 }

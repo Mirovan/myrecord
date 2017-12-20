@@ -102,8 +102,9 @@ CREATE TABLE "user_room" (
 /*Рассписание специалиста*/
 CREATE SEQUENCE schedule_id_seq START WITH 1;
 
-CREATE TABLE "user_schedule" (
+CREATE TABLE "schedule" (
     id INTEGER NOT NULL default nextval('schedule_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    owner_user_id INTEGER REFERENCES "users"(id),
 	sdate TIMESTAMP
 );
+ALTER SEQUENCE schedule_id_seq owned by "schedule".id;

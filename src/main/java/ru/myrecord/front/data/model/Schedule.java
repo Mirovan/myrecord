@@ -1,6 +1,9 @@
 package ru.myrecord.front.data.model;
 
+import ru.myrecord.front.Utils.LocalDateConverter;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
@@ -10,7 +13,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "user_schedule")
+@Table(name = "schedule")
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,10 +21,12 @@ public class Schedule {
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "owner_user_id")
     private User user;
 
-    @Column(name = "sdate")
+    @Column(name = "sdate", columnDefinition = "DATE")
+    @NotNull
+    @Convert(converter = LocalDateConverter.class)
     private LocalDate sdate;
 
     public Integer getId() {

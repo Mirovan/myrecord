@@ -13,6 +13,7 @@ import ru.myrecord.front.data.model.User;
 import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ScheduleService;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -34,5 +35,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void add(Schedule schedule) {
         scheduleDAO.save(schedule);
+    }
+
+    @Override
+    public Schedule findByUserAndSdate(User user, LocalDate sdate) {
+        return scheduleDAO.findByUserAndSdate(user, sdate);
     }
 }

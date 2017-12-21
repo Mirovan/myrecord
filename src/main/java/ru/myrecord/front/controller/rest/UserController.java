@@ -55,7 +55,7 @@ public class UserController {
     }
 */
 
-    @RequestMapping(value="/cabinet/users/schedule/", method = RequestMethod.GET)
+    @RequestMapping(value="/cabinet/users/month-schedule/", method = RequestMethod.GET)
     public List<List<Schedule>> getMonthSchedule(Integer userId, Integer year, Integer month, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();

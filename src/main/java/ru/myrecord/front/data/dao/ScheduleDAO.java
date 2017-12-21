@@ -6,12 +6,14 @@ import ru.myrecord.front.data.model.Room;
 import ru.myrecord.front.data.model.Schedule;
 import ru.myrecord.front.data.model.User;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Repository("scheduleDAO")
 public interface ScheduleDAO extends JpaRepository<Schedule, Integer> {
-	Schedule findById(Integer id);
+	Schedule findByUserAndSdate(User user, LocalDate sdate);
 	List<Schedule> findByUser(User user);
+	//void deleteByUserAndSdate(User user, LocalDate sdate);
 }

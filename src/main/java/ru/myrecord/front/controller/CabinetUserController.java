@@ -216,7 +216,11 @@ public class CabinetUserController/* implements ErrorController*/{
                 schedule.setSdate(date);
                 //Защита чтобы левые данные не добавляли, а только этого месяца
                 if ( date.getMonthValue() == month && date.getYear() == year ) {
-                    scheduleService.add(schedule);
+                    //Определяем есть ли такая запись уже в БД
+                    Schedule existSchedule = scheduleService.findByUserAndSdate(user, date);
+                    if ( existSchedule == null ) {  //Такой записи нет - добавляем
+                        scheduleService.add(schedule);
+                    }
                 }
             }
             return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/schedule/");

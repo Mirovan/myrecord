@@ -1,9 +1,13 @@
+var selectedTdClass = "red-cell";
+
 $(document).ready(
     function() {
         //action cell click
         $('#scheduleContainer').on("click", "td", function() {
-            $(this).toggleClass("red-cell");
-            showSelectForm();
+            if ($(this).text() != "") {
+                $(this).toggleClass(selectedTdClass);
+                showSelectForm();
+            }
         } );
 
         //load all Schedule when page loaded
@@ -44,6 +48,9 @@ $(document).ready(
 
 
 function showSchedule() {
+    var userSheduleArr = [];
+
+    //get user schedule dates
     $.getJSON(
         "/cabinet/users/user-schedule/",
         {
@@ -59,6 +66,7 @@ function showSchedule() {
                     var month = dateValue.sdate.monthValue - 1; // Month is 0-indexed
                     var year = dateValue.sdate.year;
                     date = new Date(year, month, day);
+                    userSheduleArr.push( $.format.date(date, 'dd-MM-yyyy') );
                     $('#userScheduleContainer').append($.format.date(date, 'dd-MM-yyyy') + '<br />');
                 }
             });
@@ -66,8 +74,9 @@ function showSchedule() {
     );
 
 
+    //get month dates and show user schedule dates
     $.getJSON(
-        "/cabinet/users/schedule/",
+        "/cabinet/users/month-schedule/",
         {
             userId: $('#userInput').val(),
             year: $('#yearInput').val(),
@@ -86,13 +95,19 @@ function showSchedule() {
                         var month = scheduleDay.sdate.monthValue - 1; // Month is 0-indexed
                         var year = scheduleDay.sdate.year;
                         date = new Date(year, month, day);
-                        $('#scheduleContainer tr:last').append('<td>' + $.format.date(date, 'dd-MM-yyyy') + '</td>');
+                        var formatedDate = $.format.date(date, 'dd-MM-yyyy');
+                        if ( userSheduleArr.indexOf(formatedDate) >= 0 ) {
+                            $('#scheduleContainer tr:last').append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
+                        } else {
+                            $('#scheduleContainer tr:last').append('<td>' + formatedDate + '</td>');
+                        }
                     } else {
                         $('#scheduleContainer tr:last').append('<td></td>');
                     }
                 });
                 $('#scheduleContainer').append('</tr>');
             });
+            showSelectForm();
         }
     );
 }

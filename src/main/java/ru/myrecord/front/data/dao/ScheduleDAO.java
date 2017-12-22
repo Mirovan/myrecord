@@ -15,5 +15,5 @@ import java.util.Set;
 public interface ScheduleDAO extends JpaRepository<Schedule, Integer> {
 	Schedule findByUserAndSdate(User user, LocalDate sdate);
 	List<Schedule> findByUser(User user);
-	//void deleteByUserAndSdate(User user, LocalDate sdate);
+	void deleteByUserAndSdate(User user, LocalDate sdate);
 }

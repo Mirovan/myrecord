@@ -68,7 +68,6 @@ function showSchedule() {
                     var year = dateValue.sdate.year;
                     date = new Date(year, month, day);
                     userSheduleArr.push( $.format.date(date, 'dd-MM-yyyy') );
-                    $('#userScheduleContainer').append($.format.date(date, 'dd-MM-yyyy') + '<br />');
                 }
             });
 

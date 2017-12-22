@@ -86,46 +86,10 @@ public class UserController {
 
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            userMonthSchedule.setScheduleAll( getMonthSchedule(year, month) );
-            userMonthSchedule.setUserSchedule( getUserSchedule(user) );
+            userMonthSchedule.setScheduleAll( scheduleService.getMonthSchedule(year, month) );  //Получаем список - месячный календарь
+            userMonthSchedule.setUserSchedule( scheduleService.findByUser(user) );  //Получаем расписание пользователя
         }
         return userMonthSchedule;
-    }
-
-
-    /**
-     * Получаем расписание пользователя
-     * */
-    public List<Schedule> getUserSchedule(User user) {
-        List<Schedule> scheduleUser = scheduleService.findByUser(user);
-        return scheduleUser;
-    }
-
-
-    /**
-     * Получаем список - месячный календарь
-     * */
-    public List<List<Schedule>> getMonthSchedule(Integer year, Integer month) {
-        List<List<Schedule>> scheduleAll = new ArrayList<>();
-        LocalDate date = LocalDate.of(year, month, 1);   //Дата по году и месяцу
-
-        //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
-        scheduleAll.add(new ArrayList<>());
-        for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
-            scheduleAll.get(scheduleAll.size()-1).add( new Schedule() );
-        }
-        //Заполняем двуменрый массив датами
-        for (int i=1; i<=date.lengthOfMonth(); i++) {
-            //увеличиваем размер массива
-            if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
-                scheduleAll.add(new ArrayList<>());
-            }
-            //создаем День
-            Schedule schedule = new Schedule();
-            schedule.setSdate(date.withDayOfMonth(i));
-            scheduleAll.get(scheduleAll.size()-1).add( schedule );
-        }
-        return scheduleAll;
     }
 
 }

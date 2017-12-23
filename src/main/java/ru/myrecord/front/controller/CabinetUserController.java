@@ -222,8 +222,6 @@ public class CabinetUserController/* implements ErrorController*/{
                     //Создем объект - день расписания
                     Schedule schedule = new Schedule();
                     schedule.setUser(user);
-                    formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                    date = LocalDate.parse(dates.get(i), formatter);
                     schedule.setSdate(date);
 
                     //Защита - чтобы левые данные не добавляли, а только этого месяца
@@ -235,7 +233,6 @@ public class CabinetUserController/* implements ErrorController*/{
                         }
                     }
                 } else {    //Пытаемся удалить i-ю дату из БД
-                    //ToDo: Доделать удаление
                     scheduleService.removeScheduleByDate(user, date);
                 }
             }

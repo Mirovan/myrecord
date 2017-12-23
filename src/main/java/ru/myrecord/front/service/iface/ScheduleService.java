@@ -11,4 +11,6 @@ public interface ScheduleService {
     List<Schedule> findByUser(User user);
     Schedule findByUserAndSdate(User user, LocalDate sdate);
     void add(Schedule schedule);
+    void removeScheduleByDate(User user, LocalDate date);
+    List<List<Schedule>> getMonthSchedule(Integer year, Integer month);
 }

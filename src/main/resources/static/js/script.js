@@ -48,33 +48,6 @@ $(document).ready(
 
 
 function showSchedule() {
-    var userSheduleArr = [];
-
-    //get user schedule dates
-    $.getJSON(
-        "/cabinet/users/user-schedule/",
-        {
-            userId: $('#userInput').val(),
-            year: $('#yearInput').val(),
-            month: $('#monthInput').val()
-        },
-        function(data) {
-            $('#userScheduleContainer').html('user sched: <br />');
-            $.each(data, function(key, dateValue) {
-                if (dateValue.sdate != null) {
-                    var day = dateValue.sdate.dayOfMonth;
-                    var month = dateValue.sdate.monthValue - 1; // Month is 0-indexed
-                    var year = dateValue.sdate.year;
-                    date = new Date(year, month, day);
-                    userSheduleArr.push( $.format.date(date, 'dd-MM-yyyy') );
-                    $('#userScheduleContainer').append($.format.date(date, 'dd-MM-yyyy') + '<br />');
-                }
-            });
-        }
-    );
-
-
-    //get month dates and show user schedule dates
     $.getJSON(
         "/cabinet/users/month-schedule/",
         {
@@ -83,8 +56,24 @@ function showSchedule() {
             month: $('#monthInput').val()
         },
         function(data) {
+            var calendarData = data.scheduleAll;
+            var userScheduleData = data.userSchedule;
+            var userSheduleArr = [];
+
+            //get user schedule
+            $.each(userScheduleData, function(key, dateValue) {
+                if (dateValue.sdate != null) {
+                    var day = dateValue.sdate.dayOfMonth;
+                    var month = dateValue.sdate.monthValue - 1; // Month is 0-indexed
+                    var year = dateValue.sdate.year;
+                    date = new Date(year, month, day);
+                    userSheduleArr.push( $.format.date(date, 'dd-MM-yyyy') );
+                }
+            });
+
+            //fill calendar with users schedule
             $('#scheduleContainer').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
-            $.each(data, function(key, valueList) {
+            $.each(calendarData, function(key, valueList) {
 
                 //fill table
                 $('#scheduleContainer').append('<tr>');
@@ -107,6 +96,7 @@ function showSchedule() {
                 });
                 $('#scheduleContainer').append('</tr>');
             });
+
             showSelectForm();
         }
     );
@@ -120,7 +110,7 @@ function showSelectForm() {
     }).get();
 
     for (var item in allTds) {
-        $('#divSelectContainer').append('<input type="checkbox" value="'+ allTds[item] +'" name="dates[]" checked="checked" />'+ allTds[item] +'<br/>');
+        $('#divSelectContainer').append('<input type="hidden" value="'+ allTds[item] +'" name="dates[]" />');
     }
 }
 

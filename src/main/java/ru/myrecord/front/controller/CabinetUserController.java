@@ -202,19 +202,49 @@ public class CabinetUserController/* implements ErrorController*/{
     public ModelAndView scheduleSave(@RequestParam Integer userId,
                                      @RequestParam Integer year,
                                      @RequestParam Integer month,
-                                     @RequestParam(value="dates[]", required = false) String[] dates,
+                                     @RequestParam(value="dates[]", required = false) List<String> dates,
                                      Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            for (int i=0; i<dates.length; i++) {
+            LocalDate localDate = LocalDate.of(year, month, 1); //текущая дата полученого года и месяца
+            int lastMonthDay = localDate.lengthOfMonth();   //последний день месяца
+
+            //Перебираем все дни полученного месяца
+            for (int i=1; i<=lastMonthDay; i++) {
+                LocalDate date = LocalDate.of(year, month, i);  //создаем i-й день
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String formattedDate = date.format(formatter);  //получаем строковое значение q-й даты
+
+                //Если i-я дата пришла в списке - пытаемся её добавить в БД
+                if ( dates.contains(formattedDate) ) {
+                    //Создем объект - день расписания
+                    Schedule schedule = new Schedule();
+                    schedule.setUser(user);
+                    schedule.setSdate(date);
+
+                    //Защита - чтобы левые данные не добавляли, а только этого месяца
+                    if ( date.getMonthValue() == month && date.getYear() == year ) {
+                        //Определяем есть ли такая запись уже в БД
+                        Schedule existSchedule = scheduleService.findByUserAndSdate(user, date);
+                        if ( existSchedule == null ) {  //Такой записи нет - добавляем
+                            scheduleService.add(schedule);
+                        }
+                    }
+                } else {    //Пытаемся удалить i-ю дату из БД
+                    scheduleService.removeScheduleByDate(user, date);
+                }
+            }
+
+            /*
+            for (int i=0; i<dates.size(); i++) {
                 Schedule schedule = new Schedule();
                 schedule.setUser(user);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate date = LocalDate.parse(dates[i], formatter);
+                LocalDate date = LocalDate.parse(dates.get(i), formatter);
                 schedule.setSdate(date);
-                //Защита чтобы левые данные не добавляли, а только этого месяца
+                //Защита - чтобы левые данные не добавляли, а только этого месяца
                 if ( date.getMonthValue() == month && date.getYear() == year ) {
                     //Определяем есть ли такая запись уже в БД
                     Schedule existSchedule = scheduleService.findByUserAndSdate(user, date);
@@ -223,6 +253,7 @@ public class CabinetUserController/* implements ErrorController*/{
                     }
                 }
             }
+            */
             return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/schedule/");
         } else {
             return new ModelAndView("redirect:/cabinet/users/");

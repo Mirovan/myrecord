@@ -32,6 +32,28 @@ public class UserController {
     @Autowired
     private ScheduleService scheduleService;
 
+
+    private class UserMonthSchedule {
+        private List<Schedule> userSchedule;
+        private List<List<Schedule>> scheduleAll;
+
+        public List<Schedule> getUserSchedule() {
+            return userSchedule;
+        }
+
+        public void setUserSchedule(List<Schedule> userSchedule) {
+            this.userSchedule = userSchedule;
+        }
+
+        public List<List<Schedule>> getScheduleAll() {
+            return scheduleAll;
+        }
+
+        public void setScheduleAll(List<List<Schedule>> scheduleAll) {
+            this.scheduleAll = scheduleAll;
+        }
+    }
+
 /*
     @RequestMapping(value="/getUsersByRoom/{roomId}", method = RequestMethod.GET)
     public Set<User> getUsersByRoom(@PathVariable Integer roomId) {
@@ -56,47 +78,18 @@ public class UserController {
 */
 
     @RequestMapping(value="/cabinet/users/month-schedule/", method = RequestMethod.GET)
-    public List<List<Schedule>> getMonthSchedule(Integer userId, Integer year, Integer month, Principal principal) {
+    public UserMonthSchedule getScheduleData(Integer userId, Integer year, Integer month, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
 
-        List<List<Schedule>> scheduleAll = new ArrayList<>();
+        UserMonthSchedule userMonthSchedule = new UserMonthSchedule();
+
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            LocalDate date = LocalDate.of(year, month, 1);   //Дата по году и месяцу
-
-            //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
-            scheduleAll.add(new ArrayList<>());
-            for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
-                scheduleAll.get(scheduleAll.size()-1).add( new Schedule() );
-            }
-            //Заполняем двуменрый массив датами
-            for (int i=1; i<=date.lengthOfMonth(); i++) {
-                //увеличиваем размер массива
-                if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
-                    scheduleAll.add(new ArrayList<>());
-                }
-                //создаем День
-                Schedule schedule = new Schedule();
-                schedule.setSdate(date.withDayOfMonth(i));
-                scheduleAll.get(scheduleAll.size()-1).add( schedule );
-            }
+            userMonthSchedule.setScheduleAll( scheduleService.getMonthSchedule(year, month) );  //Получаем список - месячный календарь
+            userMonthSchedule.setUserSchedule( scheduleService.findByUser(user) );  //Получаем расписание пользователя
         }
-        return scheduleAll;
-    }
-
-
-    @RequestMapping(value="/cabinet/users/user-schedule/", method = RequestMethod.GET)
-    public List<Schedule> getUserSchedule(Integer userId, Integer year, Integer month, Principal principal) {
-        User user = userService.findUserById(userId);
-        User ownerUser = user.getOwnerUser();
-
-        List<Schedule> scheduleUser = new ArrayList<>();
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            scheduleUser = scheduleService.findByUser(user);
-        }
-        return scheduleUser;
+        return userMonthSchedule;
     }
 
 }

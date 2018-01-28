@@ -26,19 +26,20 @@
                     lookup: usersArray,
                     onSelect: function(suggestion) {
         //                $('#selction-dynamic').html('You selected: ' + suggestion.value + ', ' + suggestion.data);
-                        $('#selction-dynamic').html(suggestion.data);
+                        //$('#selection-dynamic').html(suggestion.data);
+                        $('#userId').val(suggestion.data);
                     },
                     // onHint: function (hint) {
                     // $('#autocomplete-dynamic-x').val(hint);
                     // },
                     onInvalidateSelection: function() {
-                        $('#selction-dynamic').html('You selected: none');
+                        $('#selection-dynamic').html('You selected: none');
                     }
 
                 });
 
                 $('#button').click(function() {
-                    alert('value = ' +  $("#selction-dynamic").html()); // get the id from the hidden input
+                    alert('value = ' +  $("#selection-dynamic").html()); // get the id from the hidden input
                 });
 
             });
@@ -48,12 +49,14 @@
         </script>
         <h1>Добавление пользователя в помещение</h1>
 
-        <div>
+        <form th:action="@{'/cabinet/rooms/users/'}" method="post">
             <input type="text" name="user" id="autocomplete-dynamic" style="width: 100%; border-width: 5px;"/>
-            <div id="selction-dynamic" hidden="true"></div>
+            <input type="hidden" name="userId" id="userId" />
 
-            <button id="button" type="submit" >Select user</button>
-        </div>
+            <input id="button" type="submit" >Add user</input>
+        </form>
+
+        <div id="selection-dynamic"></div>
 
         <br />
         <br />

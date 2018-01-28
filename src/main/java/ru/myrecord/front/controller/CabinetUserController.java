@@ -174,10 +174,34 @@ public class CabinetUserController/* implements ErrorController*/{
             modelAndView.setViewName("cabinet/room/adduser");
             return modelAndView;
         } else {
-            return new ModelAndView("redirect:/cabinet/services/");
+            return new ModelAndView("redirect:/cabinet/");
         }
     }
 
+
+    @RequestMapping(value="/cabinet/rooms/users/", method = RequestMethod.POST)
+    public ModelAndView addUserToRoomPost(@RequestParam Integer roomId,
+                                          @RequestParam Integer userId,
+                                          Principal principal) {
+        Room room = roomService.findRoomById(roomId);
+        User user = room.getUser();
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+                room.getActive() == true ) { //активна ли сущность
+            //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
+
+            return new ModelAndView("redirect:/cabinet/rooms/users/");
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    @RequestMapping(value="/cabinet/rooms/users/", method = RequestMethod.GET)
+    public ModelAndView viewRoomUsers(Principal principal) {
+        //ToDo: отображаем пользователей в этой комнате
+        return new ModelAndView("cabinet/room/users/");
+    }
 
     @RequestMapping(value="/cabinet/users/{userId}/schedule/", method = RequestMethod.GET)
     public ModelAndView scheduleView(@PathVariable Integer userId, Principal principal) {
@@ -193,7 +217,7 @@ public class CabinetUserController/* implements ErrorController*/{
             modelAndView.setViewName("cabinet/user/schedule/index");
             return modelAndView;
         } else {
-            return new ModelAndView("redirect:/cabinet/users/");
+            return new ModelAndView("redirect:/cabinet/");
         }
     }
 
@@ -237,23 +261,6 @@ public class CabinetUserController/* implements ErrorController*/{
                 }
             }
 
-            /*
-            for (int i=0; i<dates.size(); i++) {
-                Schedule schedule = new Schedule();
-                schedule.setUser(user);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate date = LocalDate.parse(dates.get(i), formatter);
-                schedule.setSdate(date);
-                //Защита - чтобы левые данные не добавляли, а только этого месяца
-                if ( date.getMonthValue() == month && date.getYear() == year ) {
-                    //Определяем есть ли такая запись уже в БД
-                    Schedule existSchedule = scheduleService.findByUserAndSdate(user, date);
-                    if ( existSchedule == null ) {  //Такой записи нет - добавляем
-                        scheduleService.add(schedule);
-                    }
-                }
-            }
-            */
             return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/schedule/");
         } else {
             return new ModelAndView("redirect:/cabinet/users/");

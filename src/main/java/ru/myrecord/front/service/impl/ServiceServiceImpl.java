@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ru.myrecord.front.data.dao.ServiceDAO;
-import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.Service;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.entities.Room;
+import ru.myrecord.front.data.model.entities.Service;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ServiceService;
 
 import java.util.Set;

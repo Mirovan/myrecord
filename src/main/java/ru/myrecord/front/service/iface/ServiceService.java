@@ -1,8 +1,8 @@
 package ru.myrecord.front.service.iface;
 
-import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.Service;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.entities.Room;
+import ru.myrecord.front.data.model.entities.Service;
+import ru.myrecord.front.data.model.entities.User;
 import java.util.Set;
 
 public interface ServiceService {

@@ -1,13 +1,7 @@
 package ru.myrecord.front.Utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.myrecord.front.data.model.Role;
 import ru.myrecord.front.service.iface.RoleService;
-
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by sbt-milovanov-mm on 01.12.2017.

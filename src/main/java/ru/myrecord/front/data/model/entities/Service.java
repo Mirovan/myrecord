@@ -1,13 +1,12 @@
-package ru.myrecord.front.data.model;
+package ru.myrecord.front.data.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
-@Table(name = "room")
-public class Room {
+@Table(name = "service")
+public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -15,14 +14,16 @@ public class Room {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
+    @JsonIgnore
     private User user;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
     @JsonIgnore
-    private Set<Service> services;
+    private Room room;
 
     @Column(name = "active")
     private Boolean active;
@@ -59,22 +60,11 @@ public class Room {
         this.active = active;
     }
 
-    public Set<Service> getServices() {
-        return services;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setServices(Set<Service> services) {
-        this.services = services;
-    }
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", user=" + user +
-                ", name='" + name + '\'' +
-                ", services=" + services +
-                ", active=" + active +
-                '}';
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }

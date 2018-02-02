@@ -1,12 +1,10 @@
-package ru.myrecord.front.data.model;
+package ru.myrecord.front.data.model.entities;
 
 import ru.myrecord.front.Utils.LocalDateConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * Created by max on 16.12.2017.

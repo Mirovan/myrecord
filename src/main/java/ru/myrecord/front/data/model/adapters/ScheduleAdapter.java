@@ -1,6 +1,6 @@
-package ru.myrecord.front.data.model.restadapters;
+package ru.myrecord.front.data.model.adapters;
 
-import ru.myrecord.front.data.model.Schedule;
+import ru.myrecord.front.data.model.entities.Schedule;
 
 import java.util.List;
 

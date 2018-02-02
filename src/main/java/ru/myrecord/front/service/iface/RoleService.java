@@ -1,8 +1,7 @@
 package ru.myrecord.front.service.iface;
 
 
-import ru.myrecord.front.data.model.Role;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.entities.Role;
 
 import java.util.List;
 import java.util.Set;

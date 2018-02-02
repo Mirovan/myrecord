@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
-import ru.myrecord.front.data.model.Role;
-import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.adapters.UserAdapter;
+import ru.myrecord.front.data.model.entities.Role;
+import ru.myrecord.front.data.model.entities.Room;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.util.Arrays;
@@ -86,4 +87,14 @@ public class UserServiceImpl implements UserService {
     public Set<User> findUsersByRoom(Room room) {
         return userDAO.findByRoomId(room.getId());
     }
+
+    @Override
+    public Set<UserAdapter> getUserAdapterCollection(Set<User> users) {
+        Set<UserAdapter> userAdapterColection = new HashSet<>();
+        for (User user: users) {
+            userAdapterColection.add(new UserAdapter(user));
+        }
+        return userAdapterColection;
+    }
+
 }

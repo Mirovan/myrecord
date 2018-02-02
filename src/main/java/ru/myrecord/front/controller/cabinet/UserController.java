@@ -20,7 +20,7 @@ import java.util.*;
 
 
 @Controller
-public class CabinetUserController/* implements ErrorController*/{
+public class UserController/* implements ErrorController*/{
 
     @Autowired
     private UserService userService;
@@ -165,8 +165,8 @@ public class CabinetUserController/* implements ErrorController*/{
             //Set<Room> rooms = roomService.findRoomsByActive(user);
             // TODO: 05.12.2017 - add services to user
             Set<Service> services = serviceService.findServicesByRoom(room);
-            //Set<User> users = userService.findUsersByRoom(room);
             Set<User> users = userService.findUsersByOwner(user);
+            //List<>
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("users", users);

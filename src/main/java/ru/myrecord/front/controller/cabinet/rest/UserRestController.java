@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.Utils.Utils;
 import ru.myrecord.front.data.model.Schedule;
 import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.restadapters.ScheduleAdapter;
 import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ScheduleService;
 import ru.myrecord.front.service.iface.ServiceService;
@@ -36,27 +37,6 @@ public class UserRestController {
     @Autowired
     private ServiceService serviceService;
 
-    private class UserMonthSchedule {
-        private List<Schedule> userSchedule;
-        private List<List<Schedule>> scheduleAll;
-
-        public List<Schedule> getUserSchedule() {
-            return userSchedule;
-        }
-
-        public void setUserSchedule(List<Schedule> userSchedule) {
-            this.userSchedule = userSchedule;
-        }
-
-        public List<List<Schedule>> getScheduleAll() {
-            return scheduleAll;
-        }
-
-        public void setScheduleAll(List<List<Schedule>> scheduleAll) {
-            this.scheduleAll = scheduleAll;
-        }
-    }
-
 /*
     @RequestMapping(value="/getUsersByRoom/{roomId}", method = RequestMethod.GET)
     public Set<User> getUsersByRoom(@PathVariable Integer roomId) {
@@ -84,11 +64,11 @@ public class UserRestController {
      * Запрос расписания
      * */
     @RequestMapping(value="/cabinet/users/json-month-schedule/", method = RequestMethod.GET)
-    public UserMonthSchedule getScheduleData(Integer userId, Integer year, Integer month, Principal principal) {
+    public ScheduleAdapter getScheduleData(Integer userId, Integer year, Integer month, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
 
-        UserMonthSchedule userMonthSchedule = new UserMonthSchedule();
+        ScheduleAdapter userMonthSchedule = new ScheduleAdapter();
 
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {

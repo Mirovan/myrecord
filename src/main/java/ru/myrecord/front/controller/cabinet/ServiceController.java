@@ -22,7 +22,7 @@ import java.util.Set;
  */
 
 @Controller
-public class CabinetServiceController/* implements ErrorController*/{
+public class ServiceController/* implements ErrorController*/{
 
     @Autowired
     private UserService userService;

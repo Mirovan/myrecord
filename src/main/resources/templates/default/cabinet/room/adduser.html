@@ -41,9 +41,9 @@
             <input type="text" name="user" id="input-user-selection" style="width: 100%; border-width: 5px;"/>
             <input type="hidden" name="userId" id="userId" />
 
-            <span th:each="service : ${services}" style="display: block;">
+            <div th:each="service : ${services}" style="display: block;">
                 <input type="checkbox" th:value="@{${service.id}}" th:text="@{${service.name}}" />
-            </span>
+            </div>
 
 
             <input id="button" type="submit" >Add user</input>

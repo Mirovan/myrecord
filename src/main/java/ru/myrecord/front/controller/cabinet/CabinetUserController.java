@@ -1,4 +1,4 @@
-package ru.myrecord.front.controller;
+package ru.myrecord.front.controller.cabinet;
 
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +170,7 @@ public class CabinetUserController/* implements ErrorController*/{
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("users", users);
-            //modelAndView.addObject("service", services);
+            modelAndView.addObject("services", services);
             modelAndView.setViewName("cabinet/room/adduser");
             return modelAndView;
         } else {

@@ -28,12 +28,12 @@ public class User {
 
     @Column(name = "pass")
     @Length(min = 6)
-//    @Transient
+    @JsonIgnore
     private String pass;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
-    User ownerUser;
+    private User ownerUser;
 
     @Column(name = "name")
     private String name;

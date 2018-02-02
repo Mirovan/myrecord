@@ -10,32 +10,21 @@
     </head>
     <body>
         <script th:inline="javascript">
-            var array = [];
-
-            /*<![CDATA[*/
-            $(document).ready(function() {
+            $(document).ready(
+                function() {
 
                 let users = [[${users}]];
 
-        //        console.log('users size = ' + users.length);
-        //        console.log(users);
-
                 var usersArray = $.map(users, function (user) { return { value: user.name + ' ' + user.sirname, data: user.id }; });
-                console.log(usersArray);
-                $('#autocomplete-dynamic').autocomplete({
+                $('#input-user-selection').autocomplete({
                     lookup: usersArray,
-                    onSelect: function(suggestion) {
-        //                $('#selction-dynamic').html('You selected: ' + suggestion.value + ', ' + suggestion.data);
-                        //$('#selection-dynamic').html(suggestion.data);
-                        $('#userId').val(suggestion.data);
-                    },
-                    // onHint: function (hint) {
-                    // $('#autocomplete-dynamic-x').val(hint);
-                    // },
-                    onInvalidateSelection: function() {
-                        $('#selection-dynamic').html('You selected: none');
-                    }
+                    onSelect: function(selectedUser) {
+                        $('#userId').val(selectedUser.data);
 
+                    },
+//                    onInvalidateSelection: function() {
+//                        $('#selection-dynamic').html('You selected: none');
+//                    }
                 });
 
                 $('#button').click(function() {
@@ -43,15 +32,19 @@
                 });
 
             });
-
-            /*]]>*/
-
         </script>
+
+
         <h1>Добавление пользователя в помещение</h1>
 
         <form th:action="@{'/cabinet/rooms/users/'}" method="post">
-            <input type="text" name="user" id="autocomplete-dynamic" style="width: 100%; border-width: 5px;"/>
+            <input type="text" name="user" id="input-user-selection" style="width: 100%; border-width: 5px;"/>
             <input type="hidden" name="userId" id="userId" />
+
+            <span th:each="service : ${services}" style="display: block;">
+                <input type="checkbox" th:value="@{${service.id}}" th:text="@{${service.name}}" />
+            </span>
+
 
             <input id="button" type="submit" >Add user</input>
         </form>

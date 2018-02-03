@@ -83,20 +83,27 @@ CREATE TABLE "service" (
 ALTER SEQUENCE service_id_seq owned by "service".id;
 
 
-/*Услуги в помещении*/
-/*
-CREATE TABLE "service_room" (
-    service_id INTEGER REFERENCES "service"(id),
-	room_id INTEGER REFERENCES "room"(id)
-);
-*/
+/*Привязка пользователя к помещению - many-to-many*/
+CREATE SEQUENCE user_room_id_seq START WITH 1;
 
-
-/*Услуги пользователя - Профиль специалиста*/
 CREATE TABLE "user_room" (
+    id INTEGER NOT NULL default nextval('user_room_id_seq') PRIMARY KEY,
+	user_id INTEGER REFERENCES "users"(id),
+    room_id INTEGER REFERENCES "room"(id)
+);
+ALTER SEQUENCE user_room_id_seq owned by "user_room".id;
+
+
+
+/*Услуги пользователя - Профиль специалиста - many-to-many*/
+CREATE SEQUENCE user_service_id_seq START WITH 1;
+
+CREATE TABLE "user_service" (
+    id INTEGER NOT NULL default nextval('user_service_id_seq') PRIMARY KEY,
     user_id INTEGER REFERENCES "users"(id),
 	service_id INTEGER REFERENCES "service"(id)
 );
+ALTER SEQUENCE user_service_id_seq owned by "user_service".id;
 
 
 /*Рассписание специалиста*/

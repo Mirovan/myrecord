@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.Utils.Utils;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.Service;
 import ru.myrecord.front.data.model.entities.User;

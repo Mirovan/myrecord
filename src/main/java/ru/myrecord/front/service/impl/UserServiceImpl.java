@@ -13,12 +13,12 @@ import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.service.iface.RoleService;
+import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -32,6 +32,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("roleDAO")
     private RoleDAO roleDAO;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private RoomService roomService;
+
+    @Autowired
+    private ServiceService serviceService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -95,6 +104,62 @@ public class UserServiceImpl implements UserService {
             userAdapterColection.add(new UserAdapter(user));
         }
         return userAdapterColection;
+    }
+
+
+    /**
+     * Получение ролей для системного пользователя
+     * */
+    @Override
+    public Set<Role> getRolesForSysUser() {
+        List<String> roleNames = new ArrayList<String>();
+        roleNames.add("MASTER");
+        roleNames.add("MANAGER");
+        Set<Role> roles = roleService.findRolesByRoleName( roleNames );
+        return roles;
+    }
+
+
+    /**
+     * Проверка - равны ли пользователи
+     * */
+    public Boolean userEquals(Integer userId1, Integer userId2) {
+        return userId1.equals(userId2);
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю обычный пользователь
+     * */
+    public Boolean hasUser(Integer ownerUserId, Integer childUserId) {
+        User childUser = findUserById(childUserId);
+        if ( ownerUserId.equals(childUser.getOwnerUser().getId()) && childUser.getActive())
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данное помещение
+     * */
+    public Boolean hasRoom(Integer ownerUserId, Integer roomId) {
+        Room room = roomService.findRoomById(roomId);
+        if ( ownerUserId.equals(room.getUser().getId()) && room.getActive() )
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данная услуга
+     * */
+    public Boolean hasService(Integer ownerUserId, Integer serviceId) {
+        ru.myrecord.front.data.model.entities.Service service = serviceService.findServiceById(serviceId);
+        if ( ownerUserId.equals(service.getUser().getId()) && service.getActive() )
+            return true;
+        else
+            return false;
     }
 
 }

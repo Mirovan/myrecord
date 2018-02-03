@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.myrecord.front.Utils.Utils;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
 import ru.myrecord.front.service.iface.RoomService;

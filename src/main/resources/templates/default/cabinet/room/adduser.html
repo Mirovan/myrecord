@@ -10,46 +10,48 @@
     </head>
     <body>
         <script th:inline="javascript">
+            /*<![CDATA[*/
             $(document).ready(
                 function() {
 
-                let users = [[${users}]];
+                let users = /*[[${users}]]*/;
 
                 var usersArray = $.map(users, function (user) { return { value: user.name + ' ' + user.sirname, data: user.id }; });
                 $('#input-user-selection').autocomplete({
                     lookup: usersArray,
                     onSelect: function(selectedUser) {
-                        $('#userId').val(selectedUser.data);
-
+                        $('#addingUserId').val(selectedUser.data);
                     },
 //                    onInvalidateSelection: function() {
 //                        $('#selection-dynamic').html('You selected: none');
 //                    }
                 });
 
-                $('#button').click(function() {
-                    alert('value = ' +  $("#selection-dynamic").html()); // get the id from the hidden input
-                });
+                // $('#button').click(function() {
+                //     alert('value = ' +  $("#selection-dynamic").html()); // get the id from the hidden input
+                // });
 
             });
+            /*]]>*/
         </script>
 
 
         <h1>Добавление пользователя в помещение</h1>
 
-        <form th:action="@{'/cabinet/rooms/users/'}" method="post">
+        <div th:each="user : ${users}" th:text="${user.name}" style="display: block;"></div>
+
+        <form th:action="@{'/cabinet/rooms/users/add/'}" method="post">
             <input type="text" name="user" id="input-user-selection" style="width: 100%; border-width: 5px;"/>
-            <input type="hidden" name="userId" id="userId" />
+            <input type="hidden" name="addingUserId" id="addingUserId" />
+            <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
 
             <div th:each="service : ${services}" style="display: block;">
-                <input type="checkbox" th:value="@{${service.id}}" th:text="@{${service.name}}" />
+                <input type="checkbox" th:name="services[]" th:value="${service.id}" th:text="${service.name}" />
             </div>
 
 
-            <input id="button" type="submit" >Add user</input>
+            <input id="button" type="submit" text="Add user" />
         </form>
-
-        <div id="selection-dynamic"></div>
 
         <br />
         <br />

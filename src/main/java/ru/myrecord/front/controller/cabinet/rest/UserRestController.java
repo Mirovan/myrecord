@@ -5,16 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.Utils.Utils;
-import ru.myrecord.front.data.model.Schedule;
-import ru.myrecord.front.data.model.User;
-import ru.myrecord.front.data.model.restadapters.ScheduleAdapter;
+import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
 import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ScheduleService;
 import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 /**

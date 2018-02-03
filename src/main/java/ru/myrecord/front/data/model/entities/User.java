@@ -1,4 +1,4 @@
-package ru.myrecord.front.data.model;
+package ru.myrecord.front.data.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;

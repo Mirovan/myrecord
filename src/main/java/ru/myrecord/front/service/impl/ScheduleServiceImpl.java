@@ -5,19 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.myrecord.front.data.dao.RoomDAO;
 import ru.myrecord.front.data.dao.ScheduleDAO;
-import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.Schedule;
-import ru.myrecord.front.data.model.User;
-import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.data.model.entities.Schedule;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ScheduleService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Service("scheduleService")
 public class ScheduleServiceImpl implements ScheduleService {

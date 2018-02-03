@@ -1,6 +1,5 @@
 package ru.myrecord.front.controller.cabinet;
 
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -9,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.*;
+import ru.myrecord.front.data.model.adapters.UserAdapter;
+import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 import ru.myrecord.front.Utils.Utils;
 import java.security.Principal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -67,7 +66,7 @@ public class UserController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/users/add/", method = RequestMethod.POST)
-    public ModelAndView roomAddPost(User user, Principal principal) {
+    public ModelAndView simpleUserAddPost(User user, Principal principal) {
         User sysUser = userService.findUserByEmail(principal.getName());
         user.setOwnerUser(sysUser);
 
@@ -155,20 +154,21 @@ public class UserController/* implements ErrorController*/{
     }
 
 
-    @RequestMapping(value="/cabinet/rooms/addusers/{roomId}/", method = RequestMethod.GET)
-    public ModelAndView addUserToRoom(@PathVariable Integer roomId, Principal principal) {
+    @RequestMapping(value="/cabinet/rooms/{roomId}/addusers/", method = RequestMethod.GET)
+    public ModelAndView addUsersToRoom(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        User user = room.getUser();
+        User ownerUser = room.getUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) &&
                 room.getActive() == true ) { //активна ли сущность
             //Set<Room> rooms = roomService.findRoomsByActive(user);
             // TODO: 05.12.2017 - add services to user
             Set<Service> services = serviceService.findServicesByRoom(room);
-            Set<User> users = userService.findUsersByOwner(user);
-            //List<>
+//            Set<User> users = userService.findUsersByOwner(user);
+            Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
 
             ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("roomId", roomId);
             modelAndView.addObject("users", users);
             modelAndView.addObject("services", services);
             modelAndView.setViewName("cabinet/room/adduser");
@@ -179,14 +179,15 @@ public class UserController/* implements ErrorController*/{
     }
 
 
-    @RequestMapping(value="/cabinet/rooms/users/", method = RequestMethod.POST)
-    public ModelAndView addUserToRoomPost(@RequestParam Integer roomId,
-                                          @RequestParam Integer userId,
-                                          Principal principal) {
+    @RequestMapping(value="/cabinet/rooms/users/add/", method = RequestMethod.POST)
+    public ModelAndView addUsersToRoomPost(@RequestParam Integer roomId,
+                                           @RequestParam Integer addingUserId,
+                                           @RequestParam(value="services[]", required = false) List<String> services,
+                                           Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        User user = room.getUser();
+        User ownerUser = room.getUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
+        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) &&
                 room.getActive() == true ) { //активна ли сущность
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
 

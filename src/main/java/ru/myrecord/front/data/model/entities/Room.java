@@ -22,7 +22,7 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
-    private Set<Service> services;
+    private Set<Product> products;
 
     @Column(name = "active")
     private Boolean active;
@@ -59,12 +59,12 @@ public class Room {
         this.active = active;
     }
 
-    public Set<Service> getServices() {
-        return services;
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public void setServices(Set<Service> services) {
-        this.services = services;
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Room {
                 "id=" + id +
                 ", user=" + user +
                 ", name='" + name + '\'' +
-                ", services=" + services +
+                ", products=" + products +
                 ", active=" + active +
                 '}';
     }

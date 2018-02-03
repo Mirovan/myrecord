@@ -40,7 +40,7 @@ public class RoomServiceImpl implements RoomService {
 
 
 //    @Override
-//    public Set<ru.myrecord.front.data.model.entities.Service> findServicesByRoom(Room room) {
+//    public Set<ru.myrecord.front.data.model.entities.Product> findServicesByRoom(Room room) {
 //        return null;//roomDAO.findByRoom(room);
 //    }
 

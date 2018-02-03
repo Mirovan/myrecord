@@ -45,8 +45,8 @@
             <input type="hidden" name="addingUserId" id="addingUserId" />
             <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
 
-            <div th:each="service : ${services}" style="display: block;">
-                <input type="checkbox" th:name="services[]" th:value="${service.id}" th:text="${service.name}" />
+            <div th:each="product : ${products}" style="display: block;">
+                <input type="checkbox" th:name="products[]" th:value="${product.id}" th:text="${product.name}" />
             </div>
 
 

@@ -3,8 +3,8 @@
 //import javax.persistence.*;
 //
 //@Entity
-//@Table(name = "user_room")
-//public class UserRoom {
+//@Table(name = "user_product")
+//public class UserProduct {
 //
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,9 +15,9 @@
 //    @JoinColumn(name = "user_id")
 //    private User user;
 //
-//    @ManyToMany(mappedBy = "room", cascade = CascadeType.ALL)
-//    @JoinColumn(name = "room_id")
-//    private Room room;
+//    @ManyToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "product_id")
+//    private Product product;
 //
 //    public User getUser() {
 //        return user;
@@ -27,16 +27,11 @@
 //        this.user = user;
 //    }
 //
-//    public Room getRoom() {
-//        return room;
+//    public Product getProduct() {
+//        return product;
 //    }
 //
-//    public void setRoom(Room room) {
-//        this.room = room;
-//    }
-//
-//    public UserRoom(User user, Room room) {
-//        this.user = user;
-//        this.room = room;
+//    public void setProduct(Product product) {
+//        this.product = product;
 //    }
 //}

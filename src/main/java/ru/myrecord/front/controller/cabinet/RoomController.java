@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Room;
-import ru.myrecord.front.data.model.entities.Service;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
@@ -29,7 +29,7 @@ public class RoomController/* implements ErrorController*/{
     private RoomService roomService;
 
     @Autowired
-    private ServiceService serviceService;
+    private ProductService productService;
 
 
     @RequestMapping(value="/cabinet/rooms/", method = RequestMethod.GET)
@@ -45,15 +45,13 @@ public class RoomController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomsShow(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        User user = room.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
-                room.getActive() == true) {
-            Set<Service> services = serviceService.findServicesByRoom(room);
+        if ( userService.hasRoom(principal, roomId) ) {
+            Set<Product> products = productService.findServicesByRoom(room);
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("services", services);
-            modelAndView.setViewName("cabinet/room/services");
+            modelAndView.addObject("products", products);
+            modelAndView.setViewName("cabinet/room/product");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/rooms/");
@@ -84,10 +82,8 @@ public class RoomController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/edit/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomUpdate(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        User user = room.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
-                room.getActive() == true) {
+        if ( userService.hasRoom(principal, roomId) ) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
             if (room.getActive() == true) {
@@ -105,11 +101,9 @@ public class RoomController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/rooms/edit/", method = RequestMethod.POST)
     public ModelAndView roomEditPost(Room roomUpd, Principal principal) {
-        Room room = roomService.findRoomById(roomUpd.getId());
-        User user = room.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) &&
-                room.getActive() == true) {
+        if ( userService.hasRoom(principal, roomUpd.getId()) ) {
+            Room room = roomService.findRoomById(roomUpd.getId());
             room.setName( roomUpd.getName() );
             roomService.update(room);
         }
@@ -122,7 +116,7 @@ public class RoomController/* implements ErrorController*/{
         Room room = roomService.findRoomById(roomId);
         User user = room.getUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), user.getId()) ) {
+        if ( userService.hasRoom(principal, roomId) ) {
             room.setActive(false);
             roomService.update(room);
         }

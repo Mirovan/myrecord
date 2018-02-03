@@ -7,7 +7,7 @@
 
 <h1>Услуги - add/edit</h1>
 
-<form th:object="${service}" th:action="@{'/cabinet/services/' + ${action} + '/'}" method="post">
+<form th:object="${product}" th:action="@{'/cabinet/products/' + ${action} + '/'}" method="post">
     Service: <input type="hidden" th:field="*{id}" />
     <input type="hidden" name="roleid" value="@{${rrr}}" />
     <input type="text" th:field="*{name}" class="form-control" />

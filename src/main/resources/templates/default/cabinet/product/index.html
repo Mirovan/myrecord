@@ -8,19 +8,19 @@
 <h1>Услуги</h1>
 
 <!--
-<a href="/cabinet/services/add/">=Добавить=</a>
+<a href="/cabinet/products/add/">=Добавить=</a>
 -->
 <br />
 <br />
 
-<div th:each="service : ${services}" style="display: block;">
-    <a th:href="@{'/cabinet/services/edit/' + ${service.id} + '/'}">
-        <span th:text="${service.name}"></span>
+<div th:each="product : ${products}" style="display: block;">
+    <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">
+        <span th:text="${product.name}"></span>
     </a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a th:href="@{'/cabinet/services/edit/' + ${service.id} + '/'}">[Edit]</a>
+    <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">[Edit]</a>
     &nbsp;&nbsp;
-    <a th:href="@{'/cabinet/services/delete/' + ${service.id} + '/'}">[Delete]</a>
+    <a th:href="@{'/cabinet/products/delete/' + ${product.id} + '/'}">[Delete]</a>
 </div>
 
 <br />

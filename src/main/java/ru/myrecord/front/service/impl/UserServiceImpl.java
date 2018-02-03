@@ -10,14 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
+import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoleService;
 import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
+import java.security.Principal;
 import java.util.*;
 
 @Service("userService")
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
     private RoomService roomService;
 
     @Autowired
-    private ServiceService serviceService;
+    private ProductService productService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -123,6 +125,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Проверка - равны ли пользователи
      * */
+    @Override
     public Boolean userEquals(Integer userId1, Integer userId2) {
         return userId1.equals(userId2);
     }
@@ -131,6 +134,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Проверка - принадлежит ли системному пользователю обычный пользователь
      * */
+    @Override
     public Boolean hasUser(Integer ownerUserId, Integer childUserId) {
         User childUser = findUserById(childUserId);
         if ( ownerUserId.equals(childUser.getOwnerUser().getId()) && childUser.getActive())
@@ -141,8 +145,18 @@ public class UserServiceImpl implements UserService {
 
 
     /**
+     * Проверка - принадлежит ли системному пользователю обычный пользователь
+     * */
+    @Override
+    public Boolean hasUser(Principal principal, Integer childUserId) {
+        User ownerUser = findUserByEmail(principal.getName());
+        return hasUser(ownerUser.getId(), childUserId);
+    }
+
+    /**
      * Проверка - принадлежит ли системному пользователю данное помещение
      * */
+    @Override
     public Boolean hasRoom(Integer ownerUserId, Integer roomId) {
         Room room = roomService.findRoomById(roomId);
         if ( ownerUserId.equals(room.getUser().getId()) && room.getActive() )
@@ -151,12 +165,48 @@ public class UserServiceImpl implements UserService {
             return false;
     }
 
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данное помещение
+     * */
+    @Override
+    public Boolean hasRoom(Principal principal, Integer roomId) {
+        User ownerUser = findUserByEmail(principal.getName());
+        return hasRoom(ownerUser.getId(), roomId);
+    }
+
+
     /**
      * Проверка - принадлежит ли системному пользователю данная услуга
      * */
+    @Override
     public Boolean hasService(Integer ownerUserId, Integer serviceId) {
-        ru.myrecord.front.data.model.entities.Service service = serviceService.findServiceById(serviceId);
-        if ( ownerUserId.equals(service.getUser().getId()) && service.getActive() )
+        Product product = productService.findServiceById(serviceId);
+        if ( ownerUserId.equals(product.getUser().getId()) && product.getActive() )
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данная услуга
+     * */
+    @Override
+    public Boolean hasService(Principal principal, Integer serviceId) {
+        User ownerUser = findUserByEmail(principal.getName());
+        return hasService(ownerUser.getId(), serviceId);
+    }
+
+
+    /**
+     * Проверка - можно ли добавить пользователя с ролью MASTER и MANAGER
+     * */
+    @Override
+    public Boolean hasRoles(Integer ownerUserId) {
+        User user = findUserById(ownerUserId);
+        Set<Role> rolesAvailable = getRolesForSysUser();
+        if ( rolesAvailable.containsAll(user.getRoles()) )
             return true;
         else
             return false;

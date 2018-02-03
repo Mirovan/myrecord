@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
-import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.ScheduleService;
-import ru.myrecord.front.service.iface.ServiceService;
+import ru.myrecord.front.service.iface.*;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
@@ -32,10 +30,13 @@ public class UserController/* implements ErrorController*/{
     private RoomService roomService;
 
     @Autowired
-    private ServiceService serviceService;
+    private ProductService productService;
 
     @Autowired
     private ScheduleService scheduleService;
+
+//    @Autowired
+//    private UserRoomService userRoomService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -81,8 +82,7 @@ public class UserController/* implements ErrorController*/{
         user.setOwnerUser(sysUser);
 
         //проверка - можем ли добавить данную роль для своего сотрудника
-        Set<Role> rolesAvailable = userService.getRolesForSysUser();
-        if ( rolesAvailable.containsAll(user.getRoles()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
+        if ( userService.hasRoles(user.getId()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
             user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
             user.setActive(true);
             userService.addSimpleUser(user);
@@ -96,10 +96,9 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/users/edit/{userId}/", method = RequestMethod.GET)
     public ModelAndView serviceUpdate(@PathVariable Integer userId, Principal principal) {
-        User user = userService.findUserById(userId);
-        User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
             if (user.getActive() == true) {
@@ -129,11 +128,10 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/users/edit/", method = RequestMethod.POST)
     public ModelAndView roomEditPost(User userUpd, Principal principal) {
-        //Находим этого пользователя
-        User user = userService.findUserById(userUpd.getId());
-        User ownerUser = user.getOwnerUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        if ( userService.hasUser(principal, userUpd.getId()) ) {
+            //Находим этого пользователя
+            User user = userService.findUserById(userUpd.getId());
             //Обновляем данные
             user.setName(userUpd.getName());
             user.setSirname(userUpd.getSirname());
@@ -141,7 +139,7 @@ public class UserController/* implements ErrorController*/{
             if (userUpd.getPass() != null) {
                 user.setPass(bCryptPasswordEncoder.encode(userUpd.getPass()));
             }
-            user.setOwnerUser(ownerUser);
+            user.setOwnerUser(user.getOwnerUser());
             userService.update(user);
         }
         return new ModelAndView("redirect:/cabinet/users/");
@@ -153,10 +151,9 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/users/delete/{userId}/", method = RequestMethod.GET)
     public ModelAndView roomPost(@PathVariable Integer userId, Principal principal) {
-        User user = userService.findUserById(userId);
-        User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
             user.setActive(false);
             userService.update(user);
         }
@@ -169,19 +166,18 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/rooms/{roomId}/addusers/", method = RequestMethod.GET)
     public ModelAndView addUsersToRoom(@PathVariable Integer roomId, Principal principal) {
-        Room room = roomService.findRoomById(roomId);
-        User ownerUser = room.getUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) &&
-                room.getActive() == true ) { //активна ли сущность
-            Set<Service> services = serviceService.findServicesByRoom(room);
+        if ( userService.hasRoom(principal, roomId) ) {
+            Room room = roomService.findRoomById(roomId);
+            User ownerUser = room.getUser();
+            Set<Product> products = productService.findServicesByRoom(room);
             //Отображаем только нужные данные о пользователях используя Адаптер
             Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("roomId", roomId);
             modelAndView.addObject("users", users);
-            modelAndView.addObject("services", services);
+            modelAndView.addObject("services", products);
             modelAndView.setViewName("cabinet/room/adduser");
             return modelAndView;
         } else {
@@ -195,19 +191,17 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/rooms/users/add/", method = RequestMethod.POST)
     public ModelAndView addUsersToRoomPost(@RequestParam Integer roomId,
-                                           @RequestParam Integer addingUserId,
+                                           @RequestParam Integer userId,
                                            @RequestParam(value="services[]", required = false) List<String> services,
                                            Principal principal) {
-        Room room = roomService.findRoomById(roomId);
-        User addingUser = userService.findUserById(addingUserId);
-        User ownerUser = room.getUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        //if (userService.hasUser(principal.getName()).getId()))
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) &&
-                (room.getActive() == true)
-                ) {
+        if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) ) {
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
-            //UserRoom userRoom = new UserRoom();
+            Room room = roomService.findRoomById(roomId);
+            User user = userService.findUserById(userId);
+
+//            UserRoom userRoom = new UserRoom(user, room);
+//            userRoomService.add(userRoom);
 
             return new ModelAndView("redirect:/cabinet/rooms/users/");
         } else {
@@ -231,10 +225,8 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/users/{userId}/schedule/", method = RequestMethod.GET)
     public ModelAndView scheduleView(@PathVariable Integer userId, Principal principal) {
-        User user = userService.findUserById(userId);
-        User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        if ( userService.hasUser(principal, userId) ) {
             ModelAndView modelAndView = new ModelAndView();
             LocalDate date = LocalDate.now();
             modelAndView.addObject("year", date.getYear());
@@ -257,10 +249,9 @@ public class UserController/* implements ErrorController*/{
                                      @RequestParam Integer month,
                                      @RequestParam(value="dates[]", required = false) List<String> dates,
                                      Principal principal) {
-        User user = userService.findUserById(userId);
-        User ownerUser = user.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
             LocalDate localDate = LocalDate.of(year, month, 1); //текущая дата полученого года и месяца
             int lastMonthDay = localDate.lengthOfMonth();   //последний день месяца
 

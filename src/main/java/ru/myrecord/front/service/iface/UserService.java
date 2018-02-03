@@ -6,6 +6,7 @@ import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
@@ -21,4 +22,10 @@ public interface UserService {
     Set<Role> getRolesForSysUser();
     Boolean userEquals(Integer userId1, Integer userId2);
     Boolean hasUser(Integer ownerUserId, Integer childUser);
+    Boolean hasUser(Principal principal, Integer childUserId);
+    Boolean hasRoom(Integer ownerUserId, Integer roomId);
+    Boolean hasRoom(Principal principal, Integer roomId);
+    Boolean hasService(Integer ownerUserId, Integer serviceId);
+    Boolean hasService(Principal principal, Integer serviceId);
+    Boolean hasRoles(Integer ownerUserId);
 }

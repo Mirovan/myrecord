@@ -42,7 +42,8 @@ public class User {
     private String sirname;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role",
+    @JoinTable(
+            name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
@@ -52,11 +53,7 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_room",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_id")
-    )
+    @ManyToMany(mappedBy = "users")
     @JsonIgnore
     private Set<Room> rooms;
 
@@ -140,19 +137,4 @@ public class User {
         this.rooms = rooms;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", pass='" + pass + '\'' +
-                ", ownerUser=" + ownerUser +
-                ", name='" + name + '\'' +
-                ", sirname='" + sirname + '\'' +
-                ", roles=" + roles +
-                ", active=" + active +
-                ", rooms=" + rooms +
-                '}';
-    }
 }

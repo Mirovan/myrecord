@@ -1,6 +1,7 @@
 package ru.myrecord.front.service.iface;
 
 
+import com.sun.beans.editors.BooleanEditor;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
@@ -17,7 +18,7 @@ public interface UserService {
     public void update(User user);
     public Set<User> findUsersByOwner(User ownerUser);
     public User findUserById(Integer id);
-    public Set<User> findUsersByRoom(Room room);
+    //public Set<User> findUsersByRoom(Room room);
     Set<UserAdapter> getUserAdapterCollection(Set<User> users);
     Set<Role> getRolesForSysUser();
     Boolean userEquals(Integer userId1, Integer userId2);
@@ -27,5 +28,5 @@ public interface UserService {
     Boolean hasRoom(Principal principal, Integer roomId);
     Boolean hasService(Integer ownerUserId, Integer serviceId);
     Boolean hasService(Principal principal, Integer serviceId);
-    Boolean hasRoles(Integer ownerUserId);
+    Boolean hasRoles(Principal principal, Set<Role> roles);
 }

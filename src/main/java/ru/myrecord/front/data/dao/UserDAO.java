@@ -13,9 +13,9 @@ public interface UserDAO extends JpaRepository<User, Integer> {
     User findById(Integer id);
     Set<User> findByOwnerUserAndActiveTrueOrderByIdAsc(User user);
 
-    @Query(value = "SELECT u.* FROM users u " +
-            "INNER JOIN user_room ur ON u.id = ur.user_id " +
-            "WHERE ur.room_id = ?",
-            nativeQuery = true)
-    Set<User> findByRoomId(Integer roomId);
+//    @Query(value = "SELECT u.* FROM users u " +
+//            "INNER JOIN user_room ur ON u.id = ur.user_id " +
+//            "WHERE ur.room_id = ?",
+//            nativeQuery = true)
+//    Set<User> findByRoomId(Integer roomId);
 }

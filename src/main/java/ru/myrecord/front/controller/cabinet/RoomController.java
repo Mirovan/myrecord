@@ -45,7 +45,7 @@ public class RoomController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomsShow(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             Set<Product> products = productService.findServicesByRoom(room);
 
@@ -82,7 +82,7 @@ public class RoomController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/edit/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomUpdate(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
@@ -101,7 +101,7 @@ public class RoomController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/rooms/edit/", method = RequestMethod.POST)
     public ModelAndView roomEditPost(Room roomUpd, Principal principal) {
-        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomUpd.getId()) ) {
             Room room = roomService.findRoomById(roomUpd.getId());
             room.setName( roomUpd.getName() );
@@ -115,7 +115,7 @@ public class RoomController/* implements ErrorController*/{
     public ModelAndView roomPost(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
         User user = room.getUser();
-        //Проверка - исеет ли текущий сис.пользователь доступ к сущности
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             room.setActive(false);
             roomService.update(room);

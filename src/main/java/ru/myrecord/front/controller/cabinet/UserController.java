@@ -78,11 +78,10 @@ public class UserController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/users/add/", method = RequestMethod.POST)
     public ModelAndView simpleUserAddPost(User user, Principal principal) {
-        User sysUser = userService.findUserByEmail(principal.getName());
-        user.setOwnerUser(sysUser);
-
         //проверка - можем ли добавить данную роль для своего сотрудника
-        if ( userService.hasRoles(user.getId()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
+        if ( userService.hasRoles(principal, user.getRoles()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
+            User ownerUser = userService.findUserByEmail(principal.getName());
+            user.setOwnerUser(ownerUser);
             user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
             user.setActive(true);
             userService.addSimpleUser(user);
@@ -129,7 +128,9 @@ public class UserController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/users/edit/", method = RequestMethod.POST)
     public ModelAndView roomEditPost(User userUpd, Principal principal) {
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userUpd.getId()) ) {
+        // и роль существует в списке доступных для этого системного пользователя
+        if ( userService.hasUser(principal, userUpd.getId()) &&
+             userService.hasRoles(principal, userUpd.getRoles()) ) {
             //Находим этого пользователя
             User user = userService.findUserById(userUpd.getId());
             //Обновляем данные
@@ -199,6 +200,16 @@ public class UserController/* implements ErrorController*/{
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
+
+            Set<User> roomUsers = room.getUsers();
+            roomUsers.add(user);
+
+            Set<Room> userRooms = user.getRooms();
+            userRooms.add(room);
+
+            userService.update(user);
+            roomService.update(room);
+
 
 //            UserRoom userRoom = new UserRoom(user, room);
 //            userRoomService.add(userRoom);

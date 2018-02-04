@@ -94,10 +94,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public Set<User> findUsersByRoom(Room room) {
-        return userDAO.findByRoomId(room.getId());
-    }
+//    @Override
+//    public Set<User> findUsersByRoom(Room room) {
+//        return userDAO.findByRoomId(room.getId());
+//    }
 
     @Override
     public Set<UserAdapter> getUserAdapterCollection(Set<User> users) {
@@ -203,10 +203,10 @@ public class UserServiceImpl implements UserService {
      * Проверка - можно ли добавить пользователя с ролью MASTER и MANAGER
      * */
     @Override
-    public Boolean hasRoles(Integer ownerUserId) {
-        User user = findUserById(ownerUserId);
+    public Boolean hasRoles(Principal principal, Set<Role> roles) {
+        User ownerUser = findUserByEmail(principal.getName());
         Set<Role> rolesAvailable = getRolesForSysUser();
-        if ( rolesAvailable.containsAll(user.getRoles()) )
+        if ( rolesAvailable.containsAll(roles) )
             return true;
         else
             return false;

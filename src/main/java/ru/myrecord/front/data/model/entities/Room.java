@@ -20,12 +20,25 @@ public class Room {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "room",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true)
     @JsonIgnore
     private Set<Product> products;
 
     @Column(name = "active")
     private Boolean active;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_room",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    private Set<User> users;
 
     public Integer getId() {
         return id;
@@ -67,14 +80,12 @@ public class Room {
         this.products = products;
     }
 
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", user=" + user +
-                ", name='" + name + '\'' +
-                ", products=" + products +
-                ", active=" + active +
-                '}';
+    public Set<User> getUsers() {
+        return users;
     }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
 }

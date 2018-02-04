@@ -11,11 +11,11 @@
 //    @Column(name = "id")
 //    private Integer id;
 //
-//    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "user_id")
 //    private User user;
 //
-//    @ManyToMany(mappedBy = "room", cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "room_id")
 //    private Room room;
 //

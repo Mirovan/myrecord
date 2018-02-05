@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean hasRoom(Integer ownerUserId, Integer roomId) {
         Room room = roomService.findRoomById(roomId);
-        if ( ownerUserId.equals(room.getUser().getId()) && room.getActive() )
+        if ( ownerUserId.equals(room.getOwnerUser().getId()) && room.getActive() )
             return true;
         else
             return false;
@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean hasService(Integer ownerUserId, Integer serviceId) {
         Product product = productService.findServiceById(serviceId);
-        if ( ownerUserId.equals(product.getUser().getId()) && product.getActive() )
+        if ( ownerUserId.equals(product.getOwnerUser().getId()) && product.getActive() )
             return true;
         else
             return false;

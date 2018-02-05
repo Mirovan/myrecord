@@ -29,8 +29,8 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public Set<Room> findRoomsByActive(User user) {
-        return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user);
+    public Set<Room> findRoomsByActive(User ownerUser) {
+        return roomDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 
     @Override

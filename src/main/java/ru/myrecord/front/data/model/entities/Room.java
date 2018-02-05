@@ -15,7 +15,7 @@ public class Room {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
-    private User user;
+    private User ownerUser;
 
     @Column(name = "name")
     private String name;
@@ -48,12 +48,12 @@ public class Room {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwnerUser() {
+        return ownerUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwnerUser(User user) {
+        this.ownerUser = ownerUser;
     }
 
     public String getName() {

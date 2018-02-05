@@ -53,9 +53,13 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Room> rooms;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Product> products;
 
     public Integer getId() {
         return id;
@@ -137,4 +141,11 @@ public class User {
         this.rooms = rooms;
     }
 
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
 }

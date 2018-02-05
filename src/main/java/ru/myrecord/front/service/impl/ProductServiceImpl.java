@@ -28,8 +28,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> findServicesByUser(User user) {
-        return productDAO.findByUserAndActiveTrueOrderByIdAsc(user);
+    public Set<Product> findServicesByUser(User ownerUser) {
+        return productDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 
     @Override

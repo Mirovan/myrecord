@@ -3,6 +3,7 @@ package ru.myrecord.front.data.model.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -15,7 +16,7 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
     @JsonIgnore
-    private User user;
+    private User ownerUser;
 
     @Column(name = "name")
     private String name;
@@ -24,6 +25,15 @@ public class Product {
     @JoinColumn(name = "room_id", nullable = false)
     @JsonIgnore
     private Room room;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_product",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    private Set<User> users;
 
     @Column(name = "active")
     private Boolean active;
@@ -36,12 +46,12 @@ public class Product {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwnerUser() {
+        return ownerUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwnerUser(User user) {
+        this.ownerUser = ownerUser;
     }
 
     public String getName() {
@@ -66,5 +76,13 @@ public class Product {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

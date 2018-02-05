@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
-import ru.myrecord.front.service.iface.*;
+import ru.myrecord.front.service.iface.ProductService;
+import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.service.iface.ScheduleService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -170,7 +173,7 @@ public class UserController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             Room room = roomService.findRoomById(roomId);
-            User ownerUser = room.getUser();
+            User ownerUser = room.getOwnerUser();
             Set<Product> products = productService.findServicesByRoom(room);
             //Отображаем только нужные данные о пользователях используя Адаптер
             Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
@@ -178,7 +181,7 @@ public class UserController/* implements ErrorController*/{
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("roomId", roomId);
             modelAndView.addObject("users", users);
-            modelAndView.addObject("services", products);
+            modelAndView.addObject("products", products);
             modelAndView.setViewName("cabinet/room/adduser");
             return modelAndView;
         } else {
@@ -193,26 +196,38 @@ public class UserController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/users/add/", method = RequestMethod.POST)
     public ModelAndView addUsersToRoomPost(@RequestParam Integer roomId,
                                            @RequestParam Integer userId,
-                                           @RequestParam(value="services[]", required = false) List<String> services,
+                                           @RequestParam(value="products[]", required = false) List<Integer> productsIds,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) ) {
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
+            //ToDo: сделать так чтобы было дополнительное поле - активность для связки пользователя с комнатой и продуктом
+            //Почему то происходит выборка всех внутренних сущностей при получении комнаты или пользователя
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
+            Set<Product> products = new HashSet<>(); //чтобы исключить дублирование заводим Set
+            for (Integer item: productsIds) {
+                products.add(productService.findServiceById(item));
+            }
 
-            Set<User> roomUsers = room.getUsers();
-            roomUsers.add(user);
+            Set<User> users = new HashSet<>();
+            users.add(user);
 
-            Set<Room> userRooms = user.getRooms();
-            userRooms.add(room);
+            Set<Room> rooms = new HashSet<>();
+            rooms.add(room);
+
+            user.setRooms(rooms);
+            user.setProducts(products);
+            room.setUsers(users);
+            for (Product product: products) {
+                product.setUsers(users);
+            }
 
             userService.update(user);
             roomService.update(room);
-
-
-//            UserRoom userRoom = new UserRoom(user, room);
-//            userRoomService.add(userRoom);
+            for (Product product: products) {
+                productService.update(product);
+            }
 
             return new ModelAndView("redirect:/cabinet/rooms/users/");
         } else {

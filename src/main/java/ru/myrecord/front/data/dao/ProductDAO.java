@@ -11,6 +11,6 @@ import java.util.Set;
 @Repository("productDAO")
 public interface ProductDAO extends JpaRepository<Product, Integer> {
 	Product findById(Integer id);
-	Set<Product> findByUserAndActiveTrueOrderByIdAsc(User user);
+	Set<Product> findByOwnerUserAndActiveTrueOrderByIdAsc(User ownerUser);
 	Set<Product> findByRoomAndActiveTrueOrderByIdAsc(Room room);
 }

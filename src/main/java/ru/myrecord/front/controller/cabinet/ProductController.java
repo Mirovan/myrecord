@@ -57,7 +57,7 @@ public class ProductController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             Room room = roomService.findRoomById(roomId);
-            User user = room.getUser();
+            User user = room.getOwnerUser();
             Set<Room> rooms = roomService.findRoomsByActive(user);
             Product product = new Product();
             product.setRoom(room);
@@ -77,10 +77,10 @@ public class ProductController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/products/add/", method = RequestMethod.POST)
     public ModelAndView serviceAddPost(Product product, Principal principal) {
         Room room = product.getRoom();
-        User user = userService.findUserByEmail(principal.getName());
+        User ownerUser = userService.findUserByEmail(principal.getName());
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, room.getId()) ) {
-            product.setUser(user);
+            product.setOwnerUser(ownerUser);
             product.setActive(true);
             productService.add(product);
             return new ModelAndView("redirect:/cabinet/products/");
@@ -93,10 +93,10 @@ public class ProductController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/products/edit/{productId}/", method = RequestMethod.GET)
     public ModelAndView serviceUpdate(@PathVariable Integer productId, Principal principal) {
         Product product = productService.findServiceById(productId);
-        User user = product.getUser();
+        User ownerUser = product.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasService(principal, productId) ) {
-            Set<Room> rooms = roomService.findRoomsByActive(user);
+            Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
@@ -126,7 +126,7 @@ public class ProductController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/products/delete/{productId}/", method = RequestMethod.GET)
     public ModelAndView servicePost(@PathVariable Integer productId, Principal principal) {
         Product product = productService.findServiceById(productId);
-        User user = product.getUser();
+        User ownerUser = product.getOwnerUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasService(principal, productId) ) {
             product.setActive(false);

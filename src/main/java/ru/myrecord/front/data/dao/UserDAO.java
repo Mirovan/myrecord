@@ -11,7 +11,7 @@ import java.util.Set;
 public interface UserDAO extends JpaRepository<User, Integer> {
     User findByEmail(String email);
     User findById(Integer id);
-    Set<User> findByOwnerUserAndActiveTrueOrderByIdAsc(User user);
+    Set<User> findByOwnerUserAndActiveTrueOrderByIdAsc(User ownerUser);
 
 //    @Query(value = "SELECT u.* FROM users u " +
 //            "INNER JOIN user_room ur ON u.id = ur.user_id " +

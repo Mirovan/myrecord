@@ -6,9 +6,9 @@ import ru.myrecord.front.data.model.entities.User;
 import java.util.Set;
 
 public interface ProductService {
-    public Product findServiceById(Integer id);
-    public Set<Product> findServicesByUser(User user);
-    public Set<Product> findServicesByRoom(Room room);
-    public void add(Product product);
-    public void update(Product product);
+    Product findServiceById(Integer id);
+    Set<Product> findServicesByUser(User user);
+    Set<Product> findServicesByRoom(Room room);
+    void add(Product product);
+    void update(Product product);
 }

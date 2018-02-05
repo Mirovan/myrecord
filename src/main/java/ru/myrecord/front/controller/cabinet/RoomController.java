@@ -71,8 +71,8 @@ public class RoomController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/rooms/add/", method = RequestMethod.POST)
     public ModelAndView roomAddPost(Room room, Principal principal) {
-        User user = userService.findUserByEmail(principal.getName());
-        room.setUser(user);
+        User ownerUser = userService.findUserByEmail(principal.getName());
+        room.setOwnerUser(ownerUser);
         room.setActive(true);
         roomService.add(room);
         return new ModelAndView("redirect:/cabinet/rooms/");
@@ -114,7 +114,6 @@ public class RoomController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/rooms/delete/{roomId}/", method = RequestMethod.GET)
     public ModelAndView roomPost(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
-        User user = room.getUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             room.setActive(false);

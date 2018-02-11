@@ -89,7 +89,8 @@ CREATE SEQUENCE user_room_id_seq START WITH 1;
 CREATE TABLE "user_room" (
     id INTEGER NOT NULL default nextval('user_room_id_seq') PRIMARY KEY,
 	user_id INTEGER REFERENCES "users"(id),
-    room_id INTEGER REFERENCES "room"(id)
+    room_id INTEGER REFERENCES "room"(id),
+    active BOOLEAN
 );
 ALTER SEQUENCE user_room_id_seq owned by "user_room".id;
 
@@ -101,7 +102,8 @@ CREATE SEQUENCE user_product_id_seq START WITH 1;
 CREATE TABLE "user_product" (
     id INTEGER NOT NULL default nextval('user_product_id_seq') PRIMARY KEY,
     user_id INTEGER REFERENCES "users"(id),
-	product_id INTEGER REFERENCES "product"(id)
+	product_id INTEGER REFERENCES "product"(id),
+	active BOOLEAN
 );
 ALTER SEQUENCE user_product_id_seq owned by "user_product".id;
 

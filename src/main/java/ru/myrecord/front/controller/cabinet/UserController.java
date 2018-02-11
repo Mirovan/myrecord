@@ -199,11 +199,9 @@ public class UserController/* implements ErrorController*/{
                                            @RequestParam(value="products[]", required = false) List<Integer> productsIds,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        //ToDo: сделать проверку на принадлежность продуктов системному пользователю
         if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) ) {
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
             //ToDo: сделать так чтобы было дополнительное поле - активность для связки пользователя с комнатой и продуктом
-            //Почему то происходит выборка всех внутренних сущностей при получении комнаты или пользователя
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
             Set<Product> products = new HashSet<>(); //чтобы исключить дублирование заводим Set

@@ -52,7 +52,7 @@ public class Room {
         return ownerUser;
     }
 
-    public void setOwnerUser(User user) {
+    public void setOwnerUser(User ownerUser) {
         this.ownerUser = ownerUser;
     }
 

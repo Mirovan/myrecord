@@ -26,7 +26,7 @@ public class Product {
     @JsonIgnore
     private Room room;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "user_product",
             joinColumns = @JoinColumn(name = "product_id"),

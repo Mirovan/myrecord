@@ -13,6 +13,7 @@ public class Room {
     @Column(name = "id")
     private Integer id;
 
+    //Владелец - системный пользователь
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
     private User ownerUser;
@@ -20,6 +21,7 @@ public class Room {
     @Column(name = "name")
     private String name;
 
+    //У помещения есть услуги/продукты, которые принадлежат только этому помещению
     @OneToMany(
             mappedBy = "room",
             cascade = CascadeType.ALL,
@@ -31,14 +33,9 @@ public class Room {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user_room",
-            joinColumns = @JoinColumn(name = "room_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @OneToMany(mappedBy = "room")
     @JsonIgnore
-    private Set<User> users;
+    private Set<UserRoom> userRooms;
 
     public Integer getId() {
         return id;
@@ -80,12 +77,11 @@ public class Room {
         this.products = products;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<UserRoom> getUserRooms() {
+        return userRooms;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUserRooms(Set<UserRoom> userRooms) {
+        this.userRooms = userRooms;
     }
-
 }

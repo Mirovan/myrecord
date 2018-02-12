@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
-import ru.myrecord.front.service.iface.ProductService;
-import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.ScheduleService;
-import ru.myrecord.front.service.iface.UserService;
+import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -38,8 +35,8 @@ public class UserController/* implements ErrorController*/{
     @Autowired
     private ScheduleService scheduleService;
 
-//    @Autowired
-//    private UserRoomService userRoomService;
+    @Autowired
+    private UserRoomService userRoomService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -201,7 +198,6 @@ public class UserController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) ) {
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
-            //ToDo: сделать так чтобы было дополнительное поле - активность для связки пользователя с комнатой и продуктом
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
             Set<Product> products = new HashSet<>(); //чтобы исключить дублирование заводим Set
@@ -215,18 +211,16 @@ public class UserController/* implements ErrorController*/{
             Set<Room> rooms = new HashSet<>();
             rooms.add(room);
 
-            user.setRooms(rooms);
-            user.setProducts(products);
-            room.setUsers(users);
-            for (Product product: products) {
-                product.setUsers(users);
-            }
+            UserRoom userRoom = new UserRoom(user, room);
 
-            userService.update(user);
-            roomService.update(room);
-            for (Product product: products) {
-                productService.update(product);
-            }
+            //ToDo: протестить добавление
+            //userRoomService.add(userRoom);
+
+//            userService.update(user);
+//            roomService.update(room);
+//            for (Product product: products) {
+//                productService.update(product);
+//            }
 
             return new ModelAndView("redirect:/cabinet/rooms/users/");
         } else {

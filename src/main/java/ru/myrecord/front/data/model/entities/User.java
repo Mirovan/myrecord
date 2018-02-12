@@ -31,6 +31,7 @@ public class User {
     @JsonIgnore
     private String pass;
 
+    //Линковка на самого себя. NULL - если объект у объекта нет родителя
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
     private User ownerUser;
@@ -53,13 +54,13 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Room> rooms;
+    private Set<UserRoom> userRooms;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Product> products;
+    private Set<UserProduct> userProducts;
 
     public Integer getId() {
         return id;
@@ -133,19 +134,19 @@ public class User {
         this.active = active;
     }
 
-    public Set<Room> getRooms() {
-        return rooms;
+    public Set<UserRoom> getUserRooms() {
+        return userRooms;
     }
 
-    public void setRooms(Set<Room> rooms) {
-        this.rooms = rooms;
+    public void setUserRooms(Set<UserRoom> userRooms) {
+        this.userRooms = userRooms;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public Set<UserProduct> getUserProducts() {
+        return userProducts;
     }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
+    public void setUserProducts(Set<UserProduct> userProducts) {
+        this.userProducts = userProducts;
     }
 }

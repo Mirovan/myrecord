@@ -36,7 +36,7 @@ public class ProductController/* implements ErrorController*/{
     public ModelAndView services(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("product", productService.findServicesByUser(user));
+        modelAndView.addObject("product", productService.findProductsByUser(user));
         modelAndView.setViewName("cabinet/product/index");
         return modelAndView;
     }
@@ -92,10 +92,10 @@ public class ProductController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/products/edit/{productId}/", method = RequestMethod.GET)
     public ModelAndView serviceUpdate(@PathVariable Integer productId, Principal principal) {
-        Product product = productService.findServiceById(productId);
+        Product product = productService.findProductById(productId);
         User ownerUser = product.getOwnerUser();
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasService(principal, productId) ) {
+        if ( userService.hasProduct(principal, productId) ) {
             Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
 
             ModelAndView modelAndView = new ModelAndView();
@@ -112,9 +112,9 @@ public class ProductController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/products/edit/", method = RequestMethod.POST)
     public ModelAndView serviceEditPost(Product productUpd, Principal principal) {
-        Product product = productService.findServiceById(productUpd.getId());
+        Product product = productService.findProductById(productUpd.getId());
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasService(principal, productUpd.getId()) ) {
+        if ( userService.hasProduct(principal, productUpd.getId()) ) {
             product.setName( productUpd.getName() );
             product.setRoom( productUpd.getRoom() );
             productService.update(product);
@@ -125,10 +125,10 @@ public class ProductController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/products/delete/{productId}/", method = RequestMethod.GET)
     public ModelAndView servicePost(@PathVariable Integer productId, Principal principal) {
-        Product product = productService.findServiceById(productId);
+        Product product = productService.findProductById(productId);
         User ownerUser = product.getOwnerUser();
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasService(principal, productId) ) {
+        if ( userService.hasProduct(principal, productId) ) {
             product.setActive(false);
             productService.update(product);
         }

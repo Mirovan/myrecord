@@ -48,7 +48,7 @@ public class RoomController/* implements ErrorController*/{
         Room room = roomService.findRoomById(roomId);
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
-            Set<Product> products = productService.findServicesByRoom(room);
+            Set<Product> products = productService.findProductsByRoom(room);
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("products", products);

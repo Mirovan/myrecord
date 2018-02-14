@@ -20,13 +20,14 @@ public interface UserService {
     public User findUserById(Integer id);
     //public Set<User> findUsersByRoom(Room room);
     Set<UserAdapter> getUserAdapterCollection(Set<User> users);
-    Set<Role> getRolesForSysUser();
+    Set<Role> getRolesForSimpleUser();
     Boolean userEquals(Integer userId1, Integer userId2);
     Boolean hasUser(Integer ownerUserId, Integer childUser);
     Boolean hasUser(Principal principal, Integer childUserId);
     Boolean hasRoom(Integer ownerUserId, Integer roomId);
     Boolean hasRoom(Principal principal, Integer roomId);
-    Boolean hasService(Integer ownerUserId, Integer serviceId);
-    Boolean hasService(Principal principal, Integer serviceId);
-    Boolean hasRoles(Principal principal, Set<Role> roles);
+    Boolean hasProduct(Integer ownerUserId, Integer serviceId);
+    Boolean hasProduct(Principal principal, Integer serviceId);
+    Boolean hasProducts(Principal principal, List<Integer> products);
+    Boolean hasAccessToRoles(Principal principal, Set<Role> roles);
 }

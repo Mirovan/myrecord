@@ -23,17 +23,17 @@ public class ProductServiceImpl implements ProductService {
     private ProductDAO productDAO;
 
     @Override
-    public Product findServiceById(Integer id) {
+    public Product findProductById(Integer id) {
         return productDAO.findById(id);
     }
 
     @Override
-    public Set<Product> findServicesByUser(User ownerUser) {
+    public Set<Product> findProductsByUser(User ownerUser) {
         return productDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 
     @Override
-    public Set<Product> findServicesByRoom(Room room) {
+    public Set<Product> findProductsByRoom(Room room) {
         return productDAO.findByRoomAndActiveTrueOrderByIdAsc(room);
     }
 

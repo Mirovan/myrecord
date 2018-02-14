@@ -39,6 +39,9 @@ public class UserController/* implements ErrorController*/{
     private UserRoomService userRoomService;
 
     @Autowired
+    private UserProductService userProductService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -46,7 +49,7 @@ public class UserController/* implements ErrorController*/{
      * Отображение всех пользователей
      * */
     @RequestMapping(value="/cabinet/users/", method = RequestMethod.GET)
-    public ModelAndView users(Principal principal) {
+    public ModelAndView showUsers(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject( "users", userService.findUsersByOwner(user));
@@ -60,12 +63,12 @@ public class UserController/* implements ErrorController*/{
      * Форма добавления пользователя
      * */
     @RequestMapping(value="/cabinet/users/add/", method = RequestMethod.GET)
-    public ModelAndView simpleUserAdd() {
+    public ModelAndView addSimpleUserForm() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("action", "add");
 
         User user = new User();
-        Set<Role> rolesAvailable = userService.getRolesForSysUser();
+        Set<Role> rolesAvailable = userService.getRolesForSimpleUser();
         modelAndView.addObject("roles", rolesAvailable); //Роли из БД
         modelAndView.addObject("user", user);
         modelAndView.setViewName("cabinet/user/edit");
@@ -77,9 +80,9 @@ public class UserController/* implements ErrorController*/{
      * Сохранение добавляемого пользователя
      * */
     @RequestMapping(value="/cabinet/users/add/", method = RequestMethod.POST)
-    public ModelAndView simpleUserAddPost(User user, Principal principal) {
+    public ModelAndView addSimpleUserPost(User user, Principal principal) {
         //проверка - можем ли добавить данную роль для своего сотрудника
-        if ( userService.hasRoles(principal, user.getRoles()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
+        if ( userService.hasAccessToRoles(principal, user.getRoles()) ) {  //Проверка удачная - роль существует в списке доступных для этого системного пользователя
             User ownerUser = userService.findUserByEmail(principal.getName());
             user.setOwnerUser(ownerUser);
             user.setPass(bCryptPasswordEncoder.encode(user.getPass()));
@@ -94,7 +97,7 @@ public class UserController/* implements ErrorController*/{
      * Форма редактирования пользователя
      * */
     @RequestMapping(value="/cabinet/users/edit/{userId}/", method = RequestMethod.GET)
-    public ModelAndView serviceUpdate(@PathVariable Integer userId, Principal principal) {
+    public ModelAndView updateSimpleUserForm(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
             User user = userService.findUserById(userId);
@@ -108,7 +111,7 @@ public class UserController/* implements ErrorController*/{
                 Set<Role> userRoles = user.getRoles();
                 modelAndView.addObject("userRoles", userRoles);
                 //Все доступные роли
-                Set<Role> rolesAvailable = userService.getRolesForSysUser();
+                Set<Role> rolesAvailable = userService.getRolesForSimpleUser();
                 modelAndView.addObject("roles", rolesAvailable);
 
                 modelAndView.setViewName("cabinet/user/edit");
@@ -126,11 +129,11 @@ public class UserController/* implements ErrorController*/{
      * Сохранение редактируемого пользователя
      * */
     @RequestMapping(value="/cabinet/users/edit/", method = RequestMethod.POST)
-    public ModelAndView roomEditPost(User userUpd, Principal principal) {
+    public ModelAndView updateSimpleUserPost(User userUpd, Principal principal) {
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         // и роль существует в списке доступных для этого системного пользователя
         if ( userService.hasUser(principal, userUpd.getId()) &&
-             userService.hasRoles(principal, userUpd.getRoles()) ) {
+             userService.hasAccessToRoles(principal, userUpd.getRoles()) ) {
             //Находим этого пользователя
             User user = userService.findUserById(userUpd.getId());
             //Обновляем данные
@@ -151,7 +154,7 @@ public class UserController/* implements ErrorController*/{
      * Удаление пользователя
      * */
     @RequestMapping(value="/cabinet/users/delete/{userId}/", method = RequestMethod.GET)
-    public ModelAndView roomPost(@PathVariable Integer userId, Principal principal) {
+    public ModelAndView deleteRoomPost(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
             User user = userService.findUserById(userId);
@@ -171,7 +174,7 @@ public class UserController/* implements ErrorController*/{
         if ( userService.hasRoom(principal, roomId) ) {
             Room room = roomService.findRoomById(roomId);
             User ownerUser = room.getOwnerUser();
-            Set<Product> products = productService.findServicesByRoom(room);
+            Set<Product> products = productService.findProductsByRoom(room);
             //Отображаем только нужные данные о пользователях используя Адаптер
             Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
 
@@ -196,13 +199,13 @@ public class UserController/* implements ErrorController*/{
                                            @RequestParam(value="products[]", required = false) List<Integer> productsIds,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) ) {
+        if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) && userService.hasProducts(principal, productsIds) ) {
             //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
             Set<Product> products = new HashSet<>(); //чтобы исключить дублирование заводим Set
             for (Integer item: productsIds) {
-                products.add(productService.findServiceById(item));
+                products.add(productService.findProductById(item));
             }
 
             Set<User> users = new HashSet<>();
@@ -214,13 +217,14 @@ public class UserController/* implements ErrorController*/{
             UserRoom userRoom = new UserRoom(user, room);
 
             //ToDo: протестить добавление
-            //userRoomService.add(userRoom);
+            userRoomService.add(userRoom);
 
 //            userService.update(user);
 //            roomService.update(room);
-//            for (Product product: products) {
-//                productService.update(product);
-//            }
+            for (Product product: products) {
+                UserProduct userProduct = new UserProduct(user, product);
+                userProductService.update(userProduct);
+            }
 
             return new ModelAndView("redirect:/cabinet/rooms/users/");
         } else {
@@ -243,7 +247,7 @@ public class UserController/* implements ErrorController*/{
      * Форма отображение расписания пользователя
      * */
     @RequestMapping(value="/cabinet/users/{userId}/schedule/", method = RequestMethod.GET)
-    public ModelAndView scheduleView(@PathVariable Integer userId, Principal principal) {
+    public ModelAndView showSchedule(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
             ModelAndView modelAndView = new ModelAndView();
@@ -263,7 +267,7 @@ public class UserController/* implements ErrorController*/{
      * Сохранение/Изменение расписания пользователя
      * */
     @RequestMapping(value="/cabinet/users/saveschedule/", method = RequestMethod.POST)
-    public ModelAndView scheduleSave(@RequestParam Integer userId,
+    public ModelAndView saveSchedule(@RequestParam Integer userId,
                                      @RequestParam Integer year,
                                      @RequestParam Integer month,
                                      @RequestParam(value="dates[]", required = false) List<String> dates,

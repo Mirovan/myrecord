@@ -106,7 +106,7 @@ public class UserRestController {
 //
 //        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
 //        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-//            res = productService.findServicesByRoom(room);  //Получаем все услуги для текущей комнаты
+//            res = productService.findProductsByRoom(room);  //Получаем все услуги для текущей комнаты
 //        }
 //        return res;
 //    }

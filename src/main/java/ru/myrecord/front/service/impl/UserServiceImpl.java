@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
      * Получение ролей для системного пользователя
      * */
     @Override
-    public Set<Role> getRolesForSysUser() {
+    public Set<Role> getRolesForSimpleUser() {
         List<String> roleNames = new ArrayList<String>();
         roleNames.add("MASTER");
         roleNames.add("MANAGER");
@@ -180,8 +180,8 @@ public class UserServiceImpl implements UserService {
      * Проверка - принадлежит ли системному пользователю данная услуга
      * */
     @Override
-    public Boolean hasService(Integer ownerUserId, Integer serviceId) {
-        Product product = productService.findServiceById(serviceId);
+    public Boolean hasProduct(Integer ownerUserId, Integer productId) {
+        Product product = productService.findProductById(productId);
         if ( ownerUserId.equals(product.getOwnerUser().getId()) && product.getActive() )
             return true;
         else
@@ -193,23 +193,45 @@ public class UserServiceImpl implements UserService {
      * Проверка - принадлежит ли системному пользователю данная услуга
      * */
     @Override
-    public Boolean hasService(Principal principal, Integer serviceId) {
+    public Boolean hasProduct(Principal principal, Integer serviceId) {
         User ownerUser = findUserByEmail(principal.getName());
-        return hasService(ownerUser.getId(), serviceId);
+        return hasProduct(ownerUser.getId(), serviceId);
     }
 
 
     /**
-     * Проверка - можно ли добавить пользователя с ролью MASTER и MANAGER
+     * Проверка - принадлежат ли продукты/услуги системному пользователю
      * */
     @Override
-    public Boolean hasRoles(Principal principal, Set<Role> roles) {
+    public Boolean hasProducts(Principal principal, List<Integer> products) {
         User ownerUser = findUserByEmail(principal.getName());
-        Set<Role> rolesAvailable = getRolesForSysUser();
+        for (Integer productId: products) {
+            if ( !hasProduct(ownerUser.getId(), productId) )
+                return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * Имеет ли пользователь возможность добавлять пользователь с определенными ролями
+     * (системный поьлзователь имеет доступ к MASTER и MANAGER)
+     * (Админ сайта имеет доступ ко всем ролям)
+     * */
+    @Override
+    public Boolean hasAccessToRoles(Principal principal, Set<Role> roles) {
+        User ownerUser = findUserByEmail(principal.getName());
+        Set<Role> rolesAvailable = null;
+        if (ownerUser.getRoles().contains("SYSUSER")) {         //Выбираем роли для системного пользователя
+            rolesAvailable = getRolesForSimpleUser();
+        } else if (ownerUser.getRoles().contains("ADMIN")) {    //Выбираем роли для админа
+            //ToDo: это пока не реализовано
+        }
         if ( rolesAvailable.containsAll(roles) )
             return true;
         else
             return false;
     }
+
 
 }

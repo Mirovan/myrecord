@@ -13,11 +13,6 @@ public class Product {
     @Column(name = "id")
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_user_id")
-    @JsonIgnore
-    private User ownerUser;
-
     @Column(name = "name")
     private String name;
 
@@ -44,14 +39,6 @@ public class Product {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public User getOwnerUser() {
-        return ownerUser;
-    }
-
-    public void setOwnerUser(User user) {
-        this.ownerUser = ownerUser;
     }
 
     public String getName() {

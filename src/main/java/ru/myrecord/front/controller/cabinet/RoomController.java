@@ -48,10 +48,15 @@ public class RoomController/* implements ErrorController*/{
         Room room = roomService.findRoomById(roomId);
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
+            //Услуги в помещении
             Set<Product> products = productService.findProductsByRoom(room);
+
+            //Пользователи в помещении
+            Set<User> users = userService.findUsersByRoom(room);
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("products", products);
+            modelAndView.addObject("users", users);
             modelAndView.setViewName("cabinet/room/product");
             return modelAndView;
         } else {

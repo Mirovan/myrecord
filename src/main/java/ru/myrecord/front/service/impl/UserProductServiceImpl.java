@@ -9,7 +9,7 @@ import ru.myrecord.front.data.dao.UserProductDAO;
 import ru.myrecord.front.data.model.entities.UserProduct;
 import ru.myrecord.front.service.iface.UserProductService;
 
-@Service("userRoomService")
+@Service("userProductService")
 public class UserProductServiceImpl implements UserProductService {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());

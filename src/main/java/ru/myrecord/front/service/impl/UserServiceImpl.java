@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
+import ru.myrecord.front.data.dao.UserRoomDAO;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
-import ru.myrecord.front.data.model.entities.Product;
-import ru.myrecord.front.data.model.entities.Role;
-import ru.myrecord.front.data.model.entities.Room;
-import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoleService;
 import ru.myrecord.front.service.iface.RoomService;
@@ -34,6 +32,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("roleDAO")
     private RoleDAO roleDAO;
+
+    @Autowired
+    @Qualifier("userRoomDAO")
+    private UserRoomDAO userRoomDAO;
 
     @Autowired
     private RoleService roleService;
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
-        Role userRole = roleDAO.findByRole("ADMIN");
+        Role userRole = roleDAO.findByRole("SYSUSER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userDAO.save(user);
     }
@@ -182,7 +184,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean hasProduct(Integer ownerUserId, Integer productId) {
         Product product = productService.findProductById(productId);
-        if ( ownerUserId.equals(product.getOwnerUser().getId()) && product.getActive() )
+        Room room = product.getRoom();
+        if ( product.getActive() && room.getActive() && hasRoom(ownerUserId, room.getId()) )
             return true;
         else
             return false;
@@ -193,9 +196,14 @@ public class UserServiceImpl implements UserService {
      * Проверка - принадлежит ли системному пользователю данная услуга
      * */
     @Override
-    public Boolean hasProduct(Principal principal, Integer serviceId) {
+    public Boolean hasProduct(Principal principal, Integer productId) {
         User ownerUser = findUserByEmail(principal.getName());
-        return hasProduct(ownerUser.getId(), serviceId);
+        Product product = productService.findProductById(productId);
+        Room room = product.getRoom();
+        if ( product.getActive() && room.getActive() && hasRoom(principal, room.getId()) )
+            return true;
+        else
+            return false;
     }
 
 
@@ -222,9 +230,9 @@ public class UserServiceImpl implements UserService {
     public Boolean hasAccessToRoles(Principal principal, Set<Role> roles) {
         User ownerUser = findUserByEmail(principal.getName());
         Set<Role> rolesAvailable = null;
-        if (ownerUser.getRoles().contains("SYSUSER")) {         //Выбираем роли для системного пользователя
+        if ( ownerUser.getRoles().contains(roleService.findRoleByName("SYSUSER")) ) {         //Выбираем роли для системного пользователя
             rolesAvailable = getRolesForSimpleUser();
-        } else if (ownerUser.getRoles().contains("ADMIN")) {    //Выбираем роли для админа
+        } else if ( ownerUser.getRoles().contains(roleService.findRoleByName("ADMIN")) ) {    //Выбираем роли для админа
             //ToDo: это пока не реализовано
         }
         if ( rolesAvailable.containsAll(roles) )
@@ -234,4 +242,13 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public Set<User> findUsersByRoom(Room room) {
+        Set<UserRoom> userRooms = userRoomDAO.findByRoom(room);
+        Set<User> users = new HashSet<>();
+        for (UserRoom userRoom: userRooms) {
+            users.add( userRoom.getUser() );
+        }
+        return users;
+    }
 }

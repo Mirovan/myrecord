@@ -6,6 +6,7 @@ import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.entities.UserRoom;
 
 import java.security.Principal;
 import java.util.List;
@@ -17,8 +18,9 @@ public interface UserService {
     public void addSimpleUser(User user);
     public void update(User user);
     public Set<User> findUsersByOwner(User ownerUser);
+    public Set<User> findUsersByRoom(Room room);
     public User findUserById(Integer id);
-    //public Set<User> findUsersByRoom(Room room);
+    //public Set<User> findUsersByUserRooms(Set<UserRoom> userRooms);
     Set<UserAdapter> getUserAdapterCollection(Set<User> users);
     Set<Role> getRolesForSimpleUser();
     Boolean userEquals(Integer userId1, Integer userId2);

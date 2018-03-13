@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ProductService {
     Product findProductById(Integer id);
-    Set<Product> findProductsByUser(User user);
+    //Set<Product> findProductsByUser(User user);
     Set<Product> findProductsByRoom(Room room);
     void add(Product product);
     void update(Product product);

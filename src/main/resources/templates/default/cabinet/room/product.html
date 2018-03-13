@@ -7,9 +7,18 @@
 
 <h1>Услуги в Помещении</h1>
 
-
+Услуги
 <div th:each="product : ${products}" style="display: block;">
     - <span th:text="*{product.name}">product</span>
+    <br />
+</div>
+
+<br />
+<br />
+
+Пользователи/Мастера
+<div th:each="user : ${users}" style="display: block;">
+    - <span th:text="@{${user.name} + ' ' + ${user.sirname}}">user</span>
     <br />
 </div>
 

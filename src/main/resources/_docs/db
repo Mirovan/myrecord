@@ -75,7 +75,6 @@ CREATE SEQUENCE product_id_seq START WITH 1;
 
 CREATE TABLE "product" (
     id INTEGER NOT NULL default nextval('product_id_seq') PRIMARY KEY,
-    owner_user_id INTEGER REFERENCES "users"(id),
     name VARCHAR(240) NOT NULL,
     room_id INTEGER REFERENCES "room"(id),
     active BOOLEAN

@@ -176,6 +176,7 @@ public class UserController/* implements ErrorController*/{
             User ownerUser = room.getOwnerUser();
             Set<Product> products = productService.findProductsByRoom(room);
             //Отображаем только нужные данные о пользователях используя Адаптер
+            //ToDo: Исключить уже добавленных пользователей
             Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
 
             ModelAndView modelAndView = new ModelAndView();
@@ -200,7 +201,6 @@ public class UserController/* implements ErrorController*/{
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) && userService.hasProducts(principal, productsIds) ) {
-            //ToDo: Добавляем пользователя в комнату и его услуги в этой комнате
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
             Set<Product> products = new HashSet<>(); //чтобы исключить дублирование заводим Set
@@ -208,25 +208,20 @@ public class UserController/* implements ErrorController*/{
                 products.add(productService.findProductById(item));
             }
 
-            Set<User> users = new HashSet<>();
-            users.add(user);
-
-            Set<Room> rooms = new HashSet<>();
-            rooms.add(room);
-
             UserRoom userRoom = new UserRoom(user, room);
+            userRoom.setActive(true);
 
-            //ToDo: протестить добавление
+            //Линкуем пользователя к комнате
             userRoomService.add(userRoom);
 
-//            userService.update(user);
-//            roomService.update(room);
+            //Линкуем пользователя к услугам
             for (Product product: products) {
                 UserProduct userProduct = new UserProduct(user, product);
-                userProductService.update(userProduct);
+                userProductService.add(userProduct);
+                userProduct.setActive(true);
             }
 
-            return new ModelAndView("redirect:/cabinet/rooms/users/");
+            return new ModelAndView("redirect:/cabinet/rooms/" + String.valueOf(roomId) + "/users/");
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }
@@ -236,10 +231,21 @@ public class UserController/* implements ErrorController*/{
     /**
      * Форма отображения пользователей в помещении
      * */
-    @RequestMapping(value="/cabinet/rooms/users/", method = RequestMethod.GET)
-    public ModelAndView viewRoomUsers(Principal principal) {
+    @RequestMapping(value="/cabinet/rooms/{roomId}/users/", method = RequestMethod.GET)
+    public ModelAndView viewRoomUsers(@PathVariable Integer roomId, Principal principal) {
         //ToDo: отображаем пользователей в этой комнате
-        return new ModelAndView("cabinet/room/users/");
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.hasRoom(principal, roomId) ) {
+            Room room = roomService.findRoomById(roomId);
+            Set<User> users = userService.findUsersByRoom(room);
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("users", users);
+            modelAndView.setViewName("cabinet/room/users/index");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
     }
 
 

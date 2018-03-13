@@ -32,11 +32,15 @@ public class ProductController/* implements ErrorController*/{
     @Autowired
     private RoomService roomService;
 
+    /**
+     * Все продукты
+     * */
     @RequestMapping(value="/cabinet/products/", method = RequestMethod.GET)
-    public ModelAndView services(Principal principal) {
+    public ModelAndView productsView(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("product", productService.findProductsByUser(user));
+        //ToDo: найти все услуги у сист. пользователя
+        //modelAndView.addObject("product", productService.findProductsByUser(user));
         modelAndView.setViewName("cabinet/product/index");
         return modelAndView;
     }
@@ -53,7 +57,7 @@ public class ProductController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/rooms/{roomId}/addproduct/", method = RequestMethod.GET)
-    public ModelAndView serviceAdd(@PathVariable Integer roomId, Principal principal) {
+    public ModelAndView productAdd(@PathVariable Integer roomId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             Room room = roomService.findRoomById(roomId);
@@ -75,12 +79,10 @@ public class ProductController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/products/add/", method = RequestMethod.POST)
-    public ModelAndView serviceAddPost(Product product, Principal principal) {
+    public ModelAndView productAddPost(Product product, Principal principal) {
         Room room = product.getRoom();
-        User ownerUser = userService.findUserByEmail(principal.getName());
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, room.getId()) ) {
-            product.setOwnerUser(ownerUser);
             product.setActive(true);
             productService.add(product);
             return new ModelAndView("redirect:/cabinet/products/");
@@ -91,11 +93,11 @@ public class ProductController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/products/edit/{productId}/", method = RequestMethod.GET)
-    public ModelAndView serviceUpdate(@PathVariable Integer productId, Principal principal) {
-        Product product = productService.findProductById(productId);
-        User ownerUser = product.getOwnerUser();
+    public ModelAndView productUpdate(@PathVariable Integer productId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasProduct(principal, productId) ) {
+            Product product = productService.findProductById(productId);
+            User ownerUser = product.getRoom().getOwnerUser();   //пользователь которому принадлежит помещение с этой услугой
             Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
 
             ModelAndView modelAndView = new ModelAndView();
@@ -111,7 +113,7 @@ public class ProductController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/products/edit/", method = RequestMethod.POST)
-    public ModelAndView serviceEditPost(Product productUpd, Principal principal) {
+    public ModelAndView productEditPost(Product productUpd, Principal principal) {
         Product product = productService.findProductById(productUpd.getId());
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasProduct(principal, productUpd.getId()) ) {
@@ -124,11 +126,10 @@ public class ProductController/* implements ErrorController*/{
 
 
     @RequestMapping(value="/cabinet/products/delete/{productId}/", method = RequestMethod.GET)
-    public ModelAndView servicePost(@PathVariable Integer productId, Principal principal) {
-        Product product = productService.findProductById(productId);
-        User ownerUser = product.getOwnerUser();
+    public ModelAndView productPost(@PathVariable Integer productId, Principal principal) {
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasProduct(principal, productId) ) {
+            Product product = productService.findProductById(productId);
             product.setActive(false);
             productService.update(product);
         }

@@ -27,10 +27,11 @@ public class ProductServiceImpl implements ProductService {
         return productDAO.findById(id);
     }
 
-    @Override
-    public Set<Product> findProductsByUser(User ownerUser) {
-        return productDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
-    }
+//    @Override
+//    public Set<Product> findProductsByUser(User ownerUser) {
+//        //return productDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
+//        return null;
+//    }
 
     @Override
     public Set<Product> findProductsByRoom(Room room) {

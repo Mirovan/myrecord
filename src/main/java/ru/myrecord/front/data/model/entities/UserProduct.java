@@ -22,6 +22,9 @@ public class UserProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "active")
+    private Boolean active;
+
     public User getUser() {
         return user;
     }
@@ -36,6 +39,14 @@ public class UserProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public UserProduct(User user, Product product) {

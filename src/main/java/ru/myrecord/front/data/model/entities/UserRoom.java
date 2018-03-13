@@ -23,6 +23,9 @@ public class UserRoom {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @Column(name = "active")
+    private Boolean active;
+
     public User getUser() {
         return user;
     }
@@ -37,6 +40,18 @@ public class UserRoom {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public UserRoom() {
+        super();
     }
 
     public UserRoom(User user, Room room) {

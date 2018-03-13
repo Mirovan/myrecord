@@ -13,19 +13,29 @@ public class Room {
     @Column(name = "id")
     private Integer id;
 
+    //Владелец - системный пользователь
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
-    private User user;
+    private User ownerUser;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    //У помещения есть услуги/продукты, которые принадлежат только этому помещению
+    @OneToMany(
+            mappedBy = "room",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true)
     @JsonIgnore
-    private Set<Service> services;
+    private Set<Product> products;
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "room")
+    @JsonIgnore
+    private Set<UserRoom> userRooms;
 
     public Integer getId() {
         return id;
@@ -35,12 +45,12 @@ public class Room {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwnerUser() {
+        return ownerUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwnerUser(User ownerUser) {
+        this.ownerUser = ownerUser;
     }
 
     public String getName() {
@@ -59,22 +69,19 @@ public class Room {
         this.active = active;
     }
 
-    public Set<Service> getServices() {
-        return services;
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public void setServices(Set<Service> services) {
-        this.services = services;
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", user=" + user +
-                ", name='" + name + '\'' +
-                ", services=" + services +
-                ", active=" + active +
-                '}';
+    public Set<UserRoom> getUserRooms() {
+        return userRooms;
+    }
+
+    public void setUserRooms(Set<UserRoom> userRooms) {
+        this.userRooms = userRooms;
     }
 }

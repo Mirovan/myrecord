@@ -31,6 +31,7 @@ public class User {
     @JsonIgnore
     private String pass;
 
+    //Линковка на самого себя. NULL - если объект у объекта нет родителя
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_user_id")
     private User ownerUser;
@@ -42,7 +43,8 @@ public class User {
     private String sirname;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role",
+    @JoinTable(
+            name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
@@ -52,13 +54,13 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_room",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_id")
-    )
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Room> rooms;
+    private Set<UserRoom> userRooms;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<UserProduct> userProducts;
 
     public Integer getId() {
         return id;
@@ -132,27 +134,19 @@ public class User {
         this.active = active;
     }
 
-    public Set<Room> getRooms() {
-        return rooms;
+    public Set<UserRoom> getUserRooms() {
+        return userRooms;
     }
 
-    public void setRooms(Set<Room> rooms) {
-        this.rooms = rooms;
+    public void setUserRooms(Set<UserRoom> userRooms) {
+        this.userRooms = userRooms;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", pass='" + pass + '\'' +
-                ", ownerUser=" + ownerUser +
-                ", name='" + name + '\'' +
-                ", sirname='" + sirname + '\'' +
-                ", roles=" + roles +
-                ", active=" + active +
-                ", rooms=" + rooms +
-                '}';
+    public Set<UserProduct> getUserProducts() {
+        return userProducts;
+    }
+
+    public void setUserProducts(Set<UserProduct> userProducts) {
+        this.userProducts = userProducts;
     }
 }

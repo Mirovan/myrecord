@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Repository("roleDAO")
 public interface RoleDAO extends JpaRepository<Role, Integer> {
-	Role findByRole(String role);
+	Role findByRole(String roleName);
 
 	Role findById(Integer id);
 

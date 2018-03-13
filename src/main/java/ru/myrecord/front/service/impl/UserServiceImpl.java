@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
+import ru.myrecord.front.data.dao.UserRoomDAO;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
-import ru.myrecord.front.data.model.entities.Role;
-import ru.myrecord.front.data.model.entities.Room;
-import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.entities.*;
+import ru.myrecord.front.service.iface.ProductService;
+import ru.myrecord.front.service.iface.RoleService;
+import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.UserService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.Principal;
+import java.util.*;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -32,6 +32,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("roleDAO")
     private RoleDAO roleDAO;
+
+    @Autowired
+    @Qualifier("userRoomDAO")
+    private UserRoomDAO userRoomDAO;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private RoomService roomService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -50,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
-        Role userRole = roleDAO.findByRole("ADMIN");
+        Role userRole = roleDAO.findByRole("SYSUSER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userDAO.save(user);
     }
@@ -83,10 +96,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public Set<User> findUsersByRoom(Room room) {
-        return userDAO.findByRoomId(room.getId());
-    }
+//    @Override
+//    public Set<User> findUsersByRoom(Room room) {
+//        return userDAO.findByRoomId(room.getId());
+//    }
 
     @Override
     public Set<UserAdapter> getUserAdapterCollection(Set<User> users) {
@@ -97,4 +110,145 @@ public class UserServiceImpl implements UserService {
         return userAdapterColection;
     }
 
+
+    /**
+     * Получение ролей для системного пользователя
+     * */
+    @Override
+    public Set<Role> getRolesForSimpleUser() {
+        List<String> roleNames = new ArrayList<String>();
+        roleNames.add("MASTER");
+        roleNames.add("MANAGER");
+        Set<Role> roles = roleService.findRolesByRoleName( roleNames );
+        return roles;
+    }
+
+
+    /**
+     * Проверка - равны ли пользователи
+     * */
+    @Override
+    public Boolean userEquals(Integer userId1, Integer userId2) {
+        return userId1.equals(userId2);
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю обычный пользователь
+     * */
+    @Override
+    public Boolean hasUser(Integer ownerUserId, Integer childUserId) {
+        User childUser = findUserById(childUserId);
+        if ( ownerUserId.equals(childUser.getOwnerUser().getId()) && childUser.getActive())
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю обычный пользователь
+     * */
+    @Override
+    public Boolean hasUser(Principal principal, Integer childUserId) {
+        User ownerUser = findUserByEmail(principal.getName());
+        return hasUser(ownerUser.getId(), childUserId);
+    }
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данное помещение
+     * */
+    @Override
+    public Boolean hasRoom(Integer ownerUserId, Integer roomId) {
+        Room room = roomService.findRoomById(roomId);
+        if ( ownerUserId.equals(room.getOwnerUser().getId()) && room.getActive() )
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данное помещение
+     * */
+    @Override
+    public Boolean hasRoom(Principal principal, Integer roomId) {
+        User ownerUser = findUserByEmail(principal.getName());
+        return hasRoom(ownerUser.getId(), roomId);
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данная услуга
+     * */
+    @Override
+    public Boolean hasProduct(Integer ownerUserId, Integer productId) {
+        Product product = productService.findProductById(productId);
+        Room room = product.getRoom();
+        if ( product.getActive() && room.getActive() && hasRoom(ownerUserId, room.getId()) )
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю данная услуга
+     * */
+    @Override
+    public Boolean hasProduct(Principal principal, Integer productId) {
+        User ownerUser = findUserByEmail(principal.getName());
+        Product product = productService.findProductById(productId);
+        Room room = product.getRoom();
+        if ( product.getActive() && room.getActive() && hasRoom(principal, room.getId()) )
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * Проверка - принадлежат ли продукты/услуги системному пользователю
+     * */
+    @Override
+    public Boolean hasProducts(Principal principal, List<Integer> products) {
+        User ownerUser = findUserByEmail(principal.getName());
+        for (Integer productId: products) {
+            if ( !hasProduct(ownerUser.getId(), productId) )
+                return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * Имеет ли пользователь возможность добавлять пользователь с определенными ролями
+     * (системный поьлзователь имеет доступ к MASTER и MANAGER)
+     * (Админ сайта имеет доступ ко всем ролям)
+     * */
+    @Override
+    public Boolean hasAccessToRoles(Principal principal, Set<Role> roles) {
+        User ownerUser = findUserByEmail(principal.getName());
+        Set<Role> rolesAvailable = null;
+        if ( ownerUser.getRoles().contains(roleService.findRoleByName("SYSUSER")) ) {         //Выбираем роли для системного пользователя
+            rolesAvailable = getRolesForSimpleUser();
+        } else if ( ownerUser.getRoles().contains(roleService.findRoleByName("ADMIN")) ) {    //Выбираем роли для админа
+            //ToDo: это пока не реализовано
+        }
+        if ( rolesAvailable.containsAll(roles) )
+            return true;
+        else
+            return false;
+    }
+
+
+    @Override
+    public Set<User> findUsersByRoom(Room room) {
+        Set<UserRoom> userRooms = userRoomDAO.findByRoom(room);
+        Set<User> users = new HashSet<>();
+        for (UserRoom userRoom: userRooms) {
+            users.add( userRoom.getUser() );
+        }
+        return users;
+    }
 }

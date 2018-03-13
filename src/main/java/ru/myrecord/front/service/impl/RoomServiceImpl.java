@@ -29,8 +29,8 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public Set<Room> findRoomsByActive(User user) {
-        return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user);
+    public Set<Room> findRoomsByActive(User ownerUser) {
+        return roomDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class RoomServiceImpl implements RoomService {
 
 
 //    @Override
-//    public Set<ru.myrecord.front.data.model.entities.Service> findServicesByRoom(Room room) {
+//    public Set<ru.myrecord.front.data.model.entities.Product> findProductsByRoom(Room room) {
 //        return null;//roomDAO.findByRoom(room);
 //    }
 

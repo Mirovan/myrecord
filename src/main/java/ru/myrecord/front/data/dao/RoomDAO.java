@@ -11,7 +11,7 @@ import java.util.Set;
 @Repository("roomDAO")
 public interface RoomDAO extends JpaRepository<Room, Integer> {
 	Room findById(Integer id);
-	Set<Room> findByUserAndActiveTrueOrderByIdAsc(User user);
-//	Set<Service> findByRoom(Room room);	//AndActiveTrueOrderByIdAsc
+	Set<Room> findByOwnerUserAndActiveTrueOrderByIdAsc(User ownerUser);
+//	Set<Product> findByRoom(Room room);	//AndActiveTrueOrderByIdAsc
 	List<Room> findAll();
 }

@@ -71,32 +71,40 @@ ALTER SEQUENCE room_id_seq owned by "room".id;
 
 
 /*Услуги*/
-CREATE SEQUENCE service_id_seq START WITH 1;
+CREATE SEQUENCE product_id_seq START WITH 1;
 
-CREATE TABLE "service" (
-    id INTEGER NOT NULL default nextval('service_id_seq') PRIMARY KEY,
-    owner_user_id INTEGER REFERENCES "users"(id),
+CREATE TABLE "product" (
+    id INTEGER NOT NULL default nextval('product_id_seq') PRIMARY KEY,
     name VARCHAR(240) NOT NULL,
     room_id INTEGER REFERENCES "room"(id),
     active BOOLEAN
 );
-ALTER SEQUENCE service_id_seq owned by "service".id;
+ALTER SEQUENCE product_id_seq owned by "product".id;
 
 
-/*Услуги в помещении*/
-/*
-CREATE TABLE "service_room" (
-    service_id INTEGER REFERENCES "service"(id),
-	room_id INTEGER REFERENCES "room"(id)
-);
-*/
+/*Привязка пользователя к помещению - many-to-many*/
+CREATE SEQUENCE user_room_id_seq START WITH 1;
 
-
-/*Услуги пользователя - Профиль специалиста*/
 CREATE TABLE "user_room" (
-    user_id INTEGER REFERENCES "users"(id),
-	service_id INTEGER REFERENCES "service"(id)
+    id INTEGER NOT NULL default nextval('user_room_id_seq') PRIMARY KEY,
+	user_id INTEGER REFERENCES "users"(id),
+    room_id INTEGER REFERENCES "room"(id),
+    active BOOLEAN
 );
+ALTER SEQUENCE user_room_id_seq owned by "user_room".id;
+
+
+
+/*Услуги пользователя - Профиль специалиста - many-to-many*/
+CREATE SEQUENCE user_product_id_seq START WITH 1;
+
+CREATE TABLE "user_product" (
+    id INTEGER NOT NULL default nextval('user_product_id_seq') PRIMARY KEY,
+    user_id INTEGER REFERENCES "users"(id),
+	product_id INTEGER REFERENCES "product"(id),
+	active BOOLEAN
+);
+ALTER SEQUENCE user_product_id_seq owned by "user_product".id;
 
 
 /*Рассписание специалиста*/

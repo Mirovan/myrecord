@@ -20,7 +20,7 @@
                 $('#input-user-selection').autocomplete({
                     lookup: usersArray,
                     onSelect: function(selectedUser) {
-                        $('#addingUserId').val(selectedUser.data);
+                        $('#userId').val(selectedUser.data);
                     },
 //                    onInvalidateSelection: function() {
 //                        $('#selection-dynamic').html('You selected: none');
@@ -38,15 +38,15 @@
 
         <h1>Добавление пользователя в помещение</h1>
 
-        <div th:each="user : ${users}" th:text="${user.name}" style="display: block;"></div>
+        All users : <div th:each="user : ${users}" th:text="${user.name}" style="display: block;"></div>
 
         <form th:action="@{'/cabinet/rooms/users/add/'}" method="post">
             <input type="text" name="user" id="input-user-selection" style="width: 100%; border-width: 5px;"/>
-            <input type="hidden" name="addingUserId" id="addingUserId" />
+            <input type="hidden" name="userId" id="userId" />
             <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
 
-            <div th:each="service : ${services}" style="display: block;">
-                <input type="checkbox" th:name="services[]" th:value="${service.id}" th:text="${service.name}" />
+            <div th:each="product : ${products}" style="display: block;">
+                <input type="checkbox" th:name="products[]" th:value="${product.id}" th:text="${product.name}" />
             </div>
 
 

@@ -1,23 +1,17 @@
-/*global $, document, Chart, LINECHART, data, options, window*/
 $(document).ready(function () {
-
-    'use strict';
-
-    // Main Template Color
-    var brandPrimary = '#33b35a';
 
     // ------------------------------------------------------- //
     // Custom Scrollbar
     // ------------------------------------------------------ //
 
     if ($(window).outerWidth() > 992) {
-         $(window).on("load",function(){
-            $("nav.side-navbar").mCustomScrollbar({
-                scrollInertia: 200
-            });
+        $("nav.side-navbar").mCustomScrollbar({
+            scrollInertia: 200
         });
     }
 
+    // Main Template Color
+    var brandPrimary = '#33b35a';
 
     // ------------------------------------------------------- //
     // Side Navbar Functionality
@@ -58,22 +52,31 @@ $(document).ready(function () {
     });
 
     // ------------------------------------------------------- //
-    // Transition Placeholders
+    // Material Inputs
     // ------------------------------------------------------ //
-    $('input').on('focus', function () {
-        $(this).siblings('.label-custom').addClass('active');
+
+    var materialInputs = $('input.input-material');
+
+    // activate labels for prefilled values
+    materialInputs.filter(function () {
+        return $(this).val() !== "";
+    }).siblings('.label-material').addClass('active');
+
+    // move label on focus
+    materialInputs.on('focus', function () {
+        $(this).siblings('.label-material').addClass('active');
     });
 
-    $('input').on('blur', function () {
-        $(this).siblings('.label-custom').removeClass('active');
+    // remove/keep label on blur
+    materialInputs.on('blur', function () {
+        $(this).siblings('.label-material').removeClass('active');
 
         if ($(this).val() !== '') {
-            $(this).siblings('.label-custom').addClass('active');
+            $(this).siblings('.label-material').addClass('active');
         } else {
-            $(this).siblings('.label-custom').removeClass('active');
+            $(this).siblings('.label-material').removeClass('active');
         }
     });
-
 
     // ------------------------------------------------------- //
     // Jquery Progress Circle
@@ -100,7 +103,7 @@ $(document).ready(function () {
     // ------------------------------------------------------ //
 
     var stylesheet = $('link#theme-stylesheet');
-    $( "<link id='new-stylesheet' rel='stylesheet'>" ).insertAfter(stylesheet);
+    $("<link id='new-stylesheet' rel='stylesheet'>").insertAfter(stylesheet);
     var alternateColour = $('link#new-stylesheet');
 
     if ($.cookie("theme_csspath")) {
@@ -115,7 +118,10 @@ $(document).ready(function () {
 
             alternateColour.attr("href", theme_csspath);
 
-            $.cookie("theme_csspath", theme_csspath, { expires: 365, path: document.URL.substr(0, document.URL.lastIndexOf('/')) });
+            $.cookie("theme_csspath", theme_csspath, {
+                expires: 365,
+                path: document.URL.substr(0, document.URL.lastIndexOf('/'))
+            });
 
         }
 

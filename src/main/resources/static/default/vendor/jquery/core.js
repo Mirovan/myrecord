@@ -16,7 +16,7 @@ define( [
 	"./var/fnToString",
 	"./var/ObjectFunctionString",
 	"./var/support",
-	"./core/DOMEval"
+	"./core.js/DOMEval"
 ], function( arr, document, getProto, slice, concat, push, indexOf,
 	class2type, toString, hasOwn, fnToString, ObjectFunctionString,
 	support, DOMEval ) {

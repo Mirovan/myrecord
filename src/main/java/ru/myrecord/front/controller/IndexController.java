@@ -29,4 +29,11 @@ public class IndexController/* implements ErrorController*/{
         return modelAndView;
     }
 
+    @RequestMapping(value="/temp/", method = RequestMethod.GET)
+    public ModelAndView temp() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("temp");
+        return modelAndView;
+    }
+
 }

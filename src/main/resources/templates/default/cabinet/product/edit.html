@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spring Security Example </title>
+</head>
+<body>
+
+<h1>Услуги - add/edit</h1>
+
+<form th:object="${product}" th:action="@{'/cabinet/products/' + ${action} + '/'}" method="post">
+    Service: <input type="hidden" th:field="*{id}" />
+    <input type="hidden" name="roleid" value="@{${rrr}}" />
+    <input type="text" th:field="*{name}" class="form-control" />
+    <br/>
+    Room:
+    <select th:field="*{room}">
+        <option th:each="r : ${rooms}"
+                th:value="${r.id}"
+                th:text="${r.name}">room</option>
+    </select>
+    <br />
+    <input type="submit" />
+</form>
+
+<br />
+<br />
+<div th:include="cabinet/inc/menu.inc::menu"></div>
+
+</body>
+</html>
+

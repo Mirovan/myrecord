@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spring Security Example </title>
+</head>
+<body>
+
+<h1>Услуги</h1>
+
+<!--
+<a href="/cabinet/products/add/">=Добавить=</a>
+-->
+<br />
+<br />
+
+<div th:each="product : ${products}" style="display: block;">
+    <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">
+        <span th:text="${product.name}"></span>
+    </a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">[Edit]</a>
+    &nbsp;&nbsp;
+    <a th:href="@{'/cabinet/products/delete/' + ${product.id} + '/'}">[Delete]</a>
+</div>
+
+<br />
+<br />
+
+
+<div th:include="cabinet/inc/menu.inc::menu"></div>
+
+
+</body>
+</html>
+

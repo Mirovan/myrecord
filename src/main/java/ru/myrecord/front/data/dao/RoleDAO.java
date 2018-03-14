@@ -3,14 +3,14 @@ package ru.myrecord.front.data.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.myrecord.front.data.model.Role;
+import ru.myrecord.front.data.model.entities.Role;
 
 import java.util.List;
 import java.util.Set;
 
 @Repository("roleDAO")
 public interface RoleDAO extends JpaRepository<Role, Integer> {
-	Role findByRole(String role);
+	Role findByRole(String roleName);
 
 	Role findById(Integer id);
 

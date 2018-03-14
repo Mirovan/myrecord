@@ -4,17 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.myrecord.front.Utils.Utils;
-import ru.myrecord.front.data.model.Schedule;
-import ru.myrecord.front.data.model.User;
-import ru.myrecord.front.data.model.restadapters.ScheduleAdapter;
+import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
+import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ScheduleService;
-import ru.myrecord.front.service.iface.ServiceService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,7 +32,7 @@ public class UserRestController {
     private RoomService roomService;
 
     @Autowired
-    private ServiceService serviceService;
+    private ProductService productService;
 
 /*
     @RequestMapping(value="/getUsersByRoom/{roomId}", method = RequestMethod.GET)
@@ -71,10 +68,10 @@ public class UserRestController {
         ScheduleAdapter userMonthSchedule = new ScheduleAdapter();
 
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
             userMonthSchedule.setScheduleAll( scheduleService.getMonthSchedule(year, month) );  //Получаем список - месячный календарь
             userMonthSchedule.setUserSchedule( scheduleService.findByUser(user) );  //Получаем расписание пользователя
-        }
+        //}
         return userMonthSchedule;
     }
 
@@ -89,9 +86,9 @@ public class UserRestController {
 
         Set<User> users = null;
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
             users = userService.findUsersByOwner(user);
-        }
+        //}
         return users;
     }
 
@@ -101,15 +98,15 @@ public class UserRestController {
      * Запрос услуг для кабинета пользователя
      * */
 //    @RequestMapping(value="/cabinet/rooms/user/json-services/", method = RequestMethod.GET)
-//    public Set<Service> getRoomServices(Integer roomId, Principal principal) {
+//    public Set<Product> getRoomServices(Integer roomId, Principal principal) {
 //        Room room = roomService.findRoomById(roomId);
 //        User ownerUser = room.getUser();
 //
-//        Set<Service> res = null;
+//        Set<Product> res = null;
 //
 //        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
 //        if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-//            res = serviceService.findServicesByRoom(room);  //Получаем все услуги для текущей комнаты
+//            res = productService.findProductsByRoom(room);  //Получаем все услуги для текущей комнаты
 //        }
 //        return res;
 //    }

@@ -1,10 +1,9 @@
 package ru.myrecord.front.service.iface;
 
-import ru.myrecord.front.data.model.Schedule;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.entities.Schedule;
+import ru.myrecord.front.data.model.entities.User;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface ScheduleService {

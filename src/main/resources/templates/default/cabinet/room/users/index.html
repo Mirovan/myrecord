@@ -5,8 +5,11 @@
 </head>
 <body>
 
-<h1>Подьзователи</h1>
+<h1>Подьзователи в помещении</h1>
 
+<div th:each="user : ${users}" style="display: block;">
+    <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
+</div>
 
 
 <br />

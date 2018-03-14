@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
-import ru.myrecord.front.data.model.Role;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.entities.Role;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.impl.UserServiceImpl;
 
 import java.util.HashSet;

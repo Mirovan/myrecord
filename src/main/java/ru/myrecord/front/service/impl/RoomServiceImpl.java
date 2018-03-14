@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.RoomDAO;
-import ru.myrecord.front.data.model.Room;
-import ru.myrecord.front.data.model.User;
+import ru.myrecord.front.data.model.entities.Room;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.List;
@@ -29,8 +29,8 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public Set<Room> findRoomsByActive(User user) {
-        return roomDAO.findByUserAndActiveTrueOrderByIdAsc(user);
+    public Set<Room> findRoomsByActive(User ownerUser) {
+        return roomDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class RoomServiceImpl implements RoomService {
 
 
 //    @Override
-//    public Set<ru.myrecord.front.data.model.Service> findServicesByRoom(Room room) {
+//    public Set<ru.myrecord.front.data.model.entities.Product> findProductsByRoom(Room room) {
 //        return null;//roomDAO.findByRoom(room);
 //    }
 

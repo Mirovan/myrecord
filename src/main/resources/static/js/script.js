@@ -49,7 +49,7 @@ $(document).ready(
 
 function showSchedule() {
     $.getJSON(
-        "/cabinet/users/month-schedule/",
+        "/cabinet/users/json-month-schedule/",
         {
             userId: $('#userInput').val(),
             year: $('#yearInput').val(),

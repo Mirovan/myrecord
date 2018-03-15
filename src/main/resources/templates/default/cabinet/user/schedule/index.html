@@ -2,6 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
+<style>
+    #scheduleContainer td {
+        background: white;
+        cursor: pointer;
+        padding: 2px
+    }
+    #scheduleContainer td.red-cell {
+        background: #F00; /* Or some other color */
+    }
+</style>
 <body>
 <nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
 <div class="page">

@@ -23,24 +23,39 @@
                         <div class="card-header d-flex align-items-center">
                             <h4>Список помещений</h4>
                         </div>
+
                         <div class="card-body">
 
                             <a href="/cabinet/rooms/add/" class="btn btn-primary">Добавить</a>
                             <br />
-                            <br />
 
-                            <div th:each="room : ${rooms}" style="display: block;">
-                                <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
-                                    <span th:text="${room.name}"></span>
-                                </a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">[Edit]</a>
-                                &nbsp;&nbsp;
-                                <a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a>
-                                &nbsp;&nbsp;
-                                <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">=[Add Service]=</a>
-                                &nbsp;&nbsp;
-                                <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">=[Add User]=</a>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Название</th>
+                                            <th>Добавить услуги</th>
+                                            <th>Добавить сотрудников</th>
+                                            <th>Редактировать</th>
+                                            <th>Удалить</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="room, iterator : ${rooms}">
+                                            <th scope="row" th:text="@{${iterator.index} + 1}"></th>
+                                            <td>
+                                                <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
+                                                    <span th:text="${room.name}"></span>
+                                                </a>
+                                            </td>
+                                            <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">=[Add Service]=</a></td>
+                                            <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">=[Add User]=</a></td>
+                                            <td><a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">[Edit]</a></td>
+                                            <td><a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                         </div>

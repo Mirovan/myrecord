@@ -73,7 +73,7 @@ public class ProductController/* implements ErrorController*/{
             modelAndView.setViewName("cabinet/product/edit");
             return modelAndView;
         } else {
-            return new ModelAndView("redirect:/cabinet/products/");
+            return new ModelAndView("redirect:/cabinet/");
         }
     }
 
@@ -85,9 +85,9 @@ public class ProductController/* implements ErrorController*/{
         if ( userService.hasRoom(principal, room.getId()) ) {
             product.setActive(true);
             productService.add(product);
-            return new ModelAndView("redirect:/cabinet/products/");
+            return new ModelAndView("redirect:/cabinet/rooms/" + room.getId() + "/");
         } else {
-            return new ModelAndView("redirect:/cabinet/products/");
+            return new ModelAndView("redirect:/cabinet/");
         }
     }
 
@@ -107,7 +107,7 @@ public class ProductController/* implements ErrorController*/{
             modelAndView.setViewName("cabinet/product/edit");
             return modelAndView;
         } else {
-            return new ModelAndView("redirect:/cabinet/products/");
+            return new ModelAndView("redirect:/cabinet/");
         }
     }
 
@@ -121,7 +121,7 @@ public class ProductController/* implements ErrorController*/{
             product.setRoom( productUpd.getRoom() );
             productService.update(product);
         }
-        return new ModelAndView("redirect:/cabinet/products/");
+        return new ModelAndView("redirect:/cabinet/");
     }
 
 
@@ -133,7 +133,7 @@ public class ProductController/* implements ErrorController*/{
             product.setActive(false);
             productService.update(product);
         }
-        return new ModelAndView("redirect:/cabinet/products/");
+        return new ModelAndView("redirect:/cabinet/");
     }
 
 }

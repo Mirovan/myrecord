@@ -49,6 +49,10 @@ public class UserProduct {
         this.active = active;
     }
 
+    public UserProduct() {
+        super();
+    }
+
     public UserProduct(User user, Product product) {
         this.user = user;
         this.product = product;

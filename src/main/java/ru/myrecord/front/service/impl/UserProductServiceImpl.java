@@ -76,4 +76,14 @@ public class UserProductServiceImpl implements UserProductService {
         else
             return null;
     }
+
+    @Override
+    public Set<UserProduct> findByProductActiveLink(Product product) {
+        return userProductDAO.findByProductAndActiveTrue(product);
+    }
+
+    @Override
+    public Set<UserProduct> findByProductAnyLink(Product product) {
+        return userProductDAO.findByProduct(product);
+    }
 }

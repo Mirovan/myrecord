@@ -1,12 +1,10 @@
 package ru.myrecord.front.service.iface;
 
 
-import com.sun.beans.editors.BooleanEditor;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.data.model.entities.UserRoom;
 
 import java.security.Principal;
 import java.util.List;

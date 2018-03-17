@@ -36,9 +36,6 @@ public class UserController/* implements ErrorController*/{
     private ScheduleService scheduleService;
 
     @Autowired
-    private UserRoomService userRoomService;
-
-    @Autowired
     private UserProductService userProductService;
 
     @Autowired
@@ -206,12 +203,6 @@ public class UserController/* implements ErrorController*/{
             for (Integer item: productsIds) {
                 products.add(productService.findProductById(item));
             }
-
-            UserRoom userRoom = new UserRoom(user, room);
-            userRoom.setActive(true);
-
-            //Линкуем пользователя к комнате
-            userRoomService.add(userRoom);
 
             //Линкуем пользователя к услугам
             for (Product product: products) {

@@ -13,4 +13,6 @@ public interface UserProductService {
     boolean hasUserProductAnyLink(User user, Product product); //Есть ли у юзера продукт и связь неактивна
     UserProduct findByUserAndProductActiveLink(User user, Product product); //Поиск юзера-продукта с активной связью
     UserProduct findByUserAndProductAnyLink(User user, Product product); //Поиск юзера-продукты даже неактивного
+    Set<UserProduct> findByProductActiveLink(Product product);
+    Set<UserProduct> findByProductAnyLink(Product product);
 }

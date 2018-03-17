@@ -56,10 +56,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<UserRoom> userRooms;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
     private Set<UserProduct> userProducts;
 
     public Integer getId() {
@@ -132,14 +128,6 @@ public class User {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Set<UserRoom> getUserRooms() {
-        return userRooms;
-    }
-
-    public void setUserRooms(Set<UserRoom> userRooms) {
-        this.userRooms = userRooms;
     }
 
     public Set<UserProduct> getUserProducts() {

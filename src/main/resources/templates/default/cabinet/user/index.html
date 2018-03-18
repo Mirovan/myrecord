@@ -25,8 +25,12 @@
                         </div>
                         <div class="card-body">
 
+                            <div class="form-group">
+                                <a href="/cabinet/users/add/" class="btn btn-primary">Добавить</a>
+                            </div>
+
                             <div th:each="user : ${users}" style="display: block;">
-                                <a th:href="@{'/cabinet/users/edit/' + ${user.id} + '/'}">
+                                <a th:href="@{'/cabinet/users/salary/' + ${user.id} + '/'}">
                                     <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
                                 </a>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

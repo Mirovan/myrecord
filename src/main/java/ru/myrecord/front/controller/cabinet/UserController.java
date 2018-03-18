@@ -14,6 +14,7 @@ import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +38,9 @@ public class UserController/* implements ErrorController*/{
 
     @Autowired
     private UserProductService userProductService;
+
+    @Autowired
+    private UserSalaryService userSalaryService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -163,23 +167,27 @@ public class UserController/* implements ErrorController*/{
 
 
     /**
-     * Форма добавления пользователя в помещение
+     * Форма редактирования системы оклада пользователя
      * */
-    @RequestMapping(value="/cabinet/rooms/{roomId}/addusers/", method = RequestMethod.GET)
-    public ModelAndView addUsersToRoom(@PathVariable Integer roomId, Principal principal) {
+    @RequestMapping(value="/cabinet/users/salary/{userId}/", method = RequestMethod.GET)
+    public ModelAndView editUserSalaryForm(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasRoom(principal, roomId) ) {
-            Room room = roomService.findRoomById(roomId);
-            User ownerUser = room.getOwnerUser();
-            Set<Product> products = productService.findProductsByRoom(room);
-            //Отображаем только нужные данные о пользователях используя Адаптер
-            Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
+            UserSalary userSalary = userSalaryService.findByUser(user);
+
+            if (userSalary != null) {
+                if (userSalary.getSalary() != null && userSalary.getSalary() < 0.001) userSalary.setSalary(0F);
+                if (userSalary.getSalaryPercent() != null && userSalary.getSalaryPercent() < 0.001) userSalary.setSalaryPercent(0F);
+            } else {
+                userSalary = new UserSalary();
+                userSalary.setUser(user);
+            }
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("roomId", roomId);
-            modelAndView.addObject("users", users);
-            modelAndView.addObject("products", products);
-            modelAndView.setViewName("cabinet/room/adduser");
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("usersalary", userSalary);
+            modelAndView.setViewName("cabinet/user/salary/edit");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/");
@@ -188,62 +196,22 @@ public class UserController/* implements ErrorController*/{
 
 
     /**
-     * Добавление пользователя в помещение и его услуг
+     * Сохранение системы оклада пользователя
      * */
-    @RequestMapping(value="/cabinet/rooms/users/add/", method = RequestMethod.POST)
-    public ModelAndView addUsersToRoomPost(@RequestParam Integer roomId,
-                                           @RequestParam Integer userId,
-                                           @RequestParam(value="products[]", required = false) List<Integer> productsIds,
+    @RequestMapping(value="/cabinet/users/salary/", method = RequestMethod.POST)
+    public ModelAndView editUserSalaryPost(@RequestParam Integer userId,
+                                           UserSalary userSalary,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) && userService.hasProducts(principal, productsIds) ) {
-            Room room = roomService.findRoomById(roomId);
+        if ( userService.hasUser(principal, userId) && userSalary.getUser().getId().equals(userId) ) {
             User user = userService.findUserById(userId);
-            Set<Product> products = new HashSet<>();
-            for (Integer item: productsIds) {
-                products.add(productService.findProductById(item));
-            }
-
-            //Линкуем пользователя к услугам
-            for (Product product: products) {
-                //Если нет такой услуги, то создаем линк
-                if ( !userProductService.hasUserProductAnyLink(user, product) ) {
-                    UserProduct userProduct = new UserProduct(user, product);
-                    userProduct.setActive(true);
-                    userProductService.add(userProduct);
-                }
-                //Если линк у юзера к продукту есть, но он не активен, то активируем
-                else if ( userProductService.hasUserProductActiveLink(user, product) ) {
-                    UserProduct userProduct = userProductService.findByUserAndProductAnyLink(user, product);
-                    userProduct.setActive(true);
-                    userProductService.update(userProduct);
-                } else {
-                    UserProduct userProduct = userProductService.findByUserAndProductActiveLink(user, product);
-                }
-            }
-
-            return new ModelAndView("redirect:/cabinet/rooms/" + String.valueOf(roomId) + "/users/");
-        } else {
-            return new ModelAndView("redirect:/cabinet/");
-        }
-    }
-
-
-    /**
-     * Форма отображения пользователей в помещении
-     * */
-    @RequestMapping(value="/cabinet/rooms/{roomId}/users/", method = RequestMethod.GET)
-    public ModelAndView viewRoomUsers(@PathVariable Integer roomId, Principal principal) {
-        //ToDo: отображаем пользователей в этой комнате
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasRoom(principal, roomId) ) {
-            Room room = roomService.findRoomById(roomId);
-            Set<User> users = userService.findUsersByRoom(room);
+            userSalary.setStartdate(LocalDateTime.now());
+            userSalaryService.add(userSalary);
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("users", users);
-            modelAndView.setViewName("cabinet/room/users/index");
-            return modelAndView;
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("usersalary", userSalary);
+            return new ModelAndView("redirect:/cabinet/users/salary/" + String.valueOf(userId) + "/");
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }

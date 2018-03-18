@@ -170,6 +170,21 @@ public class ProductController/* implements ErrorController*/{
     }
 
 
+    @RequestMapping(value="/cabinet/rooms/addproduct/", method = RequestMethod.GET)
+    public ModelAndView addProductToRoom(Principal principal) {
+        User ownerUser = userService.findUserByEmail( principal.getName() );
+        Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
+        Product product = new Product();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("action", "add");
+        modelAndView.addObject("rooms", rooms);
+        modelAndView.addObject("product", product);
+        modelAndView.setViewName("cabinet/product/edit");
+        return modelAndView;
+    }
+
+
     @RequestMapping(value="/cabinet/products/add/", method = RequestMethod.POST)
     public ModelAndView addProductToRoomPost(Product product, Principal principal) {
         Room room = product.getRoom();

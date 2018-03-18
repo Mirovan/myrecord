@@ -17,6 +17,11 @@
                 <h1 class="h3 display">Пользователи</h1>
             </header>
 
+            <a th:href="@{'/cabinet/users/salary/' + ${user.id} + '/'}">Заработная плата</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a th:href="@{'/cabinet/users/products/salary/' + ${user.id} + '/'}">Процент за услуги</a>
+
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -42,7 +47,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 form-control-label">Процент</label>
+                                    <label class="col-sm-2 form-control-label">Процент прибыли за оказанные услуги</label>
                                     <div class="col-sm-4">
                                         <input type="text" th:field="*{salaryPercent}" class="form-control" />
                                     </div>

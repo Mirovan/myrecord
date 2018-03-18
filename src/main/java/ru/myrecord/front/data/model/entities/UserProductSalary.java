@@ -1,6 +1,7 @@
 package ru.myrecord.front.data.model.entities;
 
 import ru.myrecord.front.Utils.LocalDateConverter;
+import ru.myrecord.front.Utils.LocalDateTimeConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,12 +31,12 @@ public class UserProductSalary {
 
     @Column(name = "startdate", columnDefinition = "DATE")
     @NotNull
-    @Convert(converter = LocalDateConverter.class)
+    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDate startdate;
 
     @Column(name = "enddate", columnDefinition = "DATE")
     @NotNull
-    @Convert(converter = LocalDateConverter.class)
+    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDate enddate;
 
     public Integer getId() {
@@ -44,6 +45,22 @@ public class UserProductSalary {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Float getSalary() {
@@ -68,5 +85,13 @@ public class UserProductSalary {
 
     public void setStartdate(LocalDate startdate) {
         this.startdate = startdate;
+    }
+
+    public LocalDate getEnddate() {
+        return enddate;
+    }
+
+    public void setEnddate(LocalDate enddate) {
+        this.enddate = enddate;
     }
 }

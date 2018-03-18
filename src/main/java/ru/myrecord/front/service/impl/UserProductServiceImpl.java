@@ -86,4 +86,9 @@ public class UserProductServiceImpl implements UserProductService {
     public Set<UserProduct> findByProductAnyLink(Product product) {
         return userProductDAO.findByProduct(product);
     }
+
+    @Override
+    public Set<UserProduct> findByUserActiveLink(User user) {
+        return userProductDAO.findByUserAndActiveTrue(user);
+    }
 }

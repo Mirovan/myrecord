@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
@@ -28,12 +27,6 @@ public class UserController/* implements ErrorController*/{
     private UserService userService;
 
     @Autowired
-    private RoomService roomService;
-
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
     private ScheduleService scheduleService;
 
     @Autowired
@@ -41,6 +34,9 @@ public class UserController/* implements ErrorController*/{
 
     @Autowired
     private UserSalaryService userSalaryService;
+
+    @Autowired
+    private UserProductSalaryService userProductSalaryService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -196,6 +192,48 @@ public class UserController/* implements ErrorController*/{
 
 
     /**
+     * Форма редактирования системы оклада пользователя
+     * */
+    @RequestMapping(value="/cabinet/users/products/salary/{userId}/", method = RequestMethod.GET)
+    public ModelAndView editUserProductSalaryForm(@PathVariable Integer userId, Principal principal) {
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
+
+            //Set<Product> products = new HashSet<>();
+            Set<UserProductSalary> userProductSalaries = new HashSet<>();
+            //находим все услуги пользователя
+            Set<UserProduct> userProducts = userProductService.findByUserActiveLink(user);
+            for (UserProduct userProduct: userProducts) {
+                Product product = userProduct.getProduct();
+                //products.add(product);
+                UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+                //ToDo: раскоментить и доделать NPE //userProductSalaries.add(userProductSalary);
+
+//            UserSalary userSalary = userSalaryService.findByUser(user);
+//
+//            if (userSalary != null) {
+//                if (userSalary.getSalary() != null && userSalary.getSalary() < 0.001) userSalary.setSalary(0F);
+//                if (userSalary.getSalaryPercent() != null && userSalary.getSalaryPercent() < 0.001) userSalary.setSalaryPercent(0F);
+//            } else {
+//                userSalary = new UserSalary();
+//                userSalary.setUser(user);
+//            }
+            }
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("userId", userId);
+            modelAndView.addObject("userProductSalaries", userProductSalaries);
+            modelAndView.setViewName("cabinet/user/products/salary/edit");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
      * Сохранение системы оклада пользователя
      * */
     @RequestMapping(value="/cabinet/users/salary/", method = RequestMethod.POST)
@@ -206,6 +244,7 @@ public class UserController/* implements ErrorController*/{
         if ( userService.hasUser(principal, userId) && userSalary.getUser().getId().equals(userId) ) {
             User user = userService.findUserById(userId);
             userSalary.setStartdate(LocalDateTime.now());
+            //ToDo: если процент и оклад остались такими же то просто обновить, а не добавлять заново
             userSalaryService.add(userSalary);
 
             ModelAndView modelAndView = new ModelAndView();

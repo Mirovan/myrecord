@@ -15,4 +15,5 @@ public interface UserProductDAO extends JpaRepository<UserProduct, Integer> {
     Set<UserProduct> findByUserAndProduct(User user, Product product);
     Set<UserProduct> findByProductAndActiveTrue(Product product);
     Set<UserProduct> findByProduct(Product product);
+    Set<UserProduct> findByUserAndActiveTrue(User user);
 }

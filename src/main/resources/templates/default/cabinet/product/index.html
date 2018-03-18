@@ -25,6 +25,22 @@
                         </div>
                         <div class="card-body">
 
+                            <div th:each="roomProduct : ${roomProducts}" style="display: block;">
+                                <div th:each="room : ${roomProduct.room}" style="display: block;">
+                                    <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
+                                        <span th:text="${room.name}"></span>
+                                    </a>
+
+                                    <br />
+                                    <strong>Услуги</strong>
+                                    <div th:each="product: ${roomProduct.products}" style="display: block;">
+                                        <a th:href="@{'/cabinet/products/' + ${product.id} + '/users/'}">
+                                            - <span th:text="${product.name}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
 
                             <!--<div th:each="product : ${products}" style="display: block;">-->
                                 <!--<a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">-->

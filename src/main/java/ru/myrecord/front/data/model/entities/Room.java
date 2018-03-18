@@ -33,10 +33,6 @@ public class Room {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToMany(mappedBy = "room")
-    @JsonIgnore
-    private Set<UserRoom> userRooms;
-
     public Integer getId() {
         return id;
     }
@@ -75,13 +71,5 @@ public class Room {
 
     public void setProducts(Set<Product> products) {
         this.products = products;
-    }
-
-    public Set<UserRoom> getUserRooms() {
-        return userRooms;
-    }
-
-    public void setUserRooms(Set<UserRoom> userRooms) {
-        this.userRooms = userRooms;
     }
 }

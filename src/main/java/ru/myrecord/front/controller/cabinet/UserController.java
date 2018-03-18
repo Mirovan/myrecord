@@ -36,9 +36,6 @@ public class UserController/* implements ErrorController*/{
     private ScheduleService scheduleService;
 
     @Autowired
-    private UserRoomService userRoomService;
-
-    @Autowired
     private UserProductService userProductService;
 
     @Autowired
@@ -176,7 +173,6 @@ public class UserController/* implements ErrorController*/{
             User ownerUser = room.getOwnerUser();
             Set<Product> products = productService.findProductsByRoom(room);
             //Отображаем только нужные данные о пользователях используя Адаптер
-            //ToDo: Исключить уже добавленных пользователей
             Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
 
             ModelAndView modelAndView = new ModelAndView();
@@ -203,22 +199,27 @@ public class UserController/* implements ErrorController*/{
         if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) && userService.hasProducts(principal, productsIds) ) {
             Room room = roomService.findRoomById(roomId);
             User user = userService.findUserById(userId);
-            Set<Product> products = new HashSet<>(); //чтобы исключить дублирование заводим Set
+            Set<Product> products = new HashSet<>();
             for (Integer item: productsIds) {
                 products.add(productService.findProductById(item));
             }
 
-            UserRoom userRoom = new UserRoom(user, room);
-            userRoom.setActive(true);
-
-            //Линкуем пользователя к комнате
-            userRoomService.add(userRoom);
-
             //Линкуем пользователя к услугам
             for (Product product: products) {
-                UserProduct userProduct = new UserProduct(user, product);
-                userProductService.add(userProduct);
-                userProduct.setActive(true);
+                //Если нет такой услуги, то создаем линк
+                if ( !userProductService.hasUserProductAnyLink(user, product) ) {
+                    UserProduct userProduct = new UserProduct(user, product);
+                    userProduct.setActive(true);
+                    userProductService.add(userProduct);
+                }
+                //Если линк у юзера к продукту есть, но он не активен, то активируем
+                else if ( userProductService.hasUserProductActiveLink(user, product) ) {
+                    UserProduct userProduct = userProductService.findByUserAndProductAnyLink(user, product);
+                    userProduct.setActive(true);
+                    userProductService.update(userProduct);
+                } else {
+                    UserProduct userProduct = userProductService.findByUserAndProductActiveLink(user, product);
+                }
             }
 
             return new ModelAndView("redirect:/cabinet/rooms/" + String.valueOf(roomId) + "/users/");

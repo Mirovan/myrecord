@@ -9,13 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
-import ru.myrecord.front.data.dao.UserRoomDAO;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
-import ru.myrecord.front.service.iface.ProductService;
-import ru.myrecord.front.service.iface.RoleService;
-import ru.myrecord.front.service.iface.RoomService;
-import ru.myrecord.front.service.iface.UserService;
+import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.util.*;
@@ -34,10 +30,6 @@ public class UserServiceImpl implements UserService {
     private RoleDAO roleDAO;
 
     @Autowired
-    @Qualifier("userRoomDAO")
-    private UserRoomDAO userRoomDAO;
-
-    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -45,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private UserProductService userProductService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -244,10 +239,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> findUsersByRoom(Room room) {
-        Set<UserRoom> userRooms = userRoomDAO.findByRoom(room);
         Set<User> users = new HashSet<>();
-        for (UserRoom userRoom: userRooms) {
-            users.add( userRoom.getUser() );
+        //Ищем все продукты в этой комнате
+        Set<Product> products = productService.findProductsByRoom(room);
+        //Ищем всех пользователей у которых есть данный продукт
+        for (Product product : products) {
+            //Определяем оказывает ли пользователь эту услугу
+            Set<UserProduct> userProducts = userProductService.findByProductActiveLink(product);
+            for (UserProduct userProduct: userProducts) {
+                users.add( userProduct.getUser() );
+            }
         }
         return users;
     }

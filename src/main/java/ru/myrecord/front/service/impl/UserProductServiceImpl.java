@@ -6,8 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.UserProductDAO;
+import ru.myrecord.front.data.model.entities.Product;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.entities.UserProduct;
 import ru.myrecord.front.service.iface.UserProductService;
+
+import java.util.List;
+import java.util.Set;
 
 @Service("userProductService")
 public class UserProductServiceImpl implements UserProductService {
@@ -25,6 +30,60 @@ public class UserProductServiceImpl implements UserProductService {
 
     @Override
     public void update(UserProduct userProduct) {
+        userProductDAO.save(userProduct);
+    }
 
+
+    @Override
+    public boolean hasUserProductActiveLink(User user, Product product) {
+        for (UserProduct up : user.getUserProducts()) {
+            if ( up.getProduct().getId().equals(product.getId()) && up.getActive() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
+    public boolean hasUserProductAnyLink(User user, Product product) {
+        for (UserProduct up : user.getUserProducts()) {
+            if ( up.getProduct().getId().equals(product.getId()) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
+    public UserProduct findByUserAndProductActiveLink(User user, Product product) {
+        Set<UserProduct> userProducts = userProductDAO.findByUserAndProductAndActiveTrue(user, product);
+        //Должен быть только одно один элемент
+        if (userProducts != null && userProducts.iterator().hasNext())
+            return userProducts.iterator().next();
+        else
+            return null;
+    }
+
+
+    @Override
+    public UserProduct findByUserAndProductAnyLink(User user, Product product) {
+        Set<UserProduct> userProducts = userProductDAO.findByUserAndProduct(user, product);
+        //Должен быть только одно один элемент
+        if (userProducts != null && userProducts.iterator().hasNext())
+            return userProducts.iterator().next();
+        else
+            return null;
+    }
+
+    @Override
+    public Set<UserProduct> findByProductActiveLink(Product product) {
+        return userProductDAO.findByProductAndActiveTrue(product);
+    }
+
+    @Override
+    public Set<UserProduct> findByProductAnyLink(Product product) {
+        return userProductDAO.findByProduct(product);
     }
 }

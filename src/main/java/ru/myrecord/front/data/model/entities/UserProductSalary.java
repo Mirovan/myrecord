@@ -6,6 +6,7 @@ import ru.myrecord.front.Utils.LocalDateTimeConverter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_product_salary")
@@ -32,12 +33,11 @@ public class UserProductSalary {
     @Column(name = "startdate", columnDefinition = "DATE")
     @NotNull
     @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDate startdate;
+    private LocalDateTime startdate;
 
     @Column(name = "enddate", columnDefinition = "DATE")
-    @NotNull
     @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDate enddate;
+    private LocalDateTime enddate;
 
     public Integer getId() {
         return id;
@@ -79,19 +79,30 @@ public class UserProductSalary {
         this.salaryPercent = salaryPercent;
     }
 
-    public LocalDate getStartdate() {
+    public LocalDateTime getStartdate() {
         return startdate;
     }
 
-    public void setStartdate(LocalDate startdate) {
+    public void setStartdate(LocalDateTime startdate) {
         this.startdate = startdate;
     }
 
-    public LocalDate getEnddate() {
+    public LocalDateTime getEnddate() {
         return enddate;
     }
 
-    public void setEnddate(LocalDate enddate) {
+    public void setEnddate(LocalDateTime enddate) {
         this.enddate = enddate;
+    }
+
+    public UserProductSalary() {
+        super();
+    }
+
+    public UserProductSalary(User user, Product product, Float salary, Float salaryPercent) {
+        this.user = user;
+        this.product = product;
+        this.salary = salary;
+        this.salaryPercent = salaryPercent;
     }
 }

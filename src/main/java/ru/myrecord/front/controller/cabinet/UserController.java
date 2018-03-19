@@ -30,6 +30,9 @@ public class UserController/* implements ErrorController*/{
     private ScheduleService scheduleService;
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     private UserProductService userProductService;
 
     @Autowired
@@ -165,7 +168,7 @@ public class UserController/* implements ErrorController*/{
     /**
      * Форма редактирования системы оклада пользователя
      * */
-    @RequestMapping(value="/cabinet/users/salary/{userId}/", method = RequestMethod.GET)
+    @RequestMapping(value="/cabinet/users/{userId}/salary/", method = RequestMethod.GET)
     public ModelAndView editUserSalaryForm(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
@@ -192,48 +195,6 @@ public class UserController/* implements ErrorController*/{
 
 
     /**
-     * Форма редактирования системы оклада пользователя
-     * */
-    @RequestMapping(value="/cabinet/users/products/salary/{userId}/", method = RequestMethod.GET)
-    public ModelAndView editUserProductSalaryForm(@PathVariable Integer userId, Principal principal) {
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) ) {
-            User user = userService.findUserById(userId);
-
-            //Set<Product> products = new HashSet<>();
-            Set<UserProductSalary> userProductSalaries = new HashSet<>();
-            //находим все услуги пользователя
-            Set<UserProduct> userProducts = userProductService.findByUserActiveLink(user);
-            for (UserProduct userProduct: userProducts) {
-                Product product = userProduct.getProduct();
-                //products.add(product);
-                UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
-                //ToDo: раскоментить и доделать NPE //userProductSalaries.add(userProductSalary);
-
-//            UserSalary userSalary = userSalaryService.findByUser(user);
-//
-//            if (userSalary != null) {
-//                if (userSalary.getSalary() != null && userSalary.getSalary() < 0.001) userSalary.setSalary(0F);
-//                if (userSalary.getSalaryPercent() != null && userSalary.getSalaryPercent() < 0.001) userSalary.setSalaryPercent(0F);
-//            } else {
-//                userSalary = new UserSalary();
-//                userSalary.setUser(user);
-//            }
-            }
-
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("user", user);
-            modelAndView.addObject("userId", userId);
-            modelAndView.addObject("userProductSalaries", userProductSalaries);
-            modelAndView.setViewName("cabinet/user/products/salary/edit");
-            return modelAndView;
-        } else {
-            return new ModelAndView("redirect:/cabinet/");
-        }
-    }
-
-
-    /**
      * Сохранение системы оклада пользователя
      * */
     @RequestMapping(value="/cabinet/users/salary/", method = RequestMethod.POST)
@@ -247,10 +208,106 @@ public class UserController/* implements ErrorController*/{
             //ToDo: если процент и оклад остались такими же то просто обновить, а не добавлять заново
             userSalaryService.add(userSalary);
 
+            return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/salary/");
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Просмотр системы оклада пользователя
+     * */
+    @RequestMapping(value="/cabinet/users/{userId}/products/salary/", method = RequestMethod.GET)
+    public ModelAndView showUserProductSalaries(@PathVariable Integer userId, Principal principal) {
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
+
+            //Set<Product> products = new HashSet<>();
+            Set<UserProductSalary> userProductSalaries = new HashSet<>();
+            //находим все услуги пользователя
+            Set<UserProduct> userProducts = userProductService.findByUserActiveLink(user);
+            for (UserProduct userProduct: userProducts) {
+                Product product = userProduct.getProduct();
+                //products.add(product);
+                UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+                //Если з/п у сотрудника еще не установлена
+                if ( userProductSalary == null ) {
+                    userProductSalary = new UserProductSalary(user, product, 0F, 0F);
+                }
+                if (userProductSalary.getSalary() != null && userProductSalary.getSalary() < 0.001) userProductSalary.setSalary(0F);
+                if (userProductSalary.getSalaryPercent() != null && userProductSalary.getSalaryPercent() < 0.001) userProductSalary.setSalaryPercent(0F);
+                userProductSalaries.add(userProductSalary);
+            }
+
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("user", user);
-            modelAndView.addObject("usersalary", userSalary);
-            return new ModelAndView("redirect:/cabinet/users/salary/" + String.valueOf(userId) + "/");
+            modelAndView.addObject("userId", userId);
+            modelAndView.addObject("userProductSalaries", userProductSalaries);
+            modelAndView.setViewName("cabinet/user/products/salary/index");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Форма редактирования системы оклада пользователя
+     * */
+    @RequestMapping(value="/cabinet/users/{userId}/products/{productId}/salary/", method = RequestMethod.GET)
+    public ModelAndView editUserProductSalaryForm(@PathVariable Integer userId, @PathVariable Integer productId, Principal principal) {
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
+            Product product = productService.findProductById(productId);
+
+            UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+            //Если з/п у сотрудника еще не установлена
+            if ( userProductSalary == null ) {
+                userProductSalary = new UserProductSalary(user, product, 0F, 0F);
+            }
+            if (userProductSalary.getSalary() != null && userProductSalary.getSalary() < 0.001) userProductSalary.setSalary(0F);
+            if (userProductSalary.getSalaryPercent() != null && userProductSalary.getSalaryPercent() < 0.001) userProductSalary.setSalaryPercent(0F);
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("userId", userId);
+            modelAndView.addObject("product", product);
+            modelAndView.addObject("userProductSalary", userProductSalary);
+            modelAndView.setViewName("cabinet/user/products/salary/edit");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Обновление з/п сотрудика за определенный продукт
+     * */
+    @RequestMapping(value="/cabinet/users/products/salary/", method = RequestMethod.POST)
+    public ModelAndView editUserProductSalaryPost(@RequestParam Integer userId,
+                                                  @RequestParam Integer productId,
+                                                  UserProductSalary userProductSalary,
+                                                  Principal principal) {
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.hasUser(principal, userId) && userService.hasUser(principal, userId) ) {
+            User user = userService.findUserById(userId);
+            Product product = productService.findProductById(productId);
+
+            //Обновляем старую запись о з/п
+            UserProductSalary oldUserProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+            if (oldUserProductSalary != null) {
+                oldUserProductSalary.setEnddate(LocalDateTime.now());
+                userProductSalaryService.update(oldUserProductSalary);
+            }
+            userProductSalary.setProduct(product);
+            userProductSalary.setStartdate(LocalDateTime.now());
+            userProductSalaryService.add(userProductSalary);
+
+            return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/products/" + String.valueOf(productId) + "/salary/");
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }

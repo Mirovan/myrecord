@@ -17,9 +17,9 @@
                 <h1 class="h3 display">Пользователи</h1>
             </header>
 
-            <a th:href="@{'/cabinet/users/salary/' + ${user.id} + '/'}">Заработная плата</a>
+            <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">Заработная плата</a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a th:href="@{'/cabinet/users/products/salary/' + ${user.id} + '/'}">Процент за услуги</a>
+            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/salary/'}">Процент за услуги</a>
 
 
             <div class="row">

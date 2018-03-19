@@ -6,5 +6,6 @@ import ru.myrecord.front.data.model.entities.UserProductSalary;
 
 public interface UserProductSalaryService {
     void add(UserProductSalary userProductSalary);
+    void update(UserProductSalary userProductSalary);
     UserProductSalary findByUserAndProduct(User user, Product product);
 }

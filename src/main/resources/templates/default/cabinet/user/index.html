@@ -30,7 +30,7 @@
                             </div>
 
                             <div th:each="user : ${users}" style="display: block;">
-                                <a th:href="@{'/cabinet/users/salary/' + ${user.id} + '/'}">
+                                <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">
                                     <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
                                 </a>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

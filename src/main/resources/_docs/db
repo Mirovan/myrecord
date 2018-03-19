@@ -94,7 +94,7 @@ CREATE TABLE "user_product" (
 ALTER SEQUENCE user_product_id_seq owned by "user_product".id;
 
 
-/*Рассписание специалиста*/
+/*Расписание специалиста*/
 CREATE SEQUENCE schedule_id_seq START WITH 1;
 
 CREATE TABLE "schedule" (
@@ -103,3 +103,30 @@ CREATE TABLE "schedule" (
 	sdate TIMESTAMP
 );
 ALTER SEQUENCE schedule_id_seq owned by "schedule".id;
+
+/*Оклад и процент мастера*/
+CREATE SEQUENCE usersalary_id_seq START WITH 1;
+
+CREATE TABLE "user_salary" (
+    id INTEGER NOT NULL default nextval('usersalary_id_seq') PRIMARY KEY,
+    user_id INTEGER REFERENCES "users"(id),
+	salary REAL,
+	salarypercent REAL,
+	startdate TIMESTAMP /*начало действия этой истемы оплаты - текущая дата*/
+);
+ALTER SEQUENCE usersalary_id_seq owned by "user_salary".id;
+
+
+/*Оклад и процент по услуге для конкретного мастера*/
+CREATE SEQUENCE user_product_salary_id_seq START WITH 1;
+
+CREATE TABLE "user_product_salary" (
+    id INTEGER NOT NULL default nextval('user_product_salary_id_seq') PRIMARY KEY,
+    user_id INTEGER REFERENCES "users"(id),
+    product_id INTEGER REFERENCES "product"(id),
+	salary REAL,
+	salarypercent REAL,
+	startdate TIMESTAMP,
+	enddate TIMESTAMP DEFAULT NULL
+);
+ALTER SEQUENCE user_product_salary_id_seq owned by "user_product_salary".id;

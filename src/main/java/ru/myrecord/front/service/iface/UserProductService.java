@@ -15,4 +15,5 @@ public interface UserProductService {
     UserProduct findByUserAndProductAnyLink(User user, Product product); //Поиск юзера-продукты даже неактивного
     Set<UserProduct> findByProductActiveLink(Product product);
     Set<UserProduct> findByProductAnyLink(Product product);
+    Set<UserProduct> findByUserActiveLink(User user); //Поиск юзера-продукта с активной связью
 }

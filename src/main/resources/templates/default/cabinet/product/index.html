@@ -25,6 +25,10 @@
                         </div>
                         <div class="card-body">
 
+                            <div class="form-group">
+                                <a href="/cabinet/rooms/addproduct/" class="btn btn-primary">Добавить</a>
+                            </div>
+
                             <div th:each="roomProduct : ${roomProducts}" style="display: block;">
                                 <div th:each="room : ${roomProduct.room}" style="display: block;">
                                     <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">

@@ -130,3 +130,25 @@ CREATE TABLE "user_product_salary" (
 	enddate TIMESTAMP DEFAULT NULL
 );
 ALTER SEQUENCE user_product_salary_id_seq owned by "user_product_salary".id;
+
+
+/*Запись пользователя*/
+CREATE SEQUENCE client_record_id_seq START WITH 1;
+
+CREATE TABLE "client_record" (
+    id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
+    user_id INTEGER REFERENCES "users"(id),
+	active BOOLEAN DEFAULT TRUE
+);
+ALTER SEQUENCE client_record_id_seq owned by "client_record".id;
+
+
+CREATE SEQUENCE client_record_product_id_seq START WITH 1;
+
+CREATE TABLE "client_record_product" (
+    id INTEGER NOT NULL default nextval('client_record_product_id_seq') PRIMARY KEY,
+    record_id INTEGER REFERENCES "client_record"(id),
+    product_id INTEGER REFERENCES "product"(id),
+	sdate TIMESTAMP
+);
+ALTER SEQUENCE client_record_product_id_seq owned by "client_record_product".id;

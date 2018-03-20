@@ -48,6 +48,15 @@ public class RecordController/* implements ErrorController*/{
     /**
      * Форма записи клиента
      * */
+    @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.GET)
+    public ModelAndView showClientRecords(Principal principal) {
+        return new ModelAndView("/cabinet/client/record/index");
+    }
+
+
+    /**
+     * Форма записи клиента
+     * */
     @RequestMapping(value="/cabinet/clients/{userId}/product/{productId}", method = RequestMethod.GET)
     public ModelAndView editClientRecord(@PathVariable Integer userId,
                                          @PathVariable Integer productId,

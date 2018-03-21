@@ -27,23 +27,13 @@ public class RecordController/* implements ErrorController*/{
     private UserService userService;
 
     @Autowired
-    private ScheduleService scheduleService;
-
-    @Autowired
     private ProductService productService;
 
     @Autowired
-    private UserProductService userProductService;
+    private ClientRecordService clientRecordService;
 
     @Autowired
-    private UserSalaryService userSalaryService;
-
-    @Autowired
-    private UserProductSalaryService userProductSalaryService;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private ClientRecordProductService clientRecordProductService;
 
     /**
      * Форма записи клиента
@@ -62,10 +52,13 @@ public class RecordController/* implements ErrorController*/{
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
 
+        Set<User> masters = userService.findUsersByOwner(ownerUser);
+
         User client = new User();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("products", products);
+        modelAndView.addObject("masters", masters);
         modelAndView.addObject("client", client);
         modelAndView.setViewName("cabinet/client/record/edit");
         return modelAndView;
@@ -76,18 +69,33 @@ public class RecordController/* implements ErrorController*/{
      * Сохранение записи клиента
      * */
     //ToDo: do
-    @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.POST)
-    public ModelAndView editClientRecordPost(@RequestParam Integer userId,
-                                             ClientRecord clientRecord,
-                                             ClientRecordProduct clientRecordProduct,
+    @RequestMapping(value="/cabinet/clients/record/add/", method = RequestMethod.POST)
+    public ModelAndView editClientRecordPost(User client,
+                                             Integer productId,
+                                             Integer masterId,
+                                             String sdate,
                                              Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId)
-            //ToDo: принадлежит сист.пользователю продуктЫ
-                ) {
-            User user = userService.findUserById(userId);
+        if ( true ) {
+            //ToDo: принадлежит сист.пользователю продуктЫ, клиент
 
-            return new ModelAndView("redirect:/cabinet/clients/record");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            LocalDateTime recordDate = LocalDateTime.parse(sdate, formatter);
+
+            User ownerUser = userService.findUserByEmail(principal.getName());
+            ClientRecord clientRecord = new ClientRecord(client);
+            clientRecord = clientRecordService.add(clientRecord, ownerUser);
+
+            ClientRecordProduct clientRecordProduct = new ClientRecordProduct();
+            clientRecordProduct.setRecord(clientRecord);
+            Product product = productService.findProductById(productId);
+            clientRecordProduct.setProduct(product);
+            User master = userService.findUserById(masterId);
+            clientRecordProduct.setMaster(master);
+            clientRecordProduct.setSdate(recordDate);
+            clientRecordProductService.add(clientRecordProduct);
+
+            return new ModelAndView("redirect:/cabinet/clients/record/");
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }

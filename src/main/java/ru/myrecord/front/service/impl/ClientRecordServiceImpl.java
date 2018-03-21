@@ -9,6 +9,9 @@ import ru.myrecord.front.data.dao.ClientRecordDAO;
 import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ClientRecordService;
+import ru.myrecord.front.service.iface.UserService;
+
+import java.util.Random;
 
 @Service("clientRecordService")
 public class ClientRecordServiceImpl implements ClientRecordService {
@@ -19,9 +22,26 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     @Qualifier("clientRecordDAO")
     private ClientRecordDAO clientRecordDAO;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public void add(ClientRecord clientRecord) {
-        clientRecordDAO.save(clientRecord);
+    public ClientRecord add(ClientRecord clientRecord, User ownerUser) {
+        User client = clientRecord.getUser();
+        if (client.getEmail() == null) {
+            String email = client.getPhone() + "@mail.ru";
+            clientRecord.getUser().setEmail(email);
+        }
+
+        if (client.getOwnerUser() == null)
+            client.setOwnerUser(ownerUser);
+
+        if (client.getPass() == null)
+            client.setPass( userService.generatePassword((new Random(10000000L)).toString()) );
+
+        clientRecord.setActive(true);
+
+        return clientRecordDAO.saveAndFlush(clientRecord);
     }
 
     @Override

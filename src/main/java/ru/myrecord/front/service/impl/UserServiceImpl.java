@@ -252,4 +252,10 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
+
+
+    @Override
+    public String generatePassword(String password) {
+        return bCryptPasswordEncoder.encode(password);
+    }
 }

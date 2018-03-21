@@ -11,12 +11,12 @@ import ru.myrecord.front.data.model.entities.ClientRecordProduct;
 import ru.myrecord.front.service.iface.ClientRecordProductService;
 
 @Service("clientRecordProductService")
-public class ClientRecordServiceProductImpl implements ClientRecordProductService {
+public class ClientRecordProductServiceImpl implements ClientRecordProductService {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    @Qualifier("clientRecordProductdDAO")
+    @Qualifier("clientRecordProductDAO")
     private ClientRecordProductDAO clientRecordProductDAO;
 
     @Override

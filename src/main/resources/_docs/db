@@ -24,7 +24,7 @@ CREATE SEQUENCE user_id_seq START WITH 1;
 CREATE TABLE "users" (
     id INTEGER NOT NULL default nextval('user_id_seq') PRIMARY KEY,
 	email VARCHAR(120) NOT NULL,
-	phone VARCHAR(10) DEFAULT NULL,
+	phone VARCHAR(20) DEFAULT NULL,
 	pass VARCHAR(255) NOT NULL,
 	owner_user_id INTEGER REFERENCES "users"(id) DEFAULT NULL,
 	name VARCHAR(255) DEFAULT NULL,
@@ -149,6 +149,7 @@ CREATE TABLE "client_record_product" (
     id INTEGER NOT NULL default nextval('client_record_product_id_seq') PRIMARY KEY,
     record_id INTEGER REFERENCES "client_record"(id),
     product_id INTEGER REFERENCES "product"(id),
+    master_id INTEGER REFERENCES "users"(id),
 	sdate TIMESTAMP
 );
 ALTER SEQUENCE client_record_product_id_seq owned by "client_record_product".id;

@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.entities.ClientRecordProduct;
 
-@Repository("clientRecordProductdDAO")
+@Repository("clientRecordProductDAO")
 public interface ClientRecordProductDAO extends JpaRepository<ClientRecordProduct, Integer> {
 }

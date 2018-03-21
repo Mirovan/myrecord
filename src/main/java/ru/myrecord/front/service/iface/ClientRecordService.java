@@ -5,6 +5,6 @@ import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.entities.UserSalary;
 
 public interface ClientRecordService {
-    void add(ClientRecord clientRecord);
+    ClientRecord add(ClientRecord clientRecord, User ownerUser);
     ClientRecord findByUser(User user);
 }

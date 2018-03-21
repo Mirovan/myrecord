@@ -30,4 +30,5 @@ public interface UserService {
     Boolean hasProduct(Principal principal, Integer serviceId);
     Boolean hasProducts(Principal principal, List<Integer> products);
     Boolean hasAccessToRoles(Principal principal, Set<Role> roles);
+    String generatePassword(String password);
 }

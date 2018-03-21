@@ -57,19 +57,18 @@ public class RecordController/* implements ErrorController*/{
     /**
      * Форма записи клиента
      * */
-    @RequestMapping(value="/cabinet/clients/{userId}/product/{productId}", method = RequestMethod.GET)
-    public ModelAndView editClientRecord(@PathVariable Integer userId,
-                                         @PathVariable Integer productId,
-                                         Principal principal) {
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) && userService.hasProduct(principal, productId) ) {
+    @RequestMapping(value="/cabinet/clients/record/add/", method = RequestMethod.GET)
+    public ModelAndView addClientRecord(Principal principal) {
+        User ownerUser = userService.findUserByEmail(principal.getName());
+        Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
 
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("cabinet/client/record/edit");
-            return modelAndView;
-        } else {
-            return new ModelAndView("redirect:/cabinet/");
-        }
+        User client = new User();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("products", products);
+        modelAndView.addObject("client", client);
+        modelAndView.setViewName("cabinet/client/record/edit");
+        return modelAndView;
     }
 
 

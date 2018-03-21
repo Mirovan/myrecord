@@ -10,6 +10,7 @@ import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ProductService;
+import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.Set;
 
@@ -22,16 +23,13 @@ public class ProductServiceImpl implements ProductService {
     @Qualifier("productDAO")
     private ProductDAO productDAO;
 
+    @Autowired
+    private RoomService roomService;
+
     @Override
     public Product findProductById(Integer id) {
         return productDAO.findById(id);
     }
-
-//    @Override
-//    public Set<Product> findProductsByUser(User ownerUser) {
-//        //return productDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
-//        return null;
-//    }
 
     @Override
     public Set<Product> findProductsByRoom(Room room) {
@@ -48,4 +46,9 @@ public class ProductServiceImpl implements ProductService {
         productDAO.save(product);
     }
 
+    @Override
+    public Set<Product> findProductsByOwnerUser(User user) {
+        Set<Room> rooms = roomService.findRoomsByActive(user);
+        return productDAO.findByRoomInAndActiveTrueOrderByIdAsc(rooms);
+    }
 }

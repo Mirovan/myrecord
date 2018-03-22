@@ -43,6 +43,23 @@ public class RecordController/* implements ErrorController*/{
         return new ModelAndView("/cabinet/client/record/index");
     }
 
+    /**
+     * Форма записи клиента
+     * */
+//    @RequestMapping(value="/cabinet/clients/record/add/", method = RequestMethod.GET)
+//    public ModelAndView simpleClientRecord(Principal principal) {
+//        //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
+//        if ( true ) {
+//            User ownerUser = userService.findUserByEmail(principal.getName());
+//
+//            ModelAndView modelAndView = new ModelAndView();
+//            modelAndView.setViewName("cabinet/client/record/edit");
+//            return modelAndView;
+//        } else {
+//            return new ModelAndView("redirect:/cabinet/");
+//        }
+//    }
+
 
     /**
      * Форма записи клиента

@@ -29,7 +29,7 @@ public class CalendarServiceImpl implements CalendarService {
         LocalDate date = LocalDate.of(year, month, 1);   //Дата по году и месяцу
 
         //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
-        for (int i=0; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
+        for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
             calendar.add( null );
         }
 

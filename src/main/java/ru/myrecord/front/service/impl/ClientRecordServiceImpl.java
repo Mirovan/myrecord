@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ClientRecordDAO;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
-import ru.myrecord.front.data.model.adapters.CalendarRecordDayAdapter;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.data.model.entities.User;
@@ -15,8 +14,6 @@ import ru.myrecord.front.service.iface.CalendarService;
 import ru.myrecord.front.service.iface.ClientRecordService;
 import ru.myrecord.front.service.iface.UserService;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;

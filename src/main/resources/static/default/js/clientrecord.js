@@ -56,21 +56,6 @@ function showSchedule() {
             month: $('#monthInput').val()
         },
         function(data) {
-            // var calendarData = data.scheduleAll;
-            // var userScheduleData = data.userSchedule;
-            // var userSheduleArr = [];
-
-            //get user schedule
-            // $.each(userScheduleData, function(key, dateValue) {
-            //     if (dateValue.sdate != null) {
-            //         var day = dateValue.sdate.dayOfMonth;
-            //         var month = dateValue.sdate.monthValue - 1; // Month is 0-indexed
-            //         var year = dateValue.sdate.year;
-            //         date = new Date(year, month, day);
-            //         userSheduleArr.push( $.format.date(date, 'dd-MM-yyyy') );
-            //     }
-            // });
-
             //fill calendar with users schedule
             $('#monthCalendarContainerTable').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
 

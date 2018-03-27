@@ -80,7 +80,7 @@ public class ScheduleController/* implements ErrorController*/{
                     //Защита - чтобы левые данные не добавляли, а только этого месяца
                     if ( date.getMonthValue() == month && date.getYear() == year ) {
                         //Определяем есть ли такая запись уже в БД
-                        Schedule existSchedule = scheduleService.findByUserAndSdate(user, date);
+                        Schedule existSchedule = scheduleService.findByUserAndDate(user, date);
                         if ( existSchedule == null ) {  //Такой записи нет - добавляем
                             scheduleService.add(schedule);
                         }

@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ScheduleDAO;
+import ru.myrecord.front.data.model.adapters.CalendarAdapter;
+import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
+import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Schedule;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.service.iface.CalendarService;
 import ru.myrecord.front.service.iface.ScheduleService;
 
 import java.time.LocalDate;
@@ -24,6 +28,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Qualifier("scheduleDAO")
     private ScheduleDAO scheduleDAO;
 
+    @Autowired
+    private CalendarService calendarService;
+
     @Override
     public List<Schedule> findByUser(User user) {
         return scheduleDAO.findByUser(user);
@@ -35,7 +42,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule findByUserAndSdate(User user, LocalDate date) {
+    public Schedule findByUserAndDate(User user, LocalDate date) {
         return scheduleDAO.findByUserAndSdate(user, date);
     }
 
@@ -48,27 +55,22 @@ public class ScheduleServiceImpl implements ScheduleService {
      * Получаем список - месячный календарь
      * */
     @Override
-    public List<List<Schedule>> getMonthSchedule(Integer year, Integer month) {
-        List<List<Schedule>> scheduleAll = new ArrayList<>();
-        LocalDate date = LocalDate.of(year, month, 1);   //Дата по году и месяцу
+    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser, User user) {
+        //Расписание пользователя
+        List<Schedule> userSchedule = findByUser(user);
 
-        //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
-        scheduleAll.add(new ArrayList<>());
-        for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
-            scheduleAll.get(scheduleAll.size()-1).add( new Schedule() );
-        }
-        //Заполняем двуменрый массив датами
-        for (int i=1; i<=date.lengthOfMonth(); i++) {
-            //увеличиваем размер массива
-            if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
-                scheduleAll.add(new ArrayList<>());
+        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
+        for (CalendarAdapter item : calendar) {
+            //null - это просто пустые дни в начале месяца начиная с понедельника
+            if (item != null) {
+                Schedule schedule = findByUserAndDate(user, item.getDate());
+                //ToDo: сделать через адаптер
+                //ScheduleAdapter scheduleAdapter = new ScheduleAdapter();
+                item.setData(schedule);
             }
-            //создаем День
-            Schedule schedule = new Schedule();
-            schedule.setSdate(date.withDayOfMonth(i));
-            scheduleAll.get(scheduleAll.size()-1).add( schedule );
         }
-        return scheduleAll;
+
+        return calendar;
     }
 
 

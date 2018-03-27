@@ -99,7 +99,7 @@ CREATE SEQUENCE schedule_id_seq START WITH 1;
 
 CREATE TABLE "schedule" (
     id INTEGER NOT NULL default nextval('schedule_id_seq') PRIMARY KEY,
-    owner_user_id INTEGER,
+    user_id INTEGER,
 	sdate TIMESTAMP
 );
 ALTER SEQUENCE schedule_id_seq owned by "schedule".id;

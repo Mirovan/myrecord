@@ -13,6 +13,7 @@ import ru.myrecord.front.service.iface.ScheduleService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service("scheduleService")
 public class ScheduleServiceImpl implements ScheduleService {
@@ -34,8 +35,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule findByUserAndSdate(User user, LocalDate sdate) {
-        return scheduleDAO.findByUserAndSdate(user, sdate);
+    public Schedule findByUserAndSdate(User user, LocalDate date) {
+        return scheduleDAO.findByUserAndSdate(user, date);
     }
 
     @Override
@@ -68,6 +69,13 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheduleAll.get(scheduleAll.size()-1).add( schedule );
         }
         return scheduleAll;
+    }
+
+
+    @Override
+    public Set<Schedule> findByDate(LocalDate date) {
+        //Todo: улучшить выборку - добавить еще чтобы выбирал по ownerUser
+        return scheduleDAO.findBySdate(date);
     }
 
 }

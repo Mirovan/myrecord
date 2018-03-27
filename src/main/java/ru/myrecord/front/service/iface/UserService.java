@@ -7,6 +7,7 @@ import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -31,4 +32,5 @@ public interface UserService {
     Boolean hasProducts(Principal principal, List<Integer> products);
     Boolean hasAccessToRoles(Principal principal, Set<Role> roles);
     String generatePassword(String password);
+    Set<User> findMastersByScheduleDay(LocalDate date, User ownerUser);   //Поиск всех мастеров кто работает в этот день
 }

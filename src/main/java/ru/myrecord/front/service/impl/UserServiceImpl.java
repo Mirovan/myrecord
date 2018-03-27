@@ -14,6 +14,7 @@ import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service("userService")
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserProductService userProductService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -258,4 +262,18 @@ public class UserServiceImpl implements UserService {
     public String generatePassword(String password) {
         return bCryptPasswordEncoder.encode(password);
     }
+
+
+    @Override
+    public Set<User> findMastersByScheduleDay(LocalDate date, User ownerUser) {
+        Set<User> res = new HashSet<>();
+        Set<Schedule> scheduleSet = scheduleService.findByDate(date);
+        for (Schedule schedule : scheduleSet ) {
+            User user = schedule.getUser();
+            if ( hasUser(ownerUser.getId(), user.getId()) )
+                res.add( user );
+        }
+        return res;
+    }
+
 }

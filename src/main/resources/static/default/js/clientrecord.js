@@ -3,7 +3,7 @@ var selectedTdClass = "red-cell";
 $(document).ready(
     function() {
         //action cell click
-        $('#monthCalendarContainer').on("click", "td", function() {
+        $('#monthCalendarContainerTable').on("click", "td", function() {
             if ($(this).text() != "") {
                 $(this).toggleClass(selectedTdClass);
                 showSelectForm();
@@ -72,29 +72,30 @@ function showSchedule() {
             // });
 
             //fill calendar with users schedule
-            $('#monthCalendarContainer').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
+            $('#monthCalendarContainerTable').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
             $.each(data, function(key, valueList) {
 
                 //fill table
-                $('#monthCalendarContainer').append('<tr>');
-                $.each(valueList, function(key2, calendarDay) {
+                $('#monthCalendarContainerTable').append('<tr>');
+                $.each(valueList, function(key2, calendarRecordDay) {
                     var date = new Date();
-                    if (calendarDay != null) {
-                        var day = calendarDay.dayOfMonth;
-                        var month = calendarDay.monthValue - 1; // Month is 0-indexed
-                        var year = calendarDay.year;
+                    if (calendarRecordDay != null) {
+                        var day = calendarRecordDay.date.dayOfMonth;
+                        var month = calendarRecordDay.date.monthValue - 1; // Month is 0-indexed
+                        var year = calendarRecordDay.date.year;
                         date = new Date(year, month, day);
                         var formatedDate = $.format.date(date, 'dd-MM-yyyy');
-                        if ( userSheduleArr.indexOf(formatedDate) >= 0 ) {
-                            $('#monthCalendarContainer tr:last').append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
+                        //select if has users schedule in this day
+                        if ( (calendarRecordDay.users != null) && (calendarRecordDay.users.length > 0) ) {
+                            $('#monthCalendarContainerTable tr:last').append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
                         } else {
-                            $('#monthCalendarContainer tr:last').append('<td>' + formatedDate + '</td>');
+                            $('#monthCalendarContainerTable tr:last').append('<td>' + formatedDate + '</td>');
                         }
                     } else {
-                        $('#monthCalendarContainer tr:last').append('<td></td>');
+                        $('#monthCalendarContainerTable tr:last').append('<td></td>');
                     }
                 });
-                $('#monthCalendarContainer').append('</tr>');
+                $('#monthCalendarContainerTable').append('</tr>');
             });
 
             //showSelectForm();
@@ -105,7 +106,7 @@ function showSchedule() {
 
 function showSelectForm() {
     $('#divSelectContainer').html('');
-    var allTds = $("#monthCalendarContainer td.red-cell").map(function() {
+    var allTds = $("#monthCalendarContainerTable td.red-cell").map(function() {
         return this.innerHTML;
     }).get();
 

@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ClientRecordDAO;
+import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.adapters.CalendarRecordDayAdapter;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.service.iface.CalendarService;
 import ru.myrecord.front.service.iface.ClientRecordService;
 import ru.myrecord.front.service.iface.UserService;
 
@@ -31,6 +33,8 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CalendarService calendarService;
 
     @Override
     public ClientRecord add(ClientRecord clientRecord, User ownerUser) {
@@ -59,30 +63,19 @@ public class ClientRecordServiceImpl implements ClientRecordService {
 
 
     @Override
-    public List<List<CalendarRecordDayAdapter>> getMonthCalendar(Integer year, Integer month, User ownerUser) {
-        List<List<CalendarRecordDayAdapter>> calendar = new ArrayList<>();
-        LocalDate date = LocalDate.of(year, month, 1);   //Дата по году и месяцу
-
-        //Заполняем нулями первые элементы массива, в зависимости каким был первый день месяца
-        calendar.add(new ArrayList<>());
-        for (int i=1; i<date.withDayOfMonth(1).getDayOfWeek().getValue(); i++) {
-            calendar.get(calendar.size()-1).add( null );
-        }
-
-        //Заполняем двуменрый массив датами
-        for (int i=1; i<=date.lengthOfMonth(); i++) {
-            //увеличиваем размер массива
-            if ( date.withDayOfMonth(i).getDayOfWeek().getValue() == 1 ) {
-                calendar.add(new ArrayList<>());
+    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser) {
+        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
+        for (CalendarAdapter item : calendar) {
+            //null - это просто пустые дни в начале месяца начиная с понедельника
+            if (item != null) {
+                //Находим всех мастеров, у кого есть в расписании этот день
+                Set<User> users = userService.findMastersByScheduleDay(item.getDate(), ownerUser);
+                Set<UserAdapter> usersAdapter =
+                        userService.getUserAdapterCollection(users);
+                item.setData(usersAdapter);
             }
-
-            //создаем День
-            LocalDate localDate = date.withDayOfMonth(i);
-            //Находим всех мастеров, у кого есть в расписании этот день
-            Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findMastersByScheduleDay(localDate, ownerUser) );
-            CalendarRecordDayAdapter calendarRecordDayAdapter = new CalendarRecordDayAdapter(localDate, users);
-            calendar.get(calendar.size()-1).add(calendarRecordDayAdapter);
         }
+
         return calendar;
     }
 

@@ -56,9 +56,9 @@ function showSchedule() {
             month: $('#monthInput').val()
         },
         function(data) {
-            var calendarData = data.scheduleAll;
-            var userScheduleData = data.userSchedule;
-            var userSheduleArr = [];
+            // var calendarData = data.scheduleAll;
+            // var userScheduleData = data.userSchedule;
+            // var userSheduleArr = [];
 
             //get user schedule
             // $.each(userScheduleData, function(key, dateValue) {
@@ -73,29 +73,36 @@ function showSchedule() {
 
             //fill calendar with users schedule
             $('#monthCalendarContainerTable').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
-            $.each(data, function(key, valueList) {
 
-                //fill table
-                $('#monthCalendarContainerTable').append('<tr>');
-                $.each(valueList, function(key2, calendarRecordDay) {
-                    var date = new Date();
-                    if (calendarRecordDay != null) {
-                        var day = calendarRecordDay.date.dayOfMonth;
-                        var month = calendarRecordDay.date.monthValue - 1; // Month is 0-indexed
-                        var year = calendarRecordDay.date.year;
-                        date = new Date(year, month, day);
-                        var formatedDate = $.format.date(date, 'dd-MM-yyyy');
-                        //select if has users schedule in this day
-                        if ( (calendarRecordDay.users != null) && (calendarRecordDay.users.length > 0) ) {
-                            $('#monthCalendarContainerTable tr:last').append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
-                        } else {
-                            $('#monthCalendarContainerTable tr:last').append('<td>' + formatedDate + '</td>');
-                        }
+            var dayOfWeek = 0;
+            $.each(data, function(key, calendarItem) {
+                dayOfWeek++;
+
+                if (dayOfWeek == 1) {
+                    $('#monthCalendarContainerTable').append('<tr>');
+                }
+
+                if (calendarItem == null) {
+                    $('#monthCalendarContainerTable tr:last').append('<td></td>');
+                } else {
+                    var day = calendarItem.date.dayOfMonth;
+                    var month = calendarItem.date.monthValue - 1; // Month is 0-indexed
+                    var year = calendarItem.date.year;
+                    var date = new Date(year, month, day);
+                    var formatedDate = $.format.date(date, 'dd-MM-yyyy');
+                    var users = calendarItem.data;
+                    if ( (users != null) && (users.length > 0) ) {
+                        $('#monthCalendarContainerTable tr:last')
+                            .append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
                     } else {
-                        $('#monthCalendarContainerTable tr:last').append('<td></td>');
+                        $('#monthCalendarContainerTable tr:last').append('<td>' + formatedDate + '</td>');
                     }
-                });
-                $('#monthCalendarContainerTable').append('</tr>');
+                }
+
+                if (dayOfWeek >= 7) {
+                    dayOfWeek = 0;
+                    $('#monthCalendarContainerTable').append('</tr>');
+                }
             });
 
             //showSelectForm();

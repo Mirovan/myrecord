@@ -52,8 +52,7 @@ public class UserController/* implements ErrorController*/{
     public ModelAndView showUsers(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "users", userService.findUsersByOwner(user));
-        System.out.println("users = " + userService.findUsersByOwner(user));
+        modelAndView.addObject( "users", userService.findWorkersByOwner(user));
         modelAndView.setViewName("cabinet/user/index");
         return modelAndView;
     }

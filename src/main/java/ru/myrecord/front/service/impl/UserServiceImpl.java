@@ -16,6 +16,7 @@ import ru.myrecord.front.service.iface.*;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -83,6 +84,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<User> findUsersByOwner(User ownerUser) {
         return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
+    }
+
+
+    @Override
+    public Set<User> findWorkersByOwner(User ownerUser) {
+//        Set<User> allUsers = findUsersByOwner(ownerUser);
+//        Set<User> workersUsers = new HashSet<>();
+//
+//        Role role = roleService.findRoleByName("MASTER");
+//        for (User user : allUsers) {
+//            if (user.getRoles().contains(role)) {
+//                workersUsers.add(user);
+//            }
+//        }
+//        findUsersByOwner(ownerUser).stream().filter(user ->
+//            user.getRoles().contains(roleService.findRoleByName("MASTER")));
+//        return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
+        return findUsersByOwner(ownerUser)
+                .stream()
+                .filter(user -> user.getRoles().contains(roleService.findRoleByName("MASTER")))
+                .collect(Collectors.toSet());
     }
 
 

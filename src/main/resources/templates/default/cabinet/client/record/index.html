@@ -40,9 +40,34 @@
                                 <a href="/cabinet/clients/record/add/" class="btn btn-primary">Новая запись</a>
                             </div>
 
+                            <div class="form-group">
+                                <hr />
+                                <strong>Filter:</strong>
+                                <br />
+                                <select name="userId">
+                                    <option th:each="user: ${users}" th:value="${user.id}" th:text="@{${user.name} + ' ' + ${user.sirname}}"></option>
+                                </select>
+                            </div>
 
-                            <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
+                            <div class="form-group">
+                                <a id="aPrev" href="#prev">Prev</a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a id="aNext" href="#next">Next</a>
+                            </div>
 
+                            <div class="form-group">
+                                <div id="divFormContainer">
+                                    <form th:action="@{'/cabinet/users/saveschedule/'}" method="post" id="selectDate">
+                                        <input type="hidden" id="yearInput" name="year" th:value="${year}" />
+                                        <input type="hidden" id="monthInput" name="month" th:value="${month}" />
+                                        <div id="divSelectContainer"></div>
+                                        <input type="submit" />
+                                    </form>
+                                </div>
+
+                                <!-- calendar -->
+                                <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
+                            </div>
 
                         </div>
                     </div>

@@ -90,52 +90,7 @@ function showSchedule() {
                 }
             });
 
-            //showSelectForm();
         }
-        // function(data) {
-        //     var calendarData = data.scheduleAll;
-        //     var userScheduleData = data.userSchedule;
-        //     var userSheduleArr = [];
-        //
-        //     //get user schedule
-        //     $.each(userScheduleData, function(key, dateValue) {
-        //         if (dateValue.sdate != null) {
-        //             var day = dateValue.sdate.dayOfMonth;
-        //             var month = dateValue.sdate.monthValue - 1; // Month is 0-indexed
-        //             var year = dateValue.sdate.year;
-        //             date = new Date(year, month, day);
-        //             userSheduleArr.push( $.format.date(date, 'dd-MM-yyyy') );
-        //         }
-        //     });
-        //
-        //     //fill calendar with users schedule
-        //     $('#scheduleContainer').html('<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>');
-        //     $.each(calendarData, function(key, valueList) {
-        //
-        //         //fill table
-        //         $('#scheduleContainer').append('<tr>');
-        //         $.each(valueList, function(key2, scheduleDay) {
-        //             var date = new Date();
-        //             if (scheduleDay.sdate != null) {
-        //                 var day = scheduleDay.sdate.dayOfMonth;
-        //                 var month = scheduleDay.sdate.monthValue - 1; // Month is 0-indexed
-        //                 var year = scheduleDay.sdate.year;
-        //                 date = new Date(year, month, day);
-        //                 var formatedDate = $.format.date(date, 'dd-MM-yyyy');
-        //                 if ( userSheduleArr.indexOf(formatedDate) >= 0 ) {
-        //                     $('#scheduleContainer tr:last').append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
-        //                 } else {
-        //                     $('#scheduleContainer tr:last').append('<td>' + formatedDate + '</td>');
-        //                 }
-        //             } else {
-        //                 $('#scheduleContainer tr:last').append('<td></td>');
-        //             }
-        //         });
-        //         $('#scheduleContainer').append('</tr>');
-        //     });
-        //
-        //     showSelectForm();
-        // }
     );
 }
 

@@ -5,8 +5,9 @@ $(document).ready(
         //action cell click
         $('#monthCalendarContainerTable').on("click", "td", function() {
             if ($(this).text() != "") {
-                $(this).toggleClass(selectedTdClass);
-                showSelectForm();
+                //ToDo: переход на расписание дня
+                // $(this).toggleClass(selectedTdClass);
+                // showSelectForm();
             }
         } );
 
@@ -90,7 +91,6 @@ function showSchedule() {
                 }
             });
 
-            //showSelectForm();
         }
     );
 }

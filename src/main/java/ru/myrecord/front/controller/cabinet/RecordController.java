@@ -40,7 +40,17 @@ public class RecordController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.GET)
     public ModelAndView showClientRecords(Principal principal) {
-        return new ModelAndView("/cabinet/client/record/index");
+        User ownerUser = userService.findUserByEmail(principal.getName());
+        Set<User> users = userService.findWorkersByOwner(ownerUser);
+
+        LocalDate date = LocalDate.now();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("year", date.getYear());
+        modelAndView.addObject("month", date.getMonthValue());
+        modelAndView.addObject("users", users);
+        modelAndView.setViewName("/cabinet/client/record/index");
+        return modelAndView;
     }
 
     /**

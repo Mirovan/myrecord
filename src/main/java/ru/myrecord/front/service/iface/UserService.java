@@ -16,7 +16,8 @@ public interface UserService {
     public void addSysUser(User user);
     public void addSimpleUser(User user);
     public void update(User user);
-    public Set<User> findUsersByOwner(User ownerUser);
+    Set<User> findUsersByOwner(User ownerUser);  //Поиск всех пользователей для ownerUser
+    Set<User> findWorkersByOwner(User ownerUser);  //Поиск всех работников для ownerUser
     public Set<User> findUsersByRoom(Room room);
     public User findUserById(Integer id);
     //public Set<User> findUsersByUserRooms(Set<UserRoom> userRooms);
@@ -27,8 +28,8 @@ public interface UserService {
     Boolean hasUser(Principal principal, Integer childUserId);
     Boolean hasRoom(Integer ownerUserId, Integer roomId);
     Boolean hasRoom(Principal principal, Integer roomId);
-    Boolean hasProduct(Integer ownerUserId, Integer serviceId);
-    Boolean hasProduct(Principal principal, Integer serviceId);
+    Boolean hasProduct(Integer ownerUserId, Integer productId);
+    Boolean hasProduct(Principal principal, Integer productId);
     Boolean hasProducts(Principal principal, List<Integer> products);
     Boolean hasAccessToRoles(Principal principal, Set<Role> roles);
     String generatePassword(String password);

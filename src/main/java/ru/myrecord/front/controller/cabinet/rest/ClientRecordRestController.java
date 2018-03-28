@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
+import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ClientRecordService;
+import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
@@ -19,6 +21,9 @@ public class ClientRecordRestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private ClientRecordService clientRecordService;
@@ -36,10 +41,16 @@ public class ClientRecordRestController {
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
         List<CalendarAdapter> calendar = null;
-        if (productId == null) {
+        if (productId == null && userId == null) {
             calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
         } else if (productId != null) {
-            calendar = clientRecordService.getMonthCalendar(year, month, productId, ownerUser);
+            Product product = productService.findProductById(productId);
+            calendar = clientRecordService.getMonthCalendar(year, month, product, ownerUser);
+        } else if (userId != null) {
+            User worker = userService.findUserById(userId);
+            calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
+        } else {
+
         }
         return calendar;
     }

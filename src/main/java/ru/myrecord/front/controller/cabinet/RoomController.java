@@ -151,7 +151,7 @@ public class RoomController/* implements ErrorController*/{
             User ownerUser = room.getOwnerUser();
             Set<Product> products = productService.findProductsByRoom(room);
             //Отображаем только нужные данные о пользователях используя Адаптер
-            Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findUsersByOwner(ownerUser) );
+            Set<UserAdapter> users = userService.getUserAdapterCollection( userService.findWorkersByOwner(ownerUser) );
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("roomId", roomId);

@@ -47,11 +47,17 @@ $(document).ready(
 
         $('#productId').change (
             function () {
-                var productId = parseInt($('#productId').val());
+                //var productId = parseInt($('#productId').val());
                 showCalendar();
             }
         );
 
+        $('#userId').change (
+            function () {
+                //var userId = parseInt($('#userId').val());
+                showCalendar();
+            }
+        );
     }
 );
 

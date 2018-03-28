@@ -74,7 +74,7 @@ public class ProductController/* implements ErrorController*/{
             Product product = productService.findProductById(productId);
             Room room = roomService.findRoomById(product.getRoom().getId());
             //Ищем всех пользователей
-            Set<User> users = userService.findUsersByOwner(ownerUser);
+            Set<User> users = userService.findWorkersByOwner(ownerUser);
             Set<User> involveUsers = new HashSet<>();   //Оказывают эту услугу
             Set<User> freeUsers = new HashSet<>();      //Не оказывают эту услугу
             //Определяем оказывает ли пользователь эту услугу
@@ -110,7 +110,7 @@ public class ProductController/* implements ErrorController*/{
             Product product = productService.findProductById(productId);
             User ownerUser = userService.findUserByEmail( principal.getName() );
             //Ищем всех пользователей
-            Set<User> users = userService.findUsersByOwner(ownerUser);
+            Set<User> users = userService.findWorkersByOwner(ownerUser);
             //находим всех пользователей у owner'a
 
             //Id-шники юзеров которые оказывают услуги пришедшие через POST

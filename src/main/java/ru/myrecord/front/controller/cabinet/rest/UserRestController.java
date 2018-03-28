@@ -81,7 +81,7 @@ public class UserRestController {
 
 
     /**
-     * Запрос пользователей для текущего сис.пользователя
+     * Запрос работников для текущего сис.пользователя
      * */
     @RequestMapping(value="/cabinet/users/json-users/", method = RequestMethod.GET)
     public Set<User> getUsers(Integer userId, Principal principal) {
@@ -91,7 +91,7 @@ public class UserRestController {
         Set<User> users = null;
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            users = userService.findUsersByOwner(user);
+            users = userService.findWorkersByOwner(user);
         //}
         return users;
     }

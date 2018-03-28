@@ -2,6 +2,7 @@ package ru.myrecord.front.service.iface;
 
 
 import ru.myrecord.front.data.model.adapters.UserAdapter;
+import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
@@ -22,6 +23,7 @@ public interface UserService {
     public User findUserById(Integer id);
     //public Set<User> findUsersByUserRooms(Set<UserRoom> userRooms);
     Set<UserAdapter> getUserAdapterCollection(Set<User> users);
+    UserAdapter getUserAdapter(User user);
     Set<Role> getRolesForSimpleUser();
     Boolean userEquals(Integer userId1, Integer userId2);
     Boolean hasUser(Integer ownerUserId, Integer childUser);
@@ -33,7 +35,7 @@ public interface UserService {
     Boolean hasProducts(Principal principal, List<Integer> products);
     Boolean hasAccessToRoles(Principal principal, Set<Role> roles);
     String generatePassword(String password);
-    Set<User> findWorkersByScheduleDay(LocalDate date, User ownerUser);   //Поиск всех мастеров кто работает в этот день
-    Set<User> findWorkersByScheduleDay(LocalDate date, Integer productId, User ownerUser);   //Поиск всех мастеров кто работает в этот день и кто оказывает услугу
+    Set<User> findWorkersBySchedule(LocalDate date, User ownerUser);   //Поиск всех мастеров кто работает в этот день
+    Set<User> findWorkersByProductsAndSchedule(LocalDate date, Product product, User ownerUser);   //Поиск всех мастеров кто работает в этот день и кто оказывает услугу
     Boolean isWorkerDoProduct(User user, Integer productId);    //Оказывает ли пользователь данную услугу
 }

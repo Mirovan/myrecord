@@ -114,11 +114,16 @@ public class UserServiceImpl implements UserService {
     public Set<UserAdapter> getUserAdapterCollection(Set<User> users) {
         Set<UserAdapter> userAdapterColection = new HashSet<>();
         for (User user: users) {
-            userAdapterColection.add(new UserAdapter(user));
+            userAdapterColection.add( getUserAdapter(user) );
         }
         return userAdapterColection;
     }
 
+
+    @Override
+    public UserAdapter getUserAdapter(User user) {
+        return new UserAdapter(user);
+    }
 
     /**
      * Получение ролей для системного пользователя
@@ -275,7 +280,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Set<User> findWorkersByScheduleDay(LocalDate date, User ownerUser) {
+    public Set<User> findWorkersBySchedule(LocalDate date, User ownerUser) {
         Set<User> res = new HashSet<>();
         Set<Schedule> scheduleSet = scheduleService.findByDate(date);
         for (Schedule schedule : scheduleSet ) {
@@ -288,14 +293,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Set<User> findWorkersByScheduleDay(LocalDate date, Integer productId, User ownerUser) {
+    public Set<User> findWorkersByProductsAndSchedule(LocalDate date, Product product, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Product product = productService.findProductById(productId);
         Set<Schedule> scheduleSet = scheduleService.findByDate(date);
         for (Schedule schedule : scheduleSet ) {
             User user = schedule.getUser();
-            //Если текущая учетка имеет этого раюотника и у раюботника есть этот продукт
-            if ( hasUser(ownerUser.getId(), user.getId()) && isWorkerDoProduct(user, productId) )
+            //Если сист. польователь имеет этого раюотника и у раюботника есть этот продукт
+            if ( hasUser(ownerUser.getId(), user.getId()) && isWorkerDoProduct(user, product.getId()) )
                 res.add( user );
         }
         return res;

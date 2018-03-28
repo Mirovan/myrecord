@@ -42,6 +42,7 @@ public class RecordController/* implements ErrorController*/{
     public ModelAndView showClientRecords(Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<User> users = userService.findWorkersByOwner(ownerUser);
+        Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
 
         LocalDate date = LocalDate.now();
 
@@ -49,6 +50,7 @@ public class RecordController/* implements ErrorController*/{
         modelAndView.addObject("year", date.getYear());
         modelAndView.addObject("month", date.getMonthValue());
         modelAndView.addObject("users", users);
+        modelAndView.addObject("products", products);
         modelAndView.setViewName("/cabinet/client/record/index");
         return modelAndView;
     }
@@ -79,7 +81,7 @@ public class RecordController/* implements ErrorController*/{
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
 
-        Set<User> masters = userService.findUsersByOwner(ownerUser);
+        Set<User> masters = userService.findWorkersByOwner(ownerUser);
 
         User client = new User();
 

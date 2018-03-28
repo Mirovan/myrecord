@@ -46,14 +46,14 @@
                                 <br />
 
                                 Услуга:
-                                <select name="productId">
-                                    <option>-- Все услуги --</option>
+                                <select name="productId" id="productId">
+                                    <option value="">-- Все услуги --</option>
                                     <option th:each="product: ${products}" th:value="${product.id}" th:text="${product.name}"></option>
                                 </select>
 
                                 Мастер:
-                                <select name="userId">
-                                    <option>-- Все мастера --</option>
+                                <select name="userId" id="userId">
+                                    <option value="">-- Все мастера --</option>
                                     <option th:each="user: ${users}" th:value="${user.id}" th:text="@{${user.name} + ' ' + ${user.sirname}}"></option>
                                 </select>
                             </div>

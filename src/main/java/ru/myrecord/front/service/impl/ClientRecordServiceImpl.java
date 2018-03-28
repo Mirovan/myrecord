@@ -66,7 +66,25 @@ public class ClientRecordServiceImpl implements ClientRecordService {
             //null - это просто пустые дни в начале месяца начиная с понедельника
             if (item != null) {
                 //Находим всех мастеров, у кого есть в расписании этот день
-                Set<User> users = userService.findMastersByScheduleDay(item.getDate(), ownerUser);
+                Set<User> users = userService.findWorkersByScheduleDay(item.getDate(), ownerUser);
+                Set<UserAdapter> usersAdapter =
+                        userService.getUserAdapterCollection(users);
+                item.setData(usersAdapter);
+            }
+        }
+
+        return calendar;
+    }
+
+
+    @Override
+    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Integer productId, User ownerUser) {
+        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
+        for (CalendarAdapter item : calendar) {
+            //null - это просто пустые дни в начале месяца начиная с понедельника
+            if (item != null) {
+                //Находим всех мастеров, у кого есть в расписании этот день
+                Set<User> users = userService.findWorkersByScheduleDay(item.getDate(), productId, ownerUser);
                 Set<UserAdapter> usersAdapter =
                         userService.getUserAdapterCollection(users);
                 item.setData(usersAdapter);

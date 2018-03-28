@@ -89,18 +89,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> findWorkersByOwner(User ownerUser) {
-//        Set<User> allUsers = findUsersByOwner(ownerUser);
-//        Set<User> workersUsers = new HashSet<>();
-//
-//        Role role = roleService.findRoleByName("MASTER");
-//        for (User user : allUsers) {
-//            if (user.getRoles().contains(role)) {
-//                workersUsers.add(user);
-//            }
-//        }
-//        findUsersByOwner(ownerUser).stream().filter(user ->
-//            user.getRoles().contains(roleService.findRoleByName("MASTER")));
-//        return userDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
         return findUsersByOwner(ownerUser)
                 .stream()
                 .filter(user -> user.getRoles().contains(roleService.findRoleByName("MASTER")))
@@ -287,7 +275,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Set<User> findMastersByScheduleDay(LocalDate date, User ownerUser) {
+    public Set<User> findWorkersByScheduleDay(LocalDate date, User ownerUser) {
         Set<User> res = new HashSet<>();
         Set<Schedule> scheduleSet = scheduleService.findByDate(date);
         for (Schedule schedule : scheduleSet ) {
@@ -298,4 +286,29 @@ public class UserServiceImpl implements UserService {
         return res;
     }
 
+
+    @Override
+    public Set<User> findWorkersByScheduleDay(LocalDate date, Integer productId, User ownerUser) {
+        Set<User> res = new HashSet<>();
+        Product product = productService.findProductById(productId);
+        Set<Schedule> scheduleSet = scheduleService.findByDate(date);
+        for (Schedule schedule : scheduleSet ) {
+            User user = schedule.getUser();
+            //Если текущая учетка имеет этого раюотника и у раюботника есть этот продукт
+            if ( hasUser(ownerUser.getId(), user.getId()) && isWorkerDoProduct(user, productId) )
+                res.add( user );
+        }
+        return res;
+    }
+
+
+    @Override
+    public Boolean isWorkerDoProduct(User user, Integer productId) {
+        Set<UserProduct> userProducts = userProductService.findByUserActiveLink(user);
+        for (UserProduct up : userProducts) {
+            if ( up.getProduct().getId().equals(productId) )
+                return true;
+        }
+        return false;
+    }
 }

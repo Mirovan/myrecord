@@ -12,7 +12,7 @@ $(document).ready(
         } );
 
         //load all Schedule when page loaded
-        showSchedule();
+        showCalendar();
 
         //action - prev month click
         $('#aPrev').click (
@@ -26,7 +26,7 @@ $(document).ready(
                 }
                 $('#monthInput').val(month);
                 $('#yearInput').val(year);
-                showSchedule()
+                showCalendar();
             }
         );
 
@@ -41,20 +41,29 @@ $(document).ready(
                 }
                 $('#monthInput').val(month);
                 $('#yearInput').val(year);
-                showSchedule()
+                showCalendar();
             }
         );
+
+        $('#productId').change (
+            function () {
+                var productId = parseInt($('#productId').val());
+                showCalendar();
+            }
+        );
+
     }
 );
 
 
-function showSchedule() {
+function showCalendar() {
     $.getJSON(
         "/cabinet/clients/calendar/",
         {
-            /*userId: $('#userInput').val(),*/
             year: $('#yearInput').val(),
-            month: $('#monthInput').val()
+            month: $('#monthInput').val(),
+            productId: $('#productId').val(),
+            userId: $('#userId').val()
         },
         function(data) {
             //fill calendar with users schedule

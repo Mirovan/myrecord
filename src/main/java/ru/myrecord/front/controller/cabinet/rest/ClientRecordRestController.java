@@ -3,6 +3,7 @@ package ru.myrecord.front.controller.cabinet.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.entities.User;
@@ -26,11 +27,20 @@ public class ClientRecordRestController {
      * Запрос месяца
      * */
     @RequestMapping(value="/cabinet/clients/calendar/", method = RequestMethod.GET)
-    public List<CalendarAdapter> getCalendar(Integer year, Integer month, Principal principal) {
+    public List<CalendarAdapter> getCalendar(@RequestParam(required = false) Integer year,
+                                             @RequestParam(required = false) Integer month,
+                                             @RequestParam(required = false) Integer productId,
+                                             @RequestParam(required = false) Integer userId,
+                                             Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
-        List<CalendarAdapter> calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
+        List<CalendarAdapter> calendar = null;
+        if (productId == null) {
+            calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
+        } else if (productId != null) {
+            calendar = clientRecordService.getMonthCalendar(year, month, productId, ownerUser);
+        }
         return calendar;
     }
 

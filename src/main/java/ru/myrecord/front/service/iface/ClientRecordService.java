@@ -10,4 +10,5 @@ public interface ClientRecordService {
     ClientRecord add(ClientRecord clientRecord, User ownerUser);
     ClientRecord findByUser(User user);
     List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser);
+    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Integer productId, User ownerUser);
 }

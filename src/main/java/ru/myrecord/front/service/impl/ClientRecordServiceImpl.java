@@ -111,7 +111,7 @@ public class ClientRecordServiceImpl implements ClientRecordService {
                 Schedule schedule = scheduleService.findByUserAndDate(worker, item.getDate());
                 if (schedule != null) {
                     UserAdapter userAdapter = userService.getUserAdapter(worker);
-                    //добавляем всего одного сотрудника в сет
+                    //добавляем всего одного сотрудника в сэт
                     Set<UserAdapter> users = new HashSet<>();
                     users.add(userAdapter);
                     item.setData(users);
@@ -122,21 +122,5 @@ public class ClientRecordServiceImpl implements ClientRecordService {
         return calendar;
     }
 
-
-    @Override
-    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User worker, User ownerUser) {
-        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
-        for (CalendarAdapter item : calendar) {
-            //null - это просто пустые дни в начале месяца начиная с понедельника
-            if (item != null) {
-                //Находим всех мастеров, у кого есть в расписании этот день
-//                Set<User> users = userService.findWorkersByProductsAndSchedule(item.getDate(), product, ownerUser);
-//                Set<UserAdapter> usersAdapter = userService.getUserAdapterCollection(users);
-//                item.setData(usersAdapter);
-            }
-        }
-
-        return calendar;
-    }
 
 }

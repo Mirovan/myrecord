@@ -45,8 +45,9 @@ public class ClientRecordRestController {
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
         List<CalendarAdapter> calendar = null;
-        if (productId == null && userId == null) {
-            calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
+        if (productId != null && userId != null) {
+            User worker = userService.findUserById(userId);
+            calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
         } else if (productId != null) {
             Product product = productService.findProductById(productId);
             calendar = clientRecordService.getMonthCalendar(year, month, product, ownerUser);
@@ -54,7 +55,7 @@ public class ClientRecordRestController {
             User worker = userService.findUserById(userId);
             calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
         } else {
-
+            calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
         }
         return calendar;
     }

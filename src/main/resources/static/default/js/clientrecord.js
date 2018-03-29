@@ -1,4 +1,5 @@
-var selectedTdClass = "red-cell";
+var workdayTdClass = "workday-cell";
+var vacationdayTdClass = "vacationday-cell";
 
 $(document).ready(
     function() {
@@ -94,9 +95,9 @@ function showCalendar() {
                     var users = calendarItem.data;
                     if ( (users != null) && (users.length > 0) ) {
                         $('#monthCalendarContainerTable tr:last')
-                            .append('<td class="'+selectedTdClass+'">' + formatedDate + '</td>');
+                            .append('<td class="'+workdayTdClass+'">' + formatedDate + '</td>');
                     } else {
-                        $('#monthCalendarContainerTable tr:last').append('<td>' + formatedDate + '</td>');
+                        $('#monthCalendarContainerTable tr:last').append('<td class="'+vacationdayTdClass+'">' + formatedDate + '</td>');
                     }
                 }
 
@@ -131,7 +132,7 @@ function changeUserSelectList() {
 
 function showSelectForm() {
     $('#divSelectContainer').html('');
-    var allTds = $("#monthCalendarContainerTable td.red-cell").map(function() {
+    var allTds = $("#monthCalendarContainerTable td.workdayTdClass").map(function() {
         return this.innerHTML;
     }).get();
 

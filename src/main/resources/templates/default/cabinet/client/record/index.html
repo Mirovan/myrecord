@@ -6,10 +6,15 @@
     #monthCalendarContainerTable td {
         background: white;
         cursor: pointer;
-        padding: 2px
+        padding: 2px;
+        width: 120px;
+        height: 40px;
     }
-    #monthCalendarContainerTable td.red-cell {
-        background: #F00; /* Or some other color */
+    #monthCalendarContainerTable td.workday-cell {
+        background: #71dd8a; /* Or some other color */
+    }
+    #monthCalendarContainerTable td.vacationday-cell {
+        background: #efa2a9; /* Or some other color */
     }
 </style>
 <body>
@@ -28,36 +33,41 @@
             </header>
 
             <div class="row">
+
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
                             <h4>Запись клиентов</h4>
                         </div>
+                    </div>
+                </div>
 
+                <div class="col-lg-9">
+                    <strong>Filter:</strong>
+                    <br />
+
+                    Услуга:
+                    <select name="productId" id="productId">
+                        <option value="">-- Все услуги --</option>
+                        <option th:each="product: ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+                    </select>
+
+                    Мастер:
+                    <select name="userId" id="userId">
+                        <option value="">-- Все мастера --</option>
+                        <option th:each="user: ${users}" th:value="${user.id}" th:text="@{${user.name} + ' ' + ${user.sirname}}"></option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <a href="/cabinet/clients/record/add/" class="btn btn-primary">Новая запись</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="card">
                         <div class="card-body">
-
-                            <div class="form-group">
-                                <a href="/cabinet/clients/record/add/" class="btn btn-primary">Новая запись</a>
-                            </div>
-
-                            <div class="form-group">
-                                <hr />
-                                <strong>Filter:</strong>
-                                <br />
-
-                                Услуга:
-                                <select name="productId" id="productId">
-                                    <option value="">-- Все услуги --</option>
-                                    <option th:each="product: ${products}" th:value="${product.id}" th:text="${product.name}"></option>
-                                </select>
-
-                                Мастер:
-                                <select name="userId" id="userId">
-                                    <option value="">-- Все мастера --</option>
-                                    <option th:each="user: ${users}" th:value="${user.id}" th:text="@{${user.name} + ' ' + ${user.sirname}}"></option>
-                                </select>
-                            </div>
-
                             <div class="form-group">
                                 <a id="aPrev" href="#prev">Prev</a>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -71,10 +81,10 @@
                                 <!-- calendar -->
                                 <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
                             </div>
-
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

@@ -47,7 +47,7 @@ $(document).ready(
 
         $('#productId').change (
             function () {
-                //var productId = parseInt($('#productId').val());
+                changeUserSelectList();
                 showCalendar();
             }
         );
@@ -64,7 +64,7 @@ $(document).ready(
 
 function showCalendar() {
     $.getJSON(
-        "/cabinet/clients/calendar/",
+        "/cabinet/clients/json-calendar/",
         {
             year: $('#yearInput').val(),
             month: $('#monthInput').val(),
@@ -109,6 +109,24 @@ function showCalendar() {
         }
     );
 }
+
+
+function changeUserSelectList() {
+    $.getJSON(
+        "/cabinet/clients/json-users-by-product/",
+        {
+            productId: $('#productId').val(),
+        },
+        function(data) {
+            $('#userId').html('');
+            $('#userId').append('<option value="">-- Все мастера --</option>');
+            $.each(data, function(key, item) {
+                $('#userId').append('<option value="' + item.id + '">' + item.name + ' ' + item.sirname + '</option>');
+            });
+        }
+    );
+}
+
 
 
 function showSelectForm() {

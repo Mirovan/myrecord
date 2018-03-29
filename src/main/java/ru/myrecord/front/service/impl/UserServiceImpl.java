@@ -113,8 +113,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<UserAdapter> getUserAdapterCollection(Set<User> users) {
         Set<UserAdapter> userAdapterColection = new HashSet<>();
-        for (User user: users) {
-            userAdapterColection.add( getUserAdapter(user) );
+        if (users != null) {
+            for (User user : users) {
+                userAdapterColection.add(getUserAdapter(user));
+            }
         }
         return userAdapterColection;
     }
@@ -315,4 +317,18 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+
+    @Override
+    public Set<User> findWorkersByProduct(Product product) {
+        Set<User> users = new HashSet<>();
+        Set<UserProduct> userProducts = userProductService.findByProductActiveLink(product);
+        if (userProducts != null) {
+            for (UserProduct up : userProducts) {
+                users.add(up.getUser());
+            }
+        }
+        return users;
+    }
+
 }

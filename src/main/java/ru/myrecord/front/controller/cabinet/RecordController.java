@@ -79,6 +79,9 @@ public class RecordController/* implements ErrorController*/{
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("workers" , workersAdapter);
+            modelAndView.addObject("day", day);
+            modelAndView.addObject("month", month);
+            modelAndView.addObject("year", year);
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
             return modelAndView;
         } else {

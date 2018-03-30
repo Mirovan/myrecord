@@ -9,14 +9,16 @@ import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.data.model.entities.UserProduct;
+import ru.myrecord.front.data.model.helpers.CalendarRecord;
 import ru.myrecord.front.service.iface.ClientRecordService;
 import ru.myrecord.front.service.iface.ProductService;
-import ru.myrecord.front.service.iface.UserProductService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,10 +64,10 @@ public class ClientRecordRestController {
 
 
     /**
-     * Отображаем пользователей по выбранному продукту
+     * Отображаем мастеров по выбранному продукту
      * */
     @RequestMapping(value="/cabinet/clients/json-users-by-product/", method = RequestMethod.GET)
-    public Set<UserAdapter> getUsersByProduct(@RequestParam(required = false) Integer productId, Principal principal) {
+    public Set<UserAdapter> getMastersByProduct(@RequestParam(required = false) Integer productId, Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<User> users = null;
         if (productId != null) {
@@ -76,6 +78,27 @@ public class ClientRecordRestController {
         }
         Set<UserAdapter> usersAdapter = userService.getUserAdapterCollection(users);
         return usersAdapter;
+    }
+
+
+    /**
+     * Отображаем мастеров по выбранной дате
+     * */
+    @RequestMapping(value="/cabinet/clients/json-users-by-date/", method = RequestMethod.GET)
+    public Set<CalendarRecord> getMasterRecordsByDate(Integer day,
+                                                              Integer month,
+                                                              Integer year,
+                                                              Principal principal) {
+        User ownerUser = userService.findUserByEmail(principal.getName());
+        Set<CalendarRecord> calendarMap = new HashSet<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime start = LocalDateTime.of(year, month, day, 10, 0);
+        LocalDateTime end = LocalDateTime.of(year, month, day, 12, 0);
+
+        calendarMap.add(new CalendarRecord(0, "Elena", start.format(formatter), end.format(formatter), ""));
+
+        return calendarMap;
     }
 
 }

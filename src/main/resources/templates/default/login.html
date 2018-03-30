@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="cabinet/inc/head.inc :: head"></head>
-
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="cabinet/inc/head.inc::head"></head>
 <body>
-<form th:action="@{/register/}" method="get">
-	<button class="btn btn-md btn-warning btn-block" type="Submit">Go To Registration Page</button>
-</form>
 
-<div class="container">
-	<form th:action="@{/login/}" method="POST" class="form-signin">
-		<h3 class="form-signin-heading" th:text="Welcome"></h3>
-		<br/>
-
-		<input type="text" id="email" name="email" th:placeholder="Email"
-			   class="form-control" /> <br/>
-		<input type="password"  th:placeholder="Password"
-			   id="password" name="password" class="form-control" /> <br />
-
-		<div align="center" th:if="${param.error}">
-			<p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+<div class="page login-page">
+	<div class="container">
+		<div class="form-outer text-center d-flex align-items-center">
+			<div class="form-inner">
+				<div class="logo text-uppercase"><span>Bootstrap</span><strong class="text-primary">Dashboard</strong></div>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+				<form th:action="@{/login/}" id="login-form" method="post">
+					<div class="form-group-material">
+						<input id="login-username" type="text" name="email" required="required" class="input-material" />
+						<label for="login-username" class="label-material">Email</label>
+					</div>
+					<div class="form-group-material">
+						<input id="login-password" type="password" name="password" required="required" class="input-material" />
+						<label for="login-password" class="label-material">Password</label>
+					</div>
+					<button id="login" type="submit" class="btn btn-primary">Login</button>
+					<!-- This should be submit button but I replaced it with <a> for demo purposes-->
+				</form>
+				<a href="#" class="forgot-pass">Forgot Password?</a><small>Do not have an account? </small>
+				<a href="/register/" class="signup">Signup</a>
+			</div>
+			<div class="copyrights text-center">
+				<p>Design by <a href="https://bootstrapious.com" class="external">Bootstrapious</a></p>
+				<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+			</div>
 		</div>
-		<button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Login"></button>
-	</form>
+	</div>
 </div>
+
+<div th:include="cabinet/inc/js.inc::js"></div>
 </body>
 </html>

@@ -38,15 +38,26 @@
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
                             <h4>Запись клиентов</h4>
+
+                            <input type="hidden" id="dayInput" name="day" th:value="${day}" />
+                            <input type="hidden" id="monthInput" name="month" th:value="${month}" />
+                            <input type="hidden" id="yearInput" name="year" th:value="${year}" />
+
+                            <div id='calendar'></div>
+
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-12">
+                <div class="col-lg-12" th:each="worker: ${workers}">
                     <div class="card">
+                        <div class="card-header">
+                            Мастер: <span th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></span>
+                        </div>
                         <div class="card-body">
 
-                            <span th:each="worker: ${workers}" th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></span>
+                            Расписание
+
 
                         </div>
                     </div>
@@ -59,5 +70,10 @@
     <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
 </div>
 <div th:include="cabinet/inc/js.inc::js"></div>
+<script th:src="@{/static/default/js/master-week-calendar.js}"></script>
+<link href='/static/default/vendor/fullcalendar-3.9.0/fullcalendar.min.css' rel='stylesheet' />
+<link href='/static/default/vendor/fullcalendar-3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<script src='/static/default/vendor/fullcalendar-3.9.0/lib/moment.min.js'></script>
+<script src='/static/default/vendor/fullcalendar-3.9.0/fullcalendar.min.js'></script>
 </body>
 </html>

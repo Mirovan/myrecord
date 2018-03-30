@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
@@ -39,7 +40,7 @@ public class RecordController/* implements ErrorController*/{
      * Форма записи клиента
      * */
     @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.GET)
-    public ModelAndView showClientRecords(Principal principal) {
+    public ModelAndView showMonthCalendar(Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<User> users = userService.findWorkersByOwner(ownerUser);
         Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
@@ -55,22 +56,35 @@ public class RecordController/* implements ErrorController*/{
         return modelAndView;
     }
 
+
     /**
-     * Форма записи клиента
+     * Календарь для определенного дня
      * */
-//    @RequestMapping(value="/cabinet/clients/record/add/", method = RequestMethod.GET)
-//    public ModelAndView simpleClientRecord(Principal principal) {
-//        //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
-//        if ( true ) {
-//            User ownerUser = userService.findUserByEmail(principal.getName());
-//
-//            ModelAndView modelAndView = new ModelAndView();
-//            modelAndView.setViewName("cabinet/client/record/edit");
-//            return modelAndView;
-//        } else {
-//            return new ModelAndView("redirect:/cabinet/");
-//        }
-//    }
+    //@RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/product/{productId}/master/{masterId}/", method = RequestMethod.GET)
+    @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/", method = RequestMethod.GET)
+    public ModelAndView showDailyCalendar(@PathVariable Integer day,
+                                          @PathVariable Integer month,
+                                          @PathVariable Integer year,
+                                          //@RequestParam(required = false) Integer productId,
+                                          //@RequestParam(required = false) Integer masterId,
+                                          Principal principal) {
+        //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
+        if ( true ) {
+            User ownerUser = userService.findUserByEmail(principal.getName());
+
+            //Находим всех мастеров кто работает в этот день
+            LocalDate date = LocalDate.of(year, month, day);
+            Set<User> workers = userService.findWorkersByDate(date, ownerUser);
+            Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("workers" , workersAdapter);
+            modelAndView.setViewName("cabinet/client/record/dailycalendar");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
 
 
     /**

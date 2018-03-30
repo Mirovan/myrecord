@@ -73,7 +73,7 @@ public class ClientRecordServiceImpl implements ClientRecordService {
             //null - это просто пустые дни в начале месяца начиная с понедельника
             if (item != null) {
                 //Находим всех мастеров, у кого есть в расписании этот день
-                Set<User> users = userService.findWorkersBySchedule(item.getDate(), ownerUser);
+                Set<User> users = userService.findWorkersByDate(item.getDate(), ownerUser);
                 Set<UserAdapter> usersAdapter =
                         userService.getUserAdapterCollection(users);
                 item.setData(usersAdapter);
@@ -91,7 +91,7 @@ public class ClientRecordServiceImpl implements ClientRecordService {
             //null - это просто пустые дни в начале месяца начиная с понедельника
             if (item != null) {
                 //Находим всех мастеров, у кого есть в расписании этот день
-                Set<User> users = userService.findWorkersByProductsAndSchedule(item.getDate(), product, ownerUser);
+                Set<User> users = userService.findWorkersByDateAndProduct(item.getDate(), product, ownerUser);
                 Set<UserAdapter> usersAdapter = userService.getUserAdapterCollection(users);
                 item.setData(usersAdapter);
             }

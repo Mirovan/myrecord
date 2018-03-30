@@ -35,8 +35,8 @@ public interface UserService {
     Boolean hasProducts(Principal principal, List<Integer> products);
     Boolean hasAccessToRoles(Principal principal, Set<Role> roles);
     String generatePassword(String password);
-    Set<User> findWorkersBySchedule(LocalDate date, User ownerUser);   //Поиск всех мастеров кто работает в этот день
-    Set<User> findWorkersByProductsAndSchedule(LocalDate date, Product product, User ownerUser);   //Поиск всех мастеров кто работает в этот день и кто оказывает услугу
+    Set<User> findWorkersByDate(LocalDate date, User ownerUser);   //Поиск всех мастеров кто работает в этот день
+    Set<User> findWorkersByDateAndProduct(LocalDate date, Product product, User ownerUser);   //Поиск всех мастеров кто работает в этот день и кто оказывает услугу
     Boolean isWorkerDoProduct(User user, Integer productId);    //Оказывает ли пользователь данную услугу
     Set<User> findWorkersByProduct(Product product);    //Поиск раюотника по услуге
 }

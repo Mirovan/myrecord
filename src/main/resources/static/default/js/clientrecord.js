@@ -6,9 +6,27 @@ $(document).ready(
         //action cell click
         $('#monthCalendarContainerTable').on("click", "td", function() {
             if ($(this).text() != "") {
-                //ToDo: переход на расписание дня
-                // $(this).toggleClass(selectedTdClass);
-                // showSelectForm();
+                var day = parseInt($(this).attr("data-day"));
+                var month = parseInt($('#monthInput').val());
+                var year = parseInt($('#yearInput').val());
+                var productId = parseInt($('#productId').val());
+                var masterId = parseInt($('#userId').val());
+
+                var url = "/cabinet/clients/record-day/";
+                if ( !isNaN(day) && !isNaN(month) && !isNaN(year) ) {
+                    url += + day + "/" + month + "/" + year + "/";
+                }
+                if ( !isNaN(productId) ) {
+                    url += "product/" + productId + "/";
+                }
+                if ( !isNaN(masterId) ) {
+                    url += "master/" + masterId + "/";
+                }
+
+                $(location).attr(
+                    'href',
+                    url
+                );
             }
         } );
 
@@ -95,9 +113,10 @@ function showCalendar() {
                     var users = calendarItem.data;
                     if ( (users != null) && (users.length > 0) ) {
                         $('#monthCalendarContainerTable tr:last')
-                            .append('<td class="'+workdayTdClass+'">' + formatedDate + '</td>');
+                            .append('<td class="'+workdayTdClass+'" data-day="' + day + '">' + formatedDate + '</td>');
                     } else {
-                        $('#monthCalendarContainerTable tr:last').append('<td class="'+vacationdayTdClass+'">' + formatedDate + '</td>');
+                        $('#monthCalendarContainerTable tr:last')
+                            .append('<td class="'+vacationdayTdClass+'" data-day="' + day + '">' + formatedDate + '</td>');
                     }
                 }
 
@@ -126,17 +145,4 @@ function changeUserSelectList() {
             });
         }
     );
-}
-
-
-
-function showSelectForm() {
-    $('#divSelectContainer').html('');
-    var allTds = $("#monthCalendarContainerTable td.workdayTdClass").map(function() {
-        return this.innerHTML;
-    }).get();
-
-    for (var item in allTds) {
-        $('#divSelectContainer').append('<input type="hidden" value="'+ allTds[item] +'" name="dates[]" />');
-    }
 }

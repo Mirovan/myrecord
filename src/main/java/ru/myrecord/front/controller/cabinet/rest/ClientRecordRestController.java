@@ -62,7 +62,7 @@ public class ClientRecordRestController {
 
 
     /**
-     * Запрос месяца
+     * Отображаем пользователей по выбранному продукту
      * */
     @RequestMapping(value="/cabinet/clients/json-users-by-product/", method = RequestMethod.GET)
     public Set<UserAdapter> getUsersByProduct(@RequestParam(required = false) Integer productId, Principal principal) {

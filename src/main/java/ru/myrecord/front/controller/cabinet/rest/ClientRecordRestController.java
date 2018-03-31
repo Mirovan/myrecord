@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
+import ru.myrecord.front.data.model.entities.ClientRecordProduct;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.helpers.CalendarRecord;
+import ru.myrecord.front.service.iface.ClientRecordProductService;
 import ru.myrecord.front.service.iface.ClientRecordService;
 import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.UserService;
@@ -33,6 +35,10 @@ public class ClientRecordRestController {
 
     @Autowired
     private ClientRecordService clientRecordService;
+
+    @Autowired
+    private ClientRecordProductService clientRecordProductService;
+
 
     /**
      * Запрос месяца
@@ -93,10 +99,25 @@ public class ClientRecordRestController {
         Set<CalendarRecord> calendarMap = new HashSet<>();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime start = LocalDateTime.of(year, month, day, 10, 0);
-        LocalDateTime end = LocalDateTime.of(year, month, day, 12, 0);
+        LocalDate date = LocalDate.of(year, month, day);
 
-        calendarMap.add(new CalendarRecord(0, "Elena", start.format(formatter), end.format(formatter), ""));
+        Set<ClientRecordProduct> clientRecords = clientRecordProductService.findByDate(date);
+
+        for (ClientRecordProduct item : clientRecords) {
+            LocalDateTime start = item.getSdate();
+            LocalDateTime end = item.getSdate().plusHours(2);
+
+            String name = item.getRecord().getUser().getName() +  " " + item.getRecord().getUser().getSirname();
+
+            calendarMap.add(new CalendarRecord(0, name, start.format(formatter), end.format(formatter), ""));
+        }
+
+//        LocalDateTime start = LocalDateTime.of(year, month, day, 10, 0);
+//        LocalDateTime end = LocalDateTime.of(year, month, day, 12, 0);
+//        calendarMap.add(new CalendarRecord(0, "Elena", start.format(formatter), end.format(formatter), ""));
+//
+//        start = LocalDateTime.of(year, month, day, 11, 0);
+//        end = LocalDateTime.of(year, month, day, 15, 0);
 
         return calendarMap;
     }

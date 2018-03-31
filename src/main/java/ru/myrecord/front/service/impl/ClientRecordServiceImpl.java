@@ -8,15 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ClientRecordDAO;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
-import ru.myrecord.front.data.model.entities.ClientRecord;
-import ru.myrecord.front.data.model.entities.Product;
-import ru.myrecord.front.data.model.entities.Schedule;
-import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.service.iface.CalendarService;
-import ru.myrecord.front.service.iface.ClientRecordService;
-import ru.myrecord.front.service.iface.ScheduleService;
-import ru.myrecord.front.service.iface.UserService;
+import ru.myrecord.front.data.model.entities.*;
+import ru.myrecord.front.service.iface.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +34,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private ClientRecordProductService clientRecordProductService;
 
     @Override
     public ClientRecord add(ClientRecord clientRecord, User ownerUser) {

@@ -6,6 +6,7 @@ import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ClientRecordService {
     ClientRecord add(ClientRecord clientRecord, User ownerUser);

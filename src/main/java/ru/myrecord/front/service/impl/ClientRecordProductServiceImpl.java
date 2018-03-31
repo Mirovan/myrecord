@@ -10,6 +10,10 @@ import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.data.model.entities.ClientRecordProduct;
 import ru.myrecord.front.service.iface.ClientRecordProductService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Set;
+
 @Service("clientRecordProductService")
 public class ClientRecordProductServiceImpl implements ClientRecordProductService {
 
@@ -27,5 +31,12 @@ public class ClientRecordProductServiceImpl implements ClientRecordProductServic
     @Override
     public ClientRecordProduct findByClientRecord(ClientRecord clientRecord) {
         return null;
+    }
+
+    @Override
+    public Set<ClientRecordProduct> findByDate(LocalDate date) {
+        LocalDateTime start = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0);
+        LocalDateTime end = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 23, 59, 59);
+        return clientRecordProductDAO.findBySdateBetween(start, end);
     }
 }

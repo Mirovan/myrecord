@@ -92,9 +92,9 @@ public class ClientRecordRestController {
      * */
     @RequestMapping(value="/cabinet/clients/json-users-by-date/", method = RequestMethod.GET)
     public Set<CalendarRecord> getMasterRecordsByDate(Integer day,
-                                                              Integer month,
-                                                              Integer year,
-                                                              Principal principal) {
+                                                      Integer month,
+                                                      Integer year,
+                                                      Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<CalendarRecord> calendarMap = new HashSet<>();
 
@@ -105,11 +105,12 @@ public class ClientRecordRestController {
 
         for (ClientRecordProduct item : clientRecords) {
             LocalDateTime start = item.getSdate();
-            LocalDateTime end = item.getSdate().plusHours(2);
+            LocalDateTime end = item.getSdate().plusHours(2);   //ToDo: сделать наминальное время оказания услуги
 
             String name = item.getRecord().getUser().getName() +  " " + item.getRecord().getUser().getSirname();
+            UserAdapter master = userService.getUserAdapter(item.getMaster());
 
-            calendarMap.add(new CalendarRecord(0, name, start.format(formatter), end.format(formatter), ""));
+            calendarMap.add(new CalendarRecord(item.getId(), name, start.format(formatter), end.format(formatter), "", master));
         }
 
 //        LocalDateTime start = LocalDateTime.of(year, month, day, 10, 0);

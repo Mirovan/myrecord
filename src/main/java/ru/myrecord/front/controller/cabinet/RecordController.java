@@ -37,7 +37,7 @@ public class RecordController/* implements ErrorController*/{
     private ClientRecordProductService clientRecordProductService;
 
     /**
-     * Форма записи клиента
+     * Календарь работы всех мастеров
      * */
     @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.GET)
     public ModelAndView showMonthCalendar(Principal principal) {
@@ -76,12 +76,54 @@ public class RecordController/* implements ErrorController*/{
             LocalDate date = LocalDate.of(year, month, day);
             Set<User> workers = userService.findWorkersByDate(date, ownerUser);
             Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
+            Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
+
+            User client = new User();
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("client", client);
+            modelAndView.addObject("products", products);
+            modelAndView.setViewName("cabinet/client/record/dailycalendar");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Календарь для определенного дня и услуги
+     * */
+    @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/product/{productId}/", method = RequestMethod.GET)
+    public ModelAndView showDailyCalendar(@PathVariable Integer day,
+                                          @PathVariable Integer month,
+                                          @PathVariable Integer year,
+                                          @PathVariable Integer productId,
+                                          Principal principal) {
+        //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
+        if ( true ) {
+            User ownerUser = userService.findUserByEmail(principal.getName());
+
+            //Находим всех мастеров кто работает в этот день
+            LocalDate date = LocalDate.of(year, month, day);
+            Product product = productService.findProductById(productId);
+            Set<Product> products = new HashSet<>();
+            products.add(product);
+            Set<User> workers = userService.findWorkersByDateAndProduct(date, product, ownerUser);
+            Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
+
+            User client = new User();
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("workers" , workersAdapter);
+            modelAndView.addObject("day", day);
+            modelAndView.addObject("month", month);
+            modelAndView.addObject("year", year);
+            modelAndView.addObject("client", client);
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
             return modelAndView;
         } else {

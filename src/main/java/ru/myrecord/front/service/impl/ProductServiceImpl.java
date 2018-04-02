@@ -9,9 +9,12 @@ import ru.myrecord.front.data.dao.ProductDAO;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.entities.UserProduct;
 import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.service.iface.UserProductService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service("productService")
@@ -25,6 +28,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private UserProductService userProductService;
 
     @Override
     public Product findProductById(Integer id) {
@@ -47,8 +53,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> findProductsByOwnerUser(User user) {
-        Set<Room> rooms = roomService.findRoomsByActive(user);
+    public Set<Product> findProductsByOwnerUser(User ownerUser) {
+        Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
         return productDAO.findByRoomInAndActiveTrueOrderByIdAsc(rooms);
+    }
+
+    @Override
+    public Set<Product> findProductsByWorker(User worker) {
+        Set<UserProduct> userProducts = userProductService.findByUserActiveLink(worker);
+        Set<Product> products = new HashSet<>();
+        for (UserProduct up : userProducts) {
+            products.add(up.getProduct());
+        }
+        return products;
     }
 }

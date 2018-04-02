@@ -34,6 +34,9 @@ public class RecordController/* implements ErrorController*/{
     private ClientRecordService clientRecordService;
 
     @Autowired
+    private UserProductService userProductService;
+
+    @Autowired
     private ClientRecordProductService clientRecordProductService;
 
     /**
@@ -42,7 +45,7 @@ public class RecordController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.GET)
     public ModelAndView showMonthCalendar(Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
-        Set<User> users = userService.findWorkersByOwner(ownerUser);
+        Set<User> workers = userService.findWorkersByOwner(ownerUser);
         Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
 
         LocalDate date = LocalDate.now();
@@ -50,7 +53,7 @@ public class RecordController/* implements ErrorController*/{
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("year", date.getYear());
         modelAndView.addObject("month", date.getMonthValue());
-        modelAndView.addObject("users", users);
+        modelAndView.addObject("workers", workers);
         modelAndView.addObject("products", products);
         modelAndView.setViewName("/cabinet/client/record/index");
         return modelAndView;
@@ -60,13 +63,10 @@ public class RecordController/* implements ErrorController*/{
     /**
      * Календарь для определенного дня
      * */
-    //@RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/product/{productId}/master/{masterId}/", method = RequestMethod.GET)
     @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/", method = RequestMethod.GET)
     public ModelAndView showDailyCalendar(@PathVariable Integer day,
                                           @PathVariable Integer month,
                                           @PathVariable Integer year,
-                                          //@RequestParam(required = false) Integer productId,
-                                          //@RequestParam(required = false) Integer masterId,
                                           Principal principal) {
         //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
         if ( true ) {
@@ -99,11 +99,11 @@ public class RecordController/* implements ErrorController*/{
      * Календарь для определенного дня и услуги
      * */
     @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/product/{productId}/", method = RequestMethod.GET)
-    public ModelAndView showDailyCalendar(@PathVariable Integer day,
-                                          @PathVariable Integer month,
-                                          @PathVariable Integer year,
-                                          @PathVariable Integer productId,
-                                          Principal principal) {
+    public ModelAndView showDailyCalendarByProduct(@PathVariable Integer day,
+                                                   @PathVariable Integer month,
+                                                   @PathVariable Integer year,
+                                                   @PathVariable Integer productId,
+                                                   Principal principal) {
         //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
         if ( true ) {
             User ownerUser = userService.findUserByEmail(principal.getName());
@@ -119,11 +119,12 @@ public class RecordController/* implements ErrorController*/{
             User client = new User();
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
             modelAndView.addObject("client", client);
+            modelAndView.addObject("workers" , workersAdapter);
+            modelAndView.addObject("products" , products);
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
             return modelAndView;
         } else {
@@ -133,7 +134,45 @@ public class RecordController/* implements ErrorController*/{
 
 
     /**
-     * Форма записи клиента
+     * Календарь для определенного дня и пользователя
+     * */
+    @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/worker/{workerId}/", method = RequestMethod.GET)
+    public ModelAndView showDailyCalendarByUser(@PathVariable Integer day,
+                                                @PathVariable Integer month,
+                                                @PathVariable Integer year,
+                                                @PathVariable Integer workerId,
+                                                Principal principal) {
+        //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
+        if ( true ) {
+            User ownerUser = userService.findUserByEmail(principal.getName());
+
+            LocalDate date = LocalDate.of(year, month, day);
+            User worker = userService.findUserById(workerId);
+            Set<User> workers = new HashSet<>();
+            workers.add(worker);
+            Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
+
+            Set<Product> products = productService.findProductsByWorker(worker);
+
+            User client = new User();
+
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("day", day);
+            modelAndView.addObject("month", month);
+            modelAndView.addObject("year", year);
+            modelAndView.addObject("client", client);
+            modelAndView.addObject("workers" , workersAdapter);
+            modelAndView.addObject("products" , products);
+            modelAndView.setViewName("cabinet/client/record/dailycalendar");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Простая Форма записи клиента
      * */
     @RequestMapping(value="/cabinet/clients/record/add/", method = RequestMethod.GET)
     public ModelAndView addClientRecord(Principal principal) {

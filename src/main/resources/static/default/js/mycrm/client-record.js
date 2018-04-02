@@ -10,17 +10,16 @@ $(document).ready(
                 var month = parseInt($('#monthInput').val());
                 var year = parseInt($('#yearInput').val());
                 var productId = parseInt($('#productId').val());
-                var masterId = parseInt($('#userId').val());
+                var workerId = parseInt($('#workerId').val());
 
                 var url = "/cabinet/clients/record-day/";
                 if ( !isNaN(day) && !isNaN(month) && !isNaN(year) ) {
                     url += + day + "/" + month + "/" + year + "/";
                 }
-                if ( !isNaN(productId) ) {
+                if ( !isNaN(workerId) ) {
+                    url += "worker/" + workerId + "/";
+                } else if ( !isNaN(productId) ) {
                     url += "product/" + productId + "/";
-                }
-                if ( !isNaN(masterId) ) {
-                    url += "master/" + masterId + "/";
                 }
 
                 $(location).attr(
@@ -71,9 +70,9 @@ $(document).ready(
             }
         );
 
-        $('#userId').change (
+        $('#workerId').change (
             function () {
-                //var userId = parseInt($('#userId').val());
+                //var workerId = parseInt($('#workerId').val());
                 showCalendar();
             }
         );
@@ -88,7 +87,7 @@ function showCalendar() {
             year: $('#yearInput').val(),
             month: $('#monthInput').val(),
             productId: $('#productId').val(),
-            userId: $('#userId').val()
+            workerId: $('#workerId').val()
         },
         function(data) {
             //fill calendar with users schedule
@@ -138,10 +137,10 @@ function changeUserSelectList() {
             productId: $('#productId').val(),
         },
         function(data) {
-            $('#userId').html('');
-            $('#userId').append('<option value="">-- Все мастера --</option>');
+            $('#workerId').html('');
+            $('#workerId').append('<option value="">-- Все мастера --</option>');
             $.each(data, function(key, item) {
-                $('#userId').append('<option value="' + item.id + '">' + item.name + ' ' + item.sirname + '</option>');
+                $('#workerId').append('<option value="' + item.id + '">' + item.name + ' ' + item.sirname + '</option>');
             });
         }
     );

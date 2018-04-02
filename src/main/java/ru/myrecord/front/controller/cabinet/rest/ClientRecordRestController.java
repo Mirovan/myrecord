@@ -47,20 +47,20 @@ public class ClientRecordRestController {
     public List<CalendarAdapter> getCalendar(@RequestParam(required = false) Integer year,
                                              @RequestParam(required = false) Integer month,
                                              @RequestParam(required = false) Integer productId,
-                                             @RequestParam(required = false) Integer userId,
+                                             @RequestParam(required = false) Integer workerId,
                                              Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
         List<CalendarAdapter> calendar = null;
-        if (productId != null && userId != null) {
-            User worker = userService.findUserById(userId);
+        if (productId != null && workerId != null) {
+            User worker = userService.findUserById(workerId);
             calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
         } else if (productId != null) {
             Product product = productService.findProductById(productId);
             calendar = clientRecordService.getMonthCalendar(year, month, product, ownerUser);
-        } else if (userId != null) {
-            User worker = userService.findUserById(userId);
+        } else if (workerId != null) {
+            User worker = userService.findUserById(workerId);
             calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
         } else {
             calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);

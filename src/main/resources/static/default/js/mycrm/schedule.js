@@ -51,7 +51,7 @@ function showSchedule() {
     $.getJSON(
         "/cabinet/users/json-month-schedule/",
         {
-            userId: $('#userInput').val(),
+            workerId: $('#userInput').val(),
             year: $('#yearInput').val(),
             month: $('#monthInput').val()
         },

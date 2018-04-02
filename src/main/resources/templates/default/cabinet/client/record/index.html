@@ -53,9 +53,9 @@
                     </select>
 
                     Мастер:
-                    <select name="userId" id="userId">
+                    <select name="workerId" id="workerId">
                         <option value="">-- Все мастера --</option>
-                        <option th:each="user: ${users}" th:value="${user.id}" th:text="@{${user.name} + ' ' + ${user.sirname}}"></option>
+                        <option th:each="worker: ${workers}" th:value="${worker.id}" th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
                     </select>
                 </div>
 
@@ -92,6 +92,6 @@
     <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
 </div>
 <div th:include="cabinet/inc/js.inc::js"></div>
-<script th:src="@{/static/default/js/mycrm/clientrecord.js}"></script>
+<script th:src="@{/static/default/js/mycrm/client-record.js}"></script>
 </body>
 </html>

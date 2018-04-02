@@ -10,5 +10,6 @@ public interface ProductService {
     void update(Product product);
     Product findProductById(Integer id);
     Set<Product> findProductsByRoom(Room room);
-    Set<Product> findProductsByOwnerUser(User user);
+    Set<Product> findProductsByOwnerUser(User user);    //Поиск всех услуг у сист. пользователя
+    Set<Product> findProductsByWorker(User worker);    //Поиск всех услуг у работника
 }

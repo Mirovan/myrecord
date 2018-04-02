@@ -8,9 +8,6 @@ $(document).ready(
         var now = '';
         now = now.concat(year, '-', month, '-', day);
 
-        //get all data - masters and records
-        var allData = [];
-
         $.getJSON(
             "/cabinet/clients/json-workers-by-date/",
             {
@@ -35,22 +32,6 @@ $(document).ready(
                             resources: workers,
                             events: records
                         });
-                        //get resource - masters
-                        // var masters = [];
-                        // $.each(data, function(key, item) {
-                        //     var master = new Object();
-                        //     master["id"] = item["master"]["id"] + '';
-                        //     master["title"] = item["master"]["name"];
-                        //     masters.push(master);
-                        // });
-                        //
-                        // //get events - user records
-                        // var records = [];
-                        // $.each(data, function(key, item) {
-                        //     var record = Object.assign({}, item);
-                        //     record["resourceId"] = item["master"]["id"] + '';
-                        //     records.push(record);
-                        // });
                     }
                 );
 

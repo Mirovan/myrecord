@@ -1,5 +1,6 @@
 package ru.myrecord.front.controller.cabinet;
 
+import javafx.concurrent.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -76,7 +77,11 @@ public class RecordController/* implements ErrorController*/{
             LocalDate date = LocalDate.of(year, month, day);
             Set<User> workers = userService.findWorkersByDate(date, ownerUser);
             Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
-            Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
+            Set<Product> products = new HashSet<>();
+            for (User worker : workers) {
+                Set<Product> workerProducts = productService.findProductsByWorker(worker);
+                products.addAll(workerProducts);
+            }
 
             User client = new User();
 

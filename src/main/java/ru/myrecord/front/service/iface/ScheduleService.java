@@ -14,5 +14,5 @@ public interface ScheduleService {
     void add(Schedule schedule);
     void removeScheduleByDate(User user, LocalDate date);
     List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser, User user);
-    Set<Schedule> findByDate(LocalDate date);
+    Set<Schedule> findByDate(LocalDate date, User ownerUser);
 }

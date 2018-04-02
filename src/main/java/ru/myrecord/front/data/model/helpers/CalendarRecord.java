@@ -1,7 +1,5 @@
 package ru.myrecord.front.data.model.helpers;
 
-import ru.myrecord.front.data.model.adapters.UserAdapter;
-
 /**
  * Класс для отображения и передачи через JSON в JS-скрипт fullcalendar
  */
@@ -11,15 +9,15 @@ public class CalendarRecord {
     private String start;
     private String end;
     private String allDay;
-    private UserAdapter master;
+    private String resourceId;
 
-    public CalendarRecord(int id, String title, String start, String end, String allDay, UserAdapter master) {
+    public CalendarRecord(int id, String title, String start, String end, String allDay, String resourceId) {
         this.id = id;
         this.title = title;
         this.start = start;
         this.end = end;
         this.allDay = allDay;
-        this.master = master;
+        this.resourceId = resourceId;
     }
 
     public int getId() {
@@ -62,11 +60,11 @@ public class CalendarRecord {
         this.allDay = allDay;
     }
 
-    public UserAdapter getMaster() {
-        return master;
+    public String getResourceId() {
+        return resourceId;
     }
 
-    public void setMaster(UserAdapter master) {
-        this.master = master;
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 }

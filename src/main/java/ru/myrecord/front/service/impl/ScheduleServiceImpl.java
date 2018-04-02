@@ -75,7 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
     @Override
-    public Set<Schedule> findByDate(LocalDate date) {
+    public Set<Schedule> findByDate(LocalDate date, User ownerUser) {
         //Todo: улучшить выборку - добавить еще чтобы выбирал по ownerUser
         return scheduleDAO.findBySdate(date);
     }

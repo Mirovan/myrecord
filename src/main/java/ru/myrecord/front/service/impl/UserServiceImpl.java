@@ -284,7 +284,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<User> findWorkersByDate(LocalDate date, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Set<Schedule> scheduleSet = scheduleService.findByDate(date);
+        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
             User user = schedule.getUser();
             if ( hasUser(ownerUser.getId(), user.getId()) )
@@ -297,7 +297,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<User> findWorkersByDateAndProduct(LocalDate date, Product product, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Set<Schedule> scheduleSet = scheduleService.findByDate(date);
+        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
             User user = schedule.getUser();
             //Если сист. польователь имеет этого раюотника и у раюботника есть этот продукт

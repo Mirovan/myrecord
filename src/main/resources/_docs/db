@@ -132,7 +132,7 @@ CREATE TABLE "user_product_salary" (
 ALTER SEQUENCE user_product_salary_id_seq owned by "user_product_salary".id;
 
 
-/*Запись пользователя*/
+/*Запись клиента*/
 CREATE SEQUENCE client_record_id_seq START WITH 1;
 
 CREATE TABLE "client_record" (
@@ -153,3 +153,24 @@ CREATE TABLE "client_record_product" (
 	sdate TIMESTAMP
 );
 ALTER SEQUENCE client_record_product_id_seq owned by "client_record_product".id;
+
+
+/*Оплата услуг*/
+CREATE SEQUENCE payment_id_seq START WITH 1;
+
+CREATE TABLE "payment" (
+    id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
+    client_record_id INTEGER REFERENCES "client_record"(id),
+	active BOOLEAN DEFAULT TRUE
+);
+ALTER SEQUENCE client_record_id_seq owned by "client_record".id;
+
+
+CREATE SEQUENCE payment_product_id_seq START WITH 1;
+
+CREATE TABLE "payment_product" (
+    id INTEGER NOT NULL default nextval('payment_product_id_seq') PRIMARY KEY,
+    product_id INTEGER REFERENCES "product"(id),
+    price INTEGER DEFAULT 0
+);
+ALTER SEQUENCE payment_product_id_seq owned by "payment_product".id;

@@ -2,6 +2,7 @@ package ru.myrecord.front.controller.cabinet;
 
 import javafx.concurrent.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -211,10 +212,9 @@ public class RecordController/* implements ErrorController*/{
         if ( true ) {
             //ToDo: принадлежит сист.пользователю продуктЫ, клиент
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            LocalDateTime recordDateTime = LocalDateTime.parse(sdate, formatter);
-            formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate recordDate = LocalDate.parse(sdate, formatter);
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            LocalDateTime recordDateTime = LocalDateTime.parse(sdate, timeFormatter);
+            LocalDate recordDate = LocalDate.parse(sdate, timeFormatter);
 
             User ownerUser = userService.findUserByEmail(principal.getName());
             ClientRecord clientRecord = new ClientRecord(client, recordDate);

@@ -5,10 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Controller
 public class PaymentController/* implements ErrorController*/{
@@ -31,11 +34,16 @@ public class PaymentController/* implements ErrorController*/{
 
     @RequestMapping(value="/cabinet/clients/payment", method = RequestMethod.GET)
     public ModelAndView index(Principal principal) {
-        User user = userService.findUserByEmail( principal.getName() );
+        LocalDate date = LocalDate.now();
+        Set<ClientRecord> clientRecords = clientRecordService.findByDate(date);
+
+        for (ClientRecord item : clientRecords) {
+            User user = new User(item.getUser().getId(), item.getUser().getName(), item.getUser().getSirname());
+            item.setUser(user);
+        }
+
         ModelAndView modelAndView = new ModelAndView();
-
-        //clientRecordService.
-
+        modelAndView.addObject("records", clientRecords);
         modelAndView.setViewName("cabinet/client/payment/index");
         return modelAndView;
     }

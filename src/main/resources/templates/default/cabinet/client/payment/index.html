@@ -25,7 +25,10 @@
                         </div>
                         <div class="card-body">
 
-
+                            <div th:each="record: ${records}">
+                                - <span th:text="@{${record.user.name} + ' ' + ${record.user.sirname}}"></span>
+                                <br />
+                            </div>
 
                         </div>
                     </div>

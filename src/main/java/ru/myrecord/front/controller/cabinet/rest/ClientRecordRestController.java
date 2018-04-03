@@ -11,8 +11,8 @@ import ru.myrecord.front.data.model.entities.ClientRecordProduct;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Schedule;
 import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.data.model.helpers.CalendarRecord;
-import ru.myrecord.front.data.model.helpers.CalendarWorker;
+import ru.myrecord.front.data.model.adapters.CalendarRecord;
+import ru.myrecord.front.data.model.adapters.CalendarWorker;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
@@ -94,9 +94,9 @@ public class ClientRecordRestController {
      * */
     @RequestMapping(value="/cabinet/clients/json-records-by-date/", method = RequestMethod.GET)
     public Set<CalendarRecord> getRecordsByDate(Integer day,
-                                                      Integer month,
-                                                      Integer year,
-                                                      Principal principal) {
+                                                Integer month,
+                                                Integer year,
+                                                Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<CalendarRecord> calendarMap = new HashSet<>();
 

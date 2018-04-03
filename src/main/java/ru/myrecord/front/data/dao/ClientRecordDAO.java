@@ -4,6 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.entities.ClientRecord;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 @Repository("clientRecordDAO")
 public interface ClientRecordDAO extends JpaRepository<ClientRecord, Integer> {
+    Set<ClientRecord> findBySdate(LocalDate sdate);
 }

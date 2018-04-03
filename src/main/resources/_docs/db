@@ -138,6 +138,7 @@ CREATE SEQUENCE client_record_id_seq START WITH 1;
 CREATE TABLE "client_record" (
     id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
     user_id INTEGER REFERENCES "users"(id),
+	sdate TIMESTAMP,
 	active BOOLEAN DEFAULT TRUE
 );
 ALTER SEQUENCE client_record_id_seq owned by "client_record".id;
@@ -161,6 +162,7 @@ CREATE SEQUENCE payment_id_seq START WITH 1;
 CREATE TABLE "payment" (
     id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
     client_record_id INTEGER REFERENCES "client_record"(id),
+    ispaid BOOLEAN DEFAULT FALSE,
 	active BOOLEAN DEFAULT TRUE
 );
 ALTER SEQUENCE client_record_id_seq owned by "client_record".id;

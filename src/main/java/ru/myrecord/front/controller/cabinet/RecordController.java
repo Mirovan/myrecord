@@ -212,10 +212,12 @@ public class RecordController/* implements ErrorController*/{
             //ToDo: принадлежит сист.пользователю продуктЫ, клиент
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            LocalDateTime recordDate = LocalDateTime.parse(sdate, formatter);
+            LocalDateTime recordDateTime = LocalDateTime.parse(sdate, formatter);
+            formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate recordDate = LocalDate.parse(sdate, formatter);
 
             User ownerUser = userService.findUserByEmail(principal.getName());
-            ClientRecord clientRecord = new ClientRecord(client);
+            ClientRecord clientRecord = new ClientRecord(client, recordDate);
             clientRecord = clientRecordService.add(clientRecord, ownerUser);
 
             ClientRecordProduct clientRecordProduct = new ClientRecordProduct();
@@ -224,7 +226,7 @@ public class RecordController/* implements ErrorController*/{
             clientRecordProduct.setProduct(product);
             User master = userService.findUserById(masterId);
             clientRecordProduct.setMaster(master);
-            clientRecordProduct.setSdate(recordDate);
+            clientRecordProduct.setSdate(recordDateTime);
             clientRecordProductService.add(clientRecordProduct);
 
             return new ModelAndView("redirect:/cabinet/clients/record/");

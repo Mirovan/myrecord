@@ -1,6 +1,10 @@
 package ru.myrecord.front.data.model.entities;
 
+import ru.myrecord.front.Utils.LocalDateConverter;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 /**
  * Запись клиента
@@ -17,6 +21,11 @@ public class ClientRecord {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "sdate", columnDefinition = "DATE")
+    @NotNull
+    @Convert(converter = LocalDateConverter.class)
+    private LocalDate sdate;
 
     @Column(name = "active")
     private Boolean active;
@@ -37,6 +46,14 @@ public class ClientRecord {
         this.user = user;
     }
 
+    public LocalDate getSdate() {
+        return sdate;
+    }
+
+    public void setSdate(LocalDate sdate) {
+        this.sdate = sdate;
+    }
+
     public Boolean getActive() {
         return active;
     }
@@ -45,11 +62,13 @@ public class ClientRecord {
         this.active = active;
     }
 
-    public ClientRecord() {
-        super();
+    public ClientRecord(User user, LocalDate sdate) {
+        this.user = user;
+        this.sdate = sdate;
+        this.active = true;
     }
 
-    public ClientRecord(User user) {
-        this.user = user;
+    public ClientRecord() {
+        super();
     }
 }

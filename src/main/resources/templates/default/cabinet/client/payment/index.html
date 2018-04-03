@@ -25,10 +25,28 @@
                         </div>
                         <div class="card-body">
 
-                            <div th:each="record: ${records}">
-                                - <span th:text="@{${record.user.name} + ' ' + ${record.user.sirname}}"></span>
-                                <br />
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Клиент</th>
+                                        <th>Оплата</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="record, iterator : ${records}">
+                                        <th scope="row" th:text="@{${iterator.index} + 1}"></th>
+                                        <td>
+                                            <span th:text="@{${record.user.name} + ' ' + ${record.user.sirname}}"></span>
+                                        </td>
+                                        <td><a th:href="@{'/cabinet/clients/payments/' + ${record.user.id} + '/pay/'}">Оплатить</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
+
 
                         </div>
                     </div>

@@ -30,6 +30,8 @@ public class ClientRecord {
     @Column(name = "active")
     private Boolean active;
 
+    //ToDo: сделать линковку на ClientRecordProduct
+
     public Integer getId() {
         return id;
     }

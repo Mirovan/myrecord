@@ -52,8 +52,7 @@ public class UserController/* implements ErrorController*/{
     public ModelAndView showUsers(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "users", userService.findUsersByOwner(user));
-        System.out.println("users = " + userService.findUsersByOwner(user));
+        modelAndView.addObject( "users", userService.findWorkersByOwner(user));
         modelAndView.setViewName("cabinet/user/index");
         return modelAndView;
     }
@@ -313,72 +312,5 @@ public class UserController/* implements ErrorController*/{
         }
     }
 
-
-    /**
-     * Форма отображение расписания пользователя
-     * */
-    @RequestMapping(value="/cabinet/users/{userId}/schedule/", method = RequestMethod.GET)
-    public ModelAndView showSchedule(@PathVariable Integer userId, Principal principal) {
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) ) {
-            ModelAndView modelAndView = new ModelAndView();
-            LocalDate date = LocalDate.now();
-            modelAndView.addObject("year", date.getYear());
-            modelAndView.addObject("month", date.getMonthValue());
-            modelAndView.addObject("userId", userId);
-            modelAndView.setViewName("cabinet/user/schedule/index");
-            return modelAndView;
-        } else {
-            return new ModelAndView("redirect:/cabinet/");
-        }
-    }
-
-
-    /**
-     * Сохранение/Изменение расписания пользователя
-     * */
-    @RequestMapping(value="/cabinet/users/saveschedule/", method = RequestMethod.POST)
-    public ModelAndView saveSchedule(@RequestParam Integer userId,
-                                     @RequestParam Integer year,
-                                     @RequestParam Integer month,
-                                     @RequestParam(value="dates[]", required = false) List<String> dates,
-                                     Principal principal) {
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) ) {
-            User user = userService.findUserById(userId);
-            LocalDate localDate = LocalDate.of(year, month, 1); //текущая дата полученого года и месяца
-            int lastMonthDay = localDate.lengthOfMonth();   //последний день месяца
-
-            //Перебираем все дни полученного месяца
-            for (int i=1; i<=lastMonthDay; i++) {
-                LocalDate date = LocalDate.of(year, month, i);  //создаем i-й день
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                String formattedDate = date.format(formatter);  //получаем строковое значение q-й даты
-
-                //Если i-я дата пришла в списке - пытаемся её добавить в БД
-                if ( dates.contains(formattedDate) ) {
-                    //Создем объект - день расписания
-                    Schedule schedule = new Schedule();
-                    schedule.setUser(user);
-                    schedule.setSdate(date);
-
-                    //Защита - чтобы левые данные не добавляли, а только этого месяца
-                    if ( date.getMonthValue() == month && date.getYear() == year ) {
-                        //Определяем есть ли такая запись уже в БД
-                        Schedule existSchedule = scheduleService.findByUserAndSdate(user, date);
-                        if ( existSchedule == null ) {  //Такой записи нет - добавляем
-                            scheduleService.add(schedule);
-                        }
-                    }
-                } else {    //Пытаемся удалить i-ю дату из БД
-                    scheduleService.removeScheduleByDate(user, date);
-                }
-            }
-
-            return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/schedule/");
-        } else {
-            return new ModelAndView("redirect:/cabinet/users/");
-        }
-    }
 
 }

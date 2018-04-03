@@ -3,12 +3,12 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
 <style>
-    #scheduleContainer td {
+    #monthCalendarContainerTable td {
         background: white;
         cursor: pointer;
         padding: 2px
     }
-    #scheduleContainer td.red-cell {
+    #monthCalendarContainerTable td.red-cell {
         background: #F00; /* Or some other color */
     }
 </style>
@@ -53,10 +53,7 @@
                                 </form>
                             </div>
 
-                            <table id="scheduleContainer" style="margin: 10px;" border="1"></table>
-
-                            <br /><br />
-                            <div id="userScheduleContainer" style="margin: 10px;" border="1"></div>
+                            <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
 
                         </div>
                     </div>
@@ -68,7 +65,7 @@
     <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
 </div>
 <div th:include="cabinet/inc/js.inc::js"></div>
-<script th:src="@{/static/default/js/schedule.js}"></script>
+<script th:src="@{/static/default/js/mycrm/schedule.js}"></script>
 </body>
 </html>
 

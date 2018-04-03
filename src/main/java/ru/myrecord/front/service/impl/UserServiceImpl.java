@@ -14,7 +14,9 @@ import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserProductService userProductService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -83,6 +88,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public Set<User> findWorkersByOwner(User ownerUser) {
+        return findUsersByOwner(ownerUser)
+                .stream()
+                .filter(user -> user.getRoles().contains(roleService.findRoleByName("MASTER")))
+                .collect(Collectors.toSet());
+    }
+
+
+    @Override
     public User findUserById(Integer id) {
         User user = userDAO.findById(id);
         if (user != null) {
@@ -99,12 +113,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<UserAdapter> getUserAdapterCollection(Set<User> users) {
         Set<UserAdapter> userAdapterColection = new HashSet<>();
-        for (User user: users) {
-            userAdapterColection.add(new UserAdapter(user));
+        if (users != null) {
+            for (User user : users) {
+                userAdapterColection.add(getUserAdapter(user));
+            }
         }
         return userAdapterColection;
     }
 
+
+    @Override
+    public UserAdapter getUserAdapter(User user) {
+        return new UserAdapter(user);
+    }
 
     /**
      * Получение ролей для системного пользователя
@@ -252,4 +273,62 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
+
+
+    @Override
+    public String generatePassword(String password) {
+        return bCryptPasswordEncoder.encode(password);
+    }
+
+
+    @Override
+    public Set<User> findWorkersByDate(LocalDate date, User ownerUser) {
+        Set<User> res = new HashSet<>();
+        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
+        for (Schedule schedule : scheduleSet ) {
+            User user = schedule.getUser();
+            if ( hasUser(ownerUser.getId(), user.getId()) )
+                res.add( user );
+        }
+        return res;
+    }
+
+
+    @Override
+    public Set<User> findWorkersByDateAndProduct(LocalDate date, Product product, User ownerUser) {
+        Set<User> res = new HashSet<>();
+        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
+        for (Schedule schedule : scheduleSet ) {
+            User user = schedule.getUser();
+            //Если сист. польователь имеет этого раюотника и у раюботника есть этот продукт
+            if ( hasUser(ownerUser.getId(), user.getId()) && isWorkerDoProduct(user, product.getId()) )
+                res.add( user );
+        }
+        return res;
+    }
+
+
+    @Override
+    public Boolean isWorkerDoProduct(User user, Integer productId) {
+        Set<UserProduct> userProducts = userProductService.findByUserActiveLink(user);
+        for (UserProduct up : userProducts) {
+            if ( up.getProduct().getId().equals(productId) )
+                return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public Set<User> findWorkersByProduct(Product product) {
+        Set<User> users = new HashSet<>();
+        Set<UserProduct> userProducts = userProductService.findByProductActiveLink(product);
+        if (userProducts != null) {
+            for (UserProduct up : userProducts) {
+                users.add(up.getUser());
+            }
+        }
+        return users;
+    }
+
 }

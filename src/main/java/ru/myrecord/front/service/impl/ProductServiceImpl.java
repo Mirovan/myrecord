@@ -9,8 +9,12 @@ import ru.myrecord.front.data.dao.ProductDAO;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Room;
 import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.entities.UserProduct;
 import ru.myrecord.front.service.iface.ProductService;
+import ru.myrecord.front.service.iface.RoomService;
+import ru.myrecord.front.service.iface.UserProductService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service("productService")
@@ -22,16 +26,16 @@ public class ProductServiceImpl implements ProductService {
     @Qualifier("productDAO")
     private ProductDAO productDAO;
 
+    @Autowired
+    private RoomService roomService;
+
+    @Autowired
+    private UserProductService userProductService;
+
     @Override
     public Product findProductById(Integer id) {
         return productDAO.findById(id);
     }
-
-//    @Override
-//    public Set<Product> findProductsByUser(User ownerUser) {
-//        //return productDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
-//        return null;
-//    }
 
     @Override
     public Set<Product> findProductsByRoom(Room room) {
@@ -48,4 +52,19 @@ public class ProductServiceImpl implements ProductService {
         productDAO.save(product);
     }
 
+    @Override
+    public Set<Product> findProductsByOwnerUser(User ownerUser) {
+        Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
+        return productDAO.findByRoomInAndActiveTrueOrderByIdAsc(rooms);
+    }
+
+    @Override
+    public Set<Product> findProductsByWorker(User worker) {
+        Set<UserProduct> userProducts = userProductService.findByUserActiveLink(worker);
+        Set<Product> products = new HashSet<>();
+        for (UserProduct up : userProducts) {
+            products.add(up.getProduct());
+        }
+        return products;
+    }
 }

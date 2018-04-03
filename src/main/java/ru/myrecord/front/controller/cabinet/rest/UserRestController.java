@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
 import ru.myrecord.front.service.iface.ProductService;
@@ -12,6 +13,7 @@ import ru.myrecord.front.service.iface.ScheduleService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,23 +63,25 @@ public class UserRestController {
      * Запрос расписания
      * */
     @RequestMapping(value="/cabinet/users/json-month-schedule/", method = RequestMethod.GET)
-    public ScheduleAdapter getScheduleData(Integer userId, Integer year, Integer month, Principal principal) {
-        User user = userService.findUserById(userId);
+    public List<CalendarAdapter> getCalendar(Integer workerId, Integer year, Integer month, Principal principal) {
+        User user = userService.findUserById(workerId);
         User ownerUser = user.getOwnerUser();
 
-        ScheduleAdapter userMonthSchedule = new ScheduleAdapter();
+        List<CalendarAdapter> calendar = scheduleService.getMonthCalendar(year, month, ownerUser, user);
+
+        //ScheduleAdapter userMonthSchedule = new ScheduleAdapter();
 
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            userMonthSchedule.setScheduleAll( scheduleService.getMonthSchedule(year, month) );  //Получаем список - месячный календарь
-            userMonthSchedule.setUserSchedule( scheduleService.findByUser(user) );  //Получаем расписание пользователя
+            //userMonthSchedule.setScheduleAll( scheduleService.getMonthCalendar(year, month) );  //Получаем список - месячный календарь
+            //userMonthSchedule.setUserSchedule( scheduleService.findByUser(user) );  //Получаем расписание пользователя
         //}
-        return userMonthSchedule;
+        return calendar;
     }
 
 
     /**
-     * Запрос пользователей для текущего сис.пользователя
+     * Запрос работников для текущего сис.пользователя
      * */
     @RequestMapping(value="/cabinet/users/json-users/", method = RequestMethod.GET)
     public Set<User> getUsers(Integer userId, Principal principal) {
@@ -87,7 +91,7 @@ public class UserRestController {
         Set<User> users = null;
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
-            users = userService.findUsersByOwner(user);
+            users = userService.findWorkersByOwner(user);
         //}
         return users;
     }

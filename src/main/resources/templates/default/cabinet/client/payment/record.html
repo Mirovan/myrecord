@@ -36,19 +36,28 @@
                                     <strong>Дата</strong>
                                     <span th:text="${record.date}"></span>
                                 </div>
-                                <div id="payment-products" class="form-group">
-                                    <label class="col-sm-2 form-control-label">Услуга</label>
-                                    <div class="col-sm-4">
+
+                                <div id="payment-products">
+                                    <div class="row">
+                                        <strong>Услуга</strong>
                                         <select name="products[]">
                                             <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
                                         </select>
+                                        <strong>Стоимость</strong>
+                                        <div class="col-md-2">
+                                            <input name="price[]" class="form-control" type="text" />
+                                        </div>
                                     </div>
-                                    <label class="col-sm-2 form-control-label">Стоимость</label>
-                                    <input type="text" name="price[]" class="form-control" />
                                 </div>
+
+                                <div><br /><br /></div>
+
                                 <div class="form-group">
                                     <a id="addProduct" href="#">Добавить услугу</a>
                                 </div>
+
+                                <div><br /><br /></div>
+
                                 <div class="form-group">
                                     <input value="Зачислить оплату" class="btn btn-primary" type="submit" />
                                 </div>
@@ -66,6 +75,6 @@
     <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
 </div>
 <div th:include="cabinet/inc/js.inc::js"></div>
-<script src='/static/default/js/mycrm/payment-products.js'></script>
+<script src="/static/default/js/mycrm/payment-products.js"></script>
 </body>
 </html>

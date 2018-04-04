@@ -201,15 +201,15 @@ public class RecordController/* implements ErrorController*/{
     public ModelAndView editClientRecordPost(User client,
                                              Integer productId,
                                              Integer masterId,
-                                             String sdate,
+                                             String date,
                                              Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( true ) {
             //ToDo: принадлежит сист.пользователю продуктЫ, клиент
 
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            LocalDateTime recordDateTime = LocalDateTime.parse(sdate, timeFormatter);
-            LocalDate recordDate = LocalDate.parse(sdate, timeFormatter);
+            LocalDateTime recordDateTime = LocalDateTime.parse(date, timeFormatter);
+            LocalDate recordDate = LocalDate.parse(date, timeFormatter);
 
             User ownerUser = userService.findUserByEmail(principal.getName());
             ClientRecord clientRecord = new ClientRecord(client, recordDate);

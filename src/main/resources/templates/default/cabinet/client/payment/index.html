@@ -41,7 +41,7 @@
                                         <td>
                                             <span th:text="@{${record.user.name} + ' ' + ${record.user.sirname}}"></span>
                                         </td>
-                                        <td><a th:href="@{'/cabinet/clients/payments/' + ${record.user.id} + '/pay/'}">Оплатить</a></td>
+                                        <td><a th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}">Оплатить</a></td>
                                     </tr>
                                     </tbody>
                                 </table>

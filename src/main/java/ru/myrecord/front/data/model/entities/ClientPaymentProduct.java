@@ -3,7 +3,7 @@ package ru.myrecord.front.data.model.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product")
+@Table(name = "client_payment_product")
 public class ClientPaymentProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,9 +17,9 @@ public class ClientPaymentProduct {
     @JoinColumn(name = "payment_id")
     private ClientPayment clientPayment;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "product_id")
-//    private Product product;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(name = "price")
     private Integer price;

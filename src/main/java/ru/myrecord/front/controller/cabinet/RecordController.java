@@ -1,14 +1,10 @@
 package ru.myrecord.front.controller.cabinet;
 
-import javafx.concurrent.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
@@ -19,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -221,7 +216,7 @@ public class RecordController/* implements ErrorController*/{
             clientRecord = clientRecordService.add(clientRecord, ownerUser);
 
             ClientRecordProduct clientRecordProduct = new ClientRecordProduct();
-            clientRecordProduct.setRecord(clientRecord);
+            clientRecordProduct.setClientRecord(clientRecord);
             Product product = productService.findProductById(productId);
             clientRecordProduct.setProduct(product);
             User master = userService.findUserById(masterId);

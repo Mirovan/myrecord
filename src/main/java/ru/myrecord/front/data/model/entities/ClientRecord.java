@@ -1,10 +1,12 @@
 package ru.myrecord.front.data.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.myrecord.front.Utils.LocalDateConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Запись клиента
@@ -25,12 +27,14 @@ public class ClientRecord {
     @Column(name = "sdate", columnDefinition = "DATE")
     @NotNull
     @Convert(converter = LocalDateConverter.class)
-    private LocalDate sdate;
+    private LocalDate date;
 
     @Column(name = "active")
     private Boolean active;
 
-    //ToDo: сделать линковку на ClientRecordProduct
+    @OneToMany(mappedBy = "clientRecord", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ClientRecordProduct> clientRecordProducts;
 
     public Integer getId() {
         return id;
@@ -48,12 +52,12 @@ public class ClientRecord {
         this.user = user;
     }
 
-    public LocalDate getSdate() {
-        return sdate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setSdate(LocalDate sdate) {
-        this.sdate = sdate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Boolean getActive() {
@@ -64,9 +68,17 @@ public class ClientRecord {
         this.active = active;
     }
 
-    public ClientRecord(User user, LocalDate sdate) {
+    public List<ClientRecordProduct> getClientRecordProducts() {
+        return clientRecordProducts;
+    }
+
+    public void setClientRecordProducts(List<ClientRecordProduct> clientRecordProducts) {
+        this.clientRecordProducts = clientRecordProducts;
+    }
+
+    public ClientRecord(User user, LocalDate date) {
         this.user = user;
-        this.sdate = sdate;
+        this.date = date;
         this.active = true;
     }
 

@@ -100,7 +100,7 @@ CREATE SEQUENCE schedule_id_seq START WITH 1;
 CREATE TABLE "schedule" (
     id INTEGER NOT NULL default nextval('schedule_id_seq') PRIMARY KEY,
     user_id INTEGER,
-	sdate TIMESTAMP
+	date TIMESTAMP
 );
 ALTER SEQUENCE schedule_id_seq owned by "schedule".id;
 
@@ -138,7 +138,7 @@ CREATE SEQUENCE client_record_id_seq START WITH 1;
 CREATE TABLE "client_record" (
     id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
     user_id INTEGER REFERENCES "users"(id),
-	sdate TIMESTAMP,    /*дата записи*/
+	date TIMESTAMP,    /*дата записи*/
 	active BOOLEAN DEFAULT TRUE
 );
 ALTER SEQUENCE client_record_id_seq owned by "client_record".id;
@@ -151,7 +151,7 @@ CREATE TABLE "client_record_product" (
     record_id INTEGER REFERENCES "client_record"(id),
     product_id INTEGER REFERENCES "product"(id),
     master_id INTEGER REFERENCES "users"(id),
-	sdate TIMESTAMP     /*дата и время записи*/
+	date TIMESTAMP     /*дата и время записи*/
 );
 ALTER SEQUENCE client_record_product_id_seq owned by "client_record_product".id;
 

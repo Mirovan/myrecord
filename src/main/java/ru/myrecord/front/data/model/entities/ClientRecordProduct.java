@@ -3,7 +3,6 @@ package ru.myrecord.front.data.model.entities;
 import ru.myrecord.front.Utils.LocalDateTimeConverter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +15,7 @@ public class ClientRecordProduct {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "record_id")
-    private ClientRecord record;
+    private ClientRecord clientRecord;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
@@ -38,12 +37,12 @@ public class ClientRecordProduct {
         this.id = id;
     }
 
-    public ClientRecord getRecord() {
-        return record;
+    public ClientRecord getClientRecord() {
+        return clientRecord;
     }
 
-    public void setRecord(ClientRecord record) {
-        this.record = record;
+    public void setClientRecord(ClientRecord clientRecord) {
+        this.clientRecord = clientRecord;
     }
 
     public Product getProduct() {

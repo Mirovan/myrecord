@@ -66,8 +66,13 @@ public class ClientRecordServiceImpl implements ClientRecordService {
 
 
     @Override
+    public ClientRecord findById(Integer id) {
+        return clientRecordDAO.findById(id);
+    }
+
+    @Override
     public Set<ClientRecord> findByDate(LocalDate date) {
-        return clientRecordDAO.findBySdate(date);
+        return clientRecordDAO.findByDate(date);
     }
 
 

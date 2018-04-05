@@ -47,12 +47,13 @@
                                             <a href="" class="btn btn-primary"
                                                th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}"
                                                th:if="${(record.clientPayment == null) or (record.clientPayment != null and record.clientPayment.getPaid() == false)}">Оплатить</a>
-                                            <span href=""
-                                               th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}"
+                                            <span
                                                th:if="${record.clientPayment != null and record.clientPayment.getPaid() == true}">Оплачено</span>
                                         </td>
                                         <td>
-                                            <a href="">Оказанные услуги</a>
+                                            <a href=""
+                                                th:href="@{'/cabinet/clients/payment/' + ${record.clientPayment.id} + '/products/'}"
+                                                th:if="${record.clientPayment != null and record.clientPayment.getPaid() == true}">Оказанные услуги</a>
                                         </td>
                                     </tr>
                                     </tbody>

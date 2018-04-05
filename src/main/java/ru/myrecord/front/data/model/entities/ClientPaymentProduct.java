@@ -49,14 +49,6 @@ public class ClientPaymentProduct {
         this.product = product;
     }
 
-    public User getWorker() {
-        return worker;
-    }
-
-    public void setWorker(User worker) {
-        this.worker = worker;
-    }
-
     public Integer getPrice() {
         return price;
     }
@@ -65,10 +57,19 @@ public class ClientPaymentProduct {
         this.price = price;
     }
 
-    public ClientPaymentProduct(ClientPayment clientPayment, Product product, Integer price) {
+    public User getWorker() {
+        return worker;
+    }
+
+    public void setWorker(User worker) {
+        this.worker = worker;
+    }
+
+    public ClientPaymentProduct(ClientPayment clientPayment, Product product, Integer price, User worker) {
         this.clientPayment = clientPayment;
         this.product = product;
         this.price = price;
+        this.worker = worker;
     }
 
     public ClientPaymentProduct() {

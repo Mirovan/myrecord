@@ -27,4 +27,9 @@ public class ClientPaymentServiceImpl implements ClientPaymentService {
     public ClientPayment update(ClientPayment clientPayment) {
         return clientPaymentDAO.save(clientPayment);
     }
+
+    @Override
+    public ClientPayment findById(Integer id) {
+        return clientPaymentDAO.findById(id);
+    }
 }

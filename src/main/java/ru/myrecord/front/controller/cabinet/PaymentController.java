@@ -12,6 +12,7 @@ import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -69,10 +70,12 @@ public class PaymentController/* implements ErrorController*/{
         ClientRecord clientRecord = clientRecordService.findById(recordId);
 
         Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
+        Set<User> workers = userService.findWorkersByOwner(ownerUser);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("record", clientRecord);
         modelAndView.addObject("products", products);
+        modelAndView.addObject("workers", workers);
         modelAndView.setViewName("cabinet/client/payment/record");
         return modelAndView;
     }
@@ -85,6 +88,7 @@ public class PaymentController/* implements ErrorController*/{
     public ModelAndView showPaymentFormPost(@RequestParam(required = false) Integer recordId,
                                             @RequestParam(value="products[]", required = false) List<Integer> products,
                                             @RequestParam(value="prices[]", required = false) List<Integer> prices,
+                                            @RequestParam(value="workers[]", required = false) List<Integer> workers,
                                             Principal principal) {
         //ToDo: сделать проверку на принадлежность продукта сист пользователю
 
@@ -95,7 +99,8 @@ public class PaymentController/* implements ErrorController*/{
 
         for (int i=0; i<products.size(); i++) {
             Product product = productService.findProductById(products.get(i));
-            ClientPaymentProduct clientRecordProduct = new ClientPaymentProduct(clientPayment, product, prices.get(i));
+            User worker = userService.findUserById(workers.get(i));
+            ClientPaymentProduct clientRecordProduct = new ClientPaymentProduct(clientPayment, product, prices.get(i), worker);
             clientPaymentProductService.add(clientRecordProduct);
         }
 
@@ -105,5 +110,30 @@ public class PaymentController/* implements ErrorController*/{
         return( new ModelAndView("redirect:/cabinet/clients/payment/") );
     }
 
+
+    /**
+     * Страница оказанных услуг
+     * */
+    @RequestMapping(value="/cabinet/clients/payment/{paymentId}/products/", method = RequestMethod.GET)
+    public ModelAndView showPaymentProducts(@PathVariable Integer paymentId, Principal principal) {
+        User ownerUser = userService.findUserByEmail(principal.getName());
+        ClientPayment clientPayment = clientPaymentService.findById(paymentId);
+        LocalDate date = clientPayment.getClientRecord().getDate();
+        User client = clientPayment.getClientRecord().getUser();
+        List<ClientPaymentProduct> clientPaymentProducts = clientPayment.getClientPaymentProducts();
+
+        int paymentSum = 0;
+        for (ClientPaymentProduct item : clientPaymentProducts) {
+            paymentSum += item.getPrice();
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("date", date);
+        modelAndView.addObject("paymentSum", paymentSum);
+        modelAndView.addObject("client", client);
+        modelAndView.addObject("paymentProducts", clientPaymentProducts);
+        modelAndView.setViewName("cabinet/client/payment/product");
+        return modelAndView;
+    }
 
 }

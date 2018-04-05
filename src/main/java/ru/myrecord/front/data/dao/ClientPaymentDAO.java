@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.entities.ClientPayment;
 
 @Repository("clientPaymentDAO")
-    public interface ClientPaymentDAO extends JpaRepository<ClientPayment, Integer> {
+public interface ClientPaymentDAO extends JpaRepository<ClientPayment, Integer> {
+    ClientPayment findById(Integer id);
 }

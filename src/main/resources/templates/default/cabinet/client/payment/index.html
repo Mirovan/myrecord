@@ -33,6 +33,7 @@
                                         <th>#</th>
                                         <th>Клиент</th>
                                         <th>Оплата</th>
+                                        <th>Оказанные услуги</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -41,7 +42,18 @@
                                         <td>
                                             <span th:text="@{${record.user.name} + ' ' + ${record.user.sirname}}"></span>
                                         </td>
-                                        <td><a th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}">Оплатить</a></td>
+                                        <td>
+                                            <!-- if -->
+                                            <a href="" class="btn btn-primary"
+                                               th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}"
+                                               th:if="${(record.clientPayment == null) or (record.clientPayment != null and record.clientPayment.getPaid() == false)}">Оплатить</a>
+                                            <span href=""
+                                               th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}"
+                                               th:if="${record.clientPayment != null and record.clientPayment.getPaid() == true}">Оплачено</span>
+                                        </td>
+                                        <td>
+                                            <a href="">Оказанные услуги</a>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>

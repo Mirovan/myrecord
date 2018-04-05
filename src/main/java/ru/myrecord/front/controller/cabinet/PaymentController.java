@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.entities.ClientRecord;
-import ru.myrecord.front.data.model.entities.Product;
-import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -33,6 +32,12 @@ public class PaymentController/* implements ErrorController*/{
 
     @Autowired
     private ClientRecordService clientRecordService;
+
+    @Autowired
+    private ClientPaymentService clientPaymentService;
+
+    @Autowired
+    private ClientPaymentProductService clientPaymentProductService;
 
 
     /**
@@ -77,10 +82,27 @@ public class PaymentController/* implements ErrorController*/{
      * Сохраняем оплату
      * */
     @RequestMapping(value="/cabinet/clients/payment/pay/", method = RequestMethod.POST)
-    public ModelAndView showPaymentFormPost(@RequestParam Integer recordId, Principal principal) {
-        LocalDate date = LocalDate.now();
+    public ModelAndView showPaymentFormPost(@RequestParam(required = false) Integer recordId,
+                                            @RequestParam(value="products[]", required = false) List<Integer> products,
+                                            @RequestParam(value="prices[]", required = false) List<Integer> prices,
+                                            Principal principal) {
+        //ToDo: сделать проверку на принадлежность продукта сист пользователю
 
-        return( new ModelAndView("redirect: ") );
+        ClientRecord clientRecord = clientRecordService.findById(recordId);
+
+        ClientPayment clientPayment = new ClientPayment(clientRecord, false, true);
+        clientPayment = clientPaymentService.add(clientPayment);    //получаем сохранённый объект с Id
+
+        for (int i=0; i<products.size(); i++) {
+            Product product = productService.findProductById(products.get(i));
+            ClientPaymentProduct clientRecordProduct = new ClientPaymentProduct(clientPayment, product, prices.get(i));
+            clientPaymentProductService.add(clientRecordProduct);
+        }
+
+        clientPayment.setPaid(true);
+        clientPaymentService.update(clientPayment);
+
+        return( new ModelAndView("redirect:/cabinet/clients/payment/") );
     }
 
 

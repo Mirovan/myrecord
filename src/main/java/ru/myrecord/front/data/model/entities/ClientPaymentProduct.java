@@ -10,9 +10,6 @@ public class ClientPaymentProduct {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")
     private ClientPayment clientPayment;
@@ -32,14 +29,6 @@ public class ClientPaymentProduct {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public ClientPayment getClientPayment() {
         return clientPayment;
     }
@@ -48,13 +37,13 @@ public class ClientPaymentProduct {
         this.clientPayment = clientPayment;
     }
 
-//    public Product getProduct() {
-//        return product;
-//    }
-//
-//    public void setProduct(Product product) {
-//        this.product = product;
-//    }
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Integer getPrice() {
         return price;
@@ -62,5 +51,15 @@ public class ClientPaymentProduct {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public ClientPaymentProduct(ClientPayment clientPayment, Product product, Integer price) {
+        this.clientPayment = clientPayment;
+        this.product = product;
+        this.price = price;
+    }
+
+    public ClientPaymentProduct() {
+        super();
     }
 }

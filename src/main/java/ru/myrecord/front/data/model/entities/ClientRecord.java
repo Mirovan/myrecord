@@ -36,6 +36,11 @@ public class ClientRecord {
     @JsonIgnore
     private List<ClientRecordProduct> clientRecordProducts;
 
+    @OneToOne(mappedBy = "clientRecord", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private ClientPayment clientPayment;
+
+
     public Integer getId() {
         return id;
     }
@@ -74,6 +79,14 @@ public class ClientRecord {
 
     public void setClientRecordProducts(List<ClientRecordProduct> clientRecordProducts) {
         this.clientRecordProducts = clientRecordProducts;
+    }
+
+    public ClientPayment getClientPayment() {
+        return clientPayment;
+    }
+
+    public void setClientPayment(ClientPayment clientPayment) {
+        this.clientPayment = clientPayment;
     }
 
     public ClientRecord(User user, LocalDate date) {

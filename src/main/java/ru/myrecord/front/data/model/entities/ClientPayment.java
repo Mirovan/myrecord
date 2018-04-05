@@ -66,4 +66,14 @@ public class ClientPayment {
     public void setClientPaymentProducts(List<ClientPaymentProduct> clientPaymentProducts) {
         this.clientPaymentProducts = clientPaymentProducts;
     }
+
+    public ClientPayment(ClientRecord clientRecord, Boolean isPaid, Boolean active) {
+        this.clientRecord = clientRecord;
+        this.isPaid = isPaid;
+        this.active = active;
+    }
+
+    public ClientPayment() {
+        super();
+    }
 }

@@ -68,4 +68,5 @@ public class ClientRecordProduct {
     public void setSdate(LocalDateTime sdate) {
         this.sdate = sdate;
     }
+
 }

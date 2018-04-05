@@ -11,6 +11,7 @@ import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -61,6 +62,17 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     @Override
     public ClientRecord findByUser(User user) {
         return null;
+    }
+
+
+    @Override
+    public ClientRecord findById(Integer id) {
+        return clientRecordDAO.findById(id);
+    }
+
+    @Override
+    public Set<ClientRecord> findByDate(LocalDate date) {
+        return clientRecordDAO.findByDate(date);
     }
 
 

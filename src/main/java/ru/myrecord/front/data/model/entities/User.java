@@ -54,7 +54,7 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "worker", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<UserProduct> userProducts;
 
@@ -136,5 +136,15 @@ public class User {
 
     public void setUserProducts(Set<UserProduct> userProducts) {
         this.userProducts = userProducts;
+    }
+
+    public User() {
+        super();
+    }
+
+    public User(Integer id, String name, String sirname) {
+        this.id = id;
+        this.name = name;
+        this.sirname = sirname;
     }
 }

@@ -74,7 +74,7 @@ public class UserRestController {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
             //userMonthSchedule.setScheduleAll( scheduleService.getMonthCalendar(year, month) );  //Получаем список - месячный календарь
-            //userMonthSchedule.setUserSchedule( scheduleService.findByUser(user) );  //Получаем расписание пользователя
+            //userMonthSchedule.setUserSchedule( scheduleService.findByWorker(user) );  //Получаем расписание пользователя
         //}
         return calendar;
     }

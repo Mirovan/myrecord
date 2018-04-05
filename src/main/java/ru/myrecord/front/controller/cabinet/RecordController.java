@@ -1,13 +1,10 @@
 package ru.myrecord.front.controller.cabinet;
 
-import javafx.concurrent.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
@@ -18,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -205,26 +201,27 @@ public class RecordController/* implements ErrorController*/{
     public ModelAndView editClientRecordPost(User client,
                                              Integer productId,
                                              Integer masterId,
-                                             String sdate,
+                                             String date,
                                              Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( true ) {
             //ToDo: принадлежит сист.пользователю продуктЫ, клиент
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            LocalDateTime recordDate = LocalDateTime.parse(sdate, formatter);
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            LocalDateTime recordDateTime = LocalDateTime.parse(date, timeFormatter);
+            LocalDate recordDate = LocalDate.parse(date, timeFormatter);
 
             User ownerUser = userService.findUserByEmail(principal.getName());
-            ClientRecord clientRecord = new ClientRecord(client);
+            ClientRecord clientRecord = new ClientRecord(client, recordDate);
             clientRecord = clientRecordService.add(clientRecord, ownerUser);
 
             ClientRecordProduct clientRecordProduct = new ClientRecordProduct();
-            clientRecordProduct.setRecord(clientRecord);
+            clientRecordProduct.setClientRecord(clientRecord);
             Product product = productService.findProductById(productId);
             clientRecordProduct.setProduct(product);
             User master = userService.findUserById(masterId);
-            clientRecordProduct.setMaster(master);
-            clientRecordProduct.setSdate(recordDate);
+            clientRecordProduct.setWorker(master);
+            clientRecordProduct.setSdate(recordDateTime);
             clientRecordProductService.add(clientRecordProduct);
 
             return new ModelAndView("redirect:/cabinet/clients/record/");

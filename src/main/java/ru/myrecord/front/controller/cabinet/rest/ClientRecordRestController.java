@@ -11,8 +11,8 @@ import ru.myrecord.front.data.model.entities.ClientRecordProduct;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Schedule;
 import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.data.model.helpers.CalendarRecord;
-import ru.myrecord.front.data.model.helpers.CalendarWorker;
+import ru.myrecord.front.data.model.adapters.CalendarRecord;
+import ru.myrecord.front.data.model.adapters.CalendarWorker;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
@@ -94,9 +94,9 @@ public class ClientRecordRestController {
      * */
     @RequestMapping(value="/cabinet/clients/json-records-by-date/", method = RequestMethod.GET)
     public Set<CalendarRecord> getRecordsByDate(Integer day,
-                                                      Integer month,
-                                                      Integer year,
-                                                      Principal principal) {
+                                                Integer month,
+                                                Integer year,
+                                                Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
         Set<CalendarRecord> calendarMap = new HashSet<>();
 
@@ -109,8 +109,8 @@ public class ClientRecordRestController {
             LocalDateTime start = item.getSdate();
             LocalDateTime end = item.getSdate().plusHours(2);   //ToDo: сделать наминальное время оказания услуги
 
-            String name = item.getRecord().getUser().getName() +  " " + item.getRecord().getUser().getSirname();
-            UserAdapter master = userService.getUserAdapter(item.getMaster());
+            String name = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
+            UserAdapter master = userService.getUserAdapter(item.getWorker());
 
             CalendarRecord calendarRecord = new CalendarRecord(
                     item.getId(),
@@ -143,9 +143,9 @@ public class ClientRecordRestController {
         Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
 
         for (Schedule item : schedules) {
-            String name = item.getUser().getName() +  " " + item.getUser().getSirname();
+            String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
 
-            CalendarWorker calendarRecord = new CalendarWorker(item.getUser().getId(), name);
+            CalendarWorker calendarRecord = new CalendarWorker(item.getWorker().getId(), name);
             calendarWorkers.add(calendarRecord);
         }
 

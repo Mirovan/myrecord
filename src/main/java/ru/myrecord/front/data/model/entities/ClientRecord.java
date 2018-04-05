@@ -1,6 +1,12 @@
 package ru.myrecord.front.data.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ru.myrecord.front.Utils.LocalDateConverter;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Запись клиента
@@ -14,12 +20,26 @@ public class ClientRecord {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
     private User user;
+
+    @Column(name = "sdate", columnDefinition = "DATE")
+    @NotNull
+    @Convert(converter = LocalDateConverter.class)
+    private LocalDate date;
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "clientRecord", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ClientRecordProduct> clientRecordProducts;
+
+    @OneToOne(mappedBy = "clientRecord", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private ClientPayment clientPayment;
+
 
     public Integer getId() {
         return id;
@@ -37,6 +57,14 @@ public class ClientRecord {
         this.user = user;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     public Boolean getActive() {
         return active;
     }
@@ -45,11 +73,29 @@ public class ClientRecord {
         this.active = active;
     }
 
-    public ClientRecord() {
-        super();
+    public List<ClientRecordProduct> getClientRecordProducts() {
+        return clientRecordProducts;
     }
 
-    public ClientRecord(User user) {
+    public void setClientRecordProducts(List<ClientRecordProduct> clientRecordProducts) {
+        this.clientRecordProducts = clientRecordProducts;
+    }
+
+    public ClientPayment getClientPayment() {
+        return clientPayment;
+    }
+
+    public void setClientPayment(ClientPayment clientPayment) {
+        this.clientPayment = clientPayment;
+    }
+
+    public ClientRecord(User user, LocalDate date) {
         this.user = user;
+        this.date = date;
+        this.active = true;
+    }
+
+    public ClientRecord() {
+        super();
     }
 }

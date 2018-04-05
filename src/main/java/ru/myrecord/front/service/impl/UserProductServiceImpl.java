@@ -11,7 +11,6 @@ import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.entities.UserProduct;
 import ru.myrecord.front.service.iface.UserProductService;
 
-import java.util.List;
 import java.util.Set;
 
 @Service("userProductService")
@@ -58,7 +57,7 @@ public class UserProductServiceImpl implements UserProductService {
 
     @Override
     public UserProduct findByUserAndProductActiveLink(User user, Product product) {
-        Set<UserProduct> userProducts = userProductDAO.findByUserAndProductAndActiveTrue(user, product);
+        Set<UserProduct> userProducts = userProductDAO.findByWorkerAndProductAndActiveTrue(user, product);
         //Должен быть только одно один элемент
         if (userProducts != null && userProducts.iterator().hasNext())
             return userProducts.iterator().next();
@@ -69,7 +68,7 @@ public class UserProductServiceImpl implements UserProductService {
 
     @Override
     public UserProduct findByUserAndProductAnyLink(User user, Product product) {
-        Set<UserProduct> userProducts = userProductDAO.findByUserAndProduct(user, product);
+        Set<UserProduct> userProducts = userProductDAO.findByWorkerAndProduct(user, product);
         //Должен быть только одно один элемент
         if (userProducts != null && userProducts.iterator().hasNext())
             return userProducts.iterator().next();
@@ -89,6 +88,6 @@ public class UserProductServiceImpl implements UserProductService {
 
     @Override
     public Set<UserProduct> findByUserActiveLink(User user) {
-        return userProductDAO.findByUserAndActiveTrue(user);
+        return userProductDAO.findByWorkerAndActiveTrue(user);
     }
 }

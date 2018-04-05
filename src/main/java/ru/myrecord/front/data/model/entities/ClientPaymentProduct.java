@@ -1,21 +1,18 @@
 package ru.myrecord.front.data.model.entities;
 
-import ru.myrecord.front.Utils.LocalDateTimeConverter;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "client_record_product")
-public class ClientRecordProduct {
+@Table(name = "client_payment_product")
+public class ClientPaymentProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "record_id")
-    private ClientRecord clientRecord;
+    @JoinColumn(name = "payment_id")
+    private ClientPayment clientPayment;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
@@ -25,9 +22,8 @@ public class ClientRecordProduct {
     @JoinColumn(name = "worker_id")
     private User worker;
 
-    @Column(name = "sdate", columnDefinition = "DATE")
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime sdate;
+    @Column(name = "price")
+    private Integer price;
 
     public Integer getId() {
         return id;
@@ -37,12 +33,12 @@ public class ClientRecordProduct {
         this.id = id;
     }
 
-    public ClientRecord getClientRecord() {
-        return clientRecord;
+    public ClientPayment getClientPayment() {
+        return clientPayment;
     }
 
-    public void setClientRecord(ClientRecord clientRecord) {
-        this.clientRecord = clientRecord;
+    public void setClientPayment(ClientPayment clientPayment) {
+        this.clientPayment = clientPayment;
     }
 
     public Product getProduct() {
@@ -53,6 +49,14 @@ public class ClientRecordProduct {
         this.product = product;
     }
 
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
     public User getWorker() {
         return worker;
     }
@@ -61,12 +65,14 @@ public class ClientRecordProduct {
         this.worker = worker;
     }
 
-    public LocalDateTime getSdate() {
-        return sdate;
+    public ClientPaymentProduct(ClientPayment clientPayment, Product product, Integer price, User worker) {
+        this.clientPayment = clientPayment;
+        this.product = product;
+        this.price = price;
+        this.worker = worker;
     }
 
-    public void setSdate(LocalDateTime sdate) {
-        this.sdate = sdate;
+    public ClientPaymentProduct() {
+        super();
     }
-
 }

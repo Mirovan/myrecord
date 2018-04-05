@@ -19,8 +19,8 @@ public class Schedule {
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_user_id")
-    private User user;
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     @Column(name = "sdate", columnDefinition = "DATE")
     @NotNull
@@ -35,12 +35,12 @@ public class Schedule {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getWorker() {
+        return worker;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWorker(User worker) {
+        this.worker = worker;
     }
 
     public LocalDate getSdate() {

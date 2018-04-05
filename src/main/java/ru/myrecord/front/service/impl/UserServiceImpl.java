@@ -268,7 +268,7 @@ public class UserServiceImpl implements UserService {
             //Определяем оказывает ли пользователь эту услугу
             Set<UserProduct> userProducts = userProductService.findByProductActiveLink(product);
             for (UserProduct userProduct: userProducts) {
-                users.add( userProduct.getUser() );
+                users.add( userProduct.getWorker() );
             }
         }
         return users;
@@ -286,7 +286,7 @@ public class UserServiceImpl implements UserService {
         Set<User> res = new HashSet<>();
         Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
-            User user = schedule.getUser();
+            User user = schedule.getWorker();
             if ( hasUser(ownerUser.getId(), user.getId()) )
                 res.add( user );
         }
@@ -299,7 +299,7 @@ public class UserServiceImpl implements UserService {
         Set<User> res = new HashSet<>();
         Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
-            User user = schedule.getUser();
+            User user = schedule.getWorker();
             //Если сист. польователь имеет этого раюотника и у раюботника есть этот продукт
             if ( hasUser(ownerUser.getId(), user.getId()) && isWorkerDoProduct(user, product.getId()) )
                 res.add( user );
@@ -325,7 +325,7 @@ public class UserServiceImpl implements UserService {
         Set<UserProduct> userProducts = userProductService.findByProductActiveLink(product);
         if (userProducts != null) {
             for (UserProduct up : userProducts) {
-                users.add(up.getUser());
+                users.add(up.getWorker());
             }
         }
         return users;

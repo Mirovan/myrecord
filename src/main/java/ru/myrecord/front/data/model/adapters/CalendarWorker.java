@@ -1,4 +1,4 @@
-package ru.myrecord.front.data.model.helpers;
+package ru.myrecord.front.data.model.adapters;
 
 /**
  * Класс для отображения и передачи через JSON в JS-скрипт fullcalendar

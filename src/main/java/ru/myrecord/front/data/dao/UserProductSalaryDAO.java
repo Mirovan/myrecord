@@ -11,5 +11,5 @@ import java.util.Set;
 
 @Repository("userProductSalaryDAO")
 public interface UserProductSalaryDAO extends JpaRepository<UserProductSalary, Integer> {
-    Set<UserProductSalary> findByUserAndProductOrderByStartdateDesc(User user, Product product);
+    Set<UserProductSalary> findByWorkerAndProductOrderByStartdateDesc(User worker, Product product);
 }

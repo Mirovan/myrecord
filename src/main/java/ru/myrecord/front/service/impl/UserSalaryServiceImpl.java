@@ -28,7 +28,7 @@ public class UserSalaryServiceImpl implements UserSalaryService {
 
     @Override
     public UserSalary findByUser(User user) {
-        Set<UserSalary> userSalaries = userSalaryDAO.findByUserOrderByStartdateDesc(user);
+        Set<UserSalary> userSalaries = userSalaryDAO.findByWorkerOrderByStartdateDesc(user);
         if (userSalaries != null && userSalaries.iterator().hasNext())
             return userSalaries.iterator().next();
         else

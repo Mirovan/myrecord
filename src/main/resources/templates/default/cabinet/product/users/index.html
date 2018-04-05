@@ -45,7 +45,7 @@
 
                                 <div th:each="user : ${freeUsers}" class="col-sm-10">
                                     <input name="freeUsers[]" th:value="${user.id}" type="checkbox" />
-                                    <label th:text="${user.name}"></label>
+                                    <label th:text="@{${user.name} + ' ' + ${user.sirname}}"></label>
                                 </div>
 
                                 <div class="form-group">

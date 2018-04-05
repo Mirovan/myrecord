@@ -220,7 +220,7 @@ public class RecordController/* implements ErrorController*/{
             Product product = productService.findProductById(productId);
             clientRecordProduct.setProduct(product);
             User master = userService.findUserById(masterId);
-            clientRecordProduct.setMaster(master);
+            clientRecordProduct.setWorker(master);
             clientRecordProduct.setSdate(recordDateTime);
             clientRecordProductService.add(clientRecordProduct);
 

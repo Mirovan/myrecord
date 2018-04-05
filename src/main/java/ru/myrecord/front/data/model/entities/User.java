@@ -54,7 +54,7 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "worker", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<UserProduct> userProducts;
 

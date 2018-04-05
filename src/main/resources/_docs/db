@@ -87,7 +87,7 @@ CREATE SEQUENCE user_product_id_seq START WITH 1;
 
 CREATE TABLE "user_product" (
     id INTEGER NOT NULL default nextval('user_product_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    worker_id INTEGER REFERENCES "users"(id),
 	product_id INTEGER REFERENCES "product"(id),
 	active BOOLEAN
 );
@@ -99,7 +99,7 @@ CREATE SEQUENCE schedule_id_seq START WITH 1;
 
 CREATE TABLE "schedule" (
     id INTEGER NOT NULL default nextval('schedule_id_seq') PRIMARY KEY,
-    user_id INTEGER,
+    worker_id INTEGER,
 	date TIMESTAMP
 );
 ALTER SEQUENCE schedule_id_seq owned by "schedule".id;
@@ -109,7 +109,7 @@ CREATE SEQUENCE usersalary_id_seq START WITH 1;
 
 CREATE TABLE "user_salary" (
     id INTEGER NOT NULL default nextval('usersalary_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    worker_id INTEGER REFERENCES "users"(id),
 	salary REAL,
 	salarypercent REAL,
 	startdate TIMESTAMP /*начало действия этой истемы оплаты - текущая дата*/
@@ -122,7 +122,7 @@ CREATE SEQUENCE user_product_salary_id_seq START WITH 1;
 
 CREATE TABLE "user_product_salary" (
     id INTEGER NOT NULL default nextval('user_product_salary_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    worker_id INTEGER REFERENCES "users"(id),
     product_id INTEGER REFERENCES "product"(id),
 	salary REAL,
 	salarypercent REAL,
@@ -137,7 +137,7 @@ CREATE SEQUENCE client_record_id_seq START WITH 1;
 
 CREATE TABLE "client_record" (
     id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(id),
+    client_id INTEGER REFERENCES "users"(id),
 	date TIMESTAMP,    /*дата записи*/
 	active BOOLEAN DEFAULT TRUE
 );
@@ -150,7 +150,7 @@ CREATE TABLE "client_record_product" (
     id INTEGER NOT NULL default nextval('client_record_product_id_seq') PRIMARY KEY,
     record_id INTEGER REFERENCES "client_record"(id),
     product_id INTEGER REFERENCES "product"(id),
-    master_id INTEGER REFERENCES "users"(id),
+    worker_id INTEGER REFERENCES "users"(id),
 	date TIMESTAMP     /*дата и время записи*/
 );
 ALTER SEQUENCE client_record_product_id_seq owned by "client_record_product".id;
@@ -174,6 +174,7 @@ CREATE TABLE "client_payment_product" (
     id INTEGER NOT NULL default nextval('client_payment_product_id_seq') PRIMARY KEY,
     payment_id INTEGER REFERENCES "client_payment"(id),
     product_id INTEGER REFERENCES "product"(id),
+    worker_id INTEGER REFERENCES "users"(id),
     price INTEGER DEFAULT 0
 );
 ALTER SEQUENCE client_payment_product_id_seq owned by "client_payment_product".id;

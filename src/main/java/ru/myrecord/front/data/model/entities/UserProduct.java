@@ -15,8 +15,8 @@ public class UserProduct {
     private Integer id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
@@ -25,12 +25,20 @@ public class UserProduct {
     @Column(name = "active")
     private Boolean active;
 
-    public User getUser() {
-        return user;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getWorker() {
+        return worker;
+    }
+
+    public void setWorker(User worker) {
+        this.worker = worker;
     }
 
     public Product getProduct() {
@@ -53,8 +61,8 @@ public class UserProduct {
         super();
     }
 
-    public UserProduct(User user, Product product) {
-        this.user = user;
+    public UserProduct(User worker, Product product) {
+        this.worker = worker;
         this.product = product;
     }
 }

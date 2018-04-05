@@ -13,17 +13,17 @@ public class ClientRecordProduct {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "record_id")
     private ClientRecord clientRecord;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "master_id")
-    private User master;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     @Column(name = "sdate", columnDefinition = "DATE")
     @Convert(converter = LocalDateTimeConverter.class)
@@ -53,12 +53,12 @@ public class ClientRecordProduct {
         this.product = product;
     }
 
-    public User getMaster() {
-        return master;
+    public User getWorker() {
+        return worker;
     }
 
-    public void setMaster(User master) {
-        this.master = master;
+    public void setWorker(User worker) {
+        this.worker = worker;
     }
 
     public LocalDateTime getSdate() {

@@ -20,8 +20,8 @@ public class ClientRecord {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
     private User user;
 
     @Column(name = "sdate", columnDefinition = "DATE")

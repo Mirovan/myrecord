@@ -17,8 +17,8 @@ public class UserProductSalary {
     private Integer id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
@@ -47,12 +47,12 @@ public class UserProductSalary {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getWorker() {
+        return worker;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWorker(User worker) {
+        this.worker = worker;
     }
 
     public Product getProduct() {
@@ -99,8 +99,8 @@ public class UserProductSalary {
         super();
     }
 
-    public UserProductSalary(User user, Product product, Float salary, Float salaryPercent) {
-        this.user = user;
+    public UserProductSalary(User worker, Product product, Float salary, Float salaryPercent) {
+        this.worker = worker;
         this.product = product;
         this.salary = salary;
         this.salaryPercent = salaryPercent;

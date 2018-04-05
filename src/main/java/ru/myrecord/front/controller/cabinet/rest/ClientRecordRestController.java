@@ -110,7 +110,7 @@ public class ClientRecordRestController {
             LocalDateTime end = item.getSdate().plusHours(2);   //ToDo: сделать наминальное время оказания услуги
 
             String name = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
-            UserAdapter master = userService.getUserAdapter(item.getMaster());
+            UserAdapter master = userService.getUserAdapter(item.getWorker());
 
             CalendarRecord calendarRecord = new CalendarRecord(
                     item.getId(),
@@ -143,9 +143,9 @@ public class ClientRecordRestController {
         Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
 
         for (Schedule item : schedules) {
-            String name = item.getUser().getName() +  " " + item.getUser().getSirname();
+            String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
 
-            CalendarWorker calendarRecord = new CalendarWorker(item.getUser().getId(), name);
+            CalendarWorker calendarRecord = new CalendarWorker(item.getWorker().getId(), name);
             calendarWorkers.add(calendarRecord);
         }
 

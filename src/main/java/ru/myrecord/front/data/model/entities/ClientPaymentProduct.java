@@ -10,13 +10,17 @@ public class ClientPaymentProduct {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")
     private ClientPayment clientPayment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     @Column(name = "price")
     private Integer price;
@@ -43,6 +47,14 @@ public class ClientPaymentProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public User getWorker() {
+        return worker;
+    }
+
+    public void setWorker(User worker) {
+        this.worker = worker;
     }
 
     public Integer getPrice() {

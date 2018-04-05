@@ -25,7 +25,7 @@ public class Product {
     @JoinTable(
             name = "user_product",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "worker_id")
     )
     @JsonIgnore
     private Set<User> users;

@@ -171,19 +171,19 @@ public class UserController/* implements ErrorController*/{
     public ModelAndView editUserSalaryForm(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
-            User user = userService.findUserById(userId);
-            UserSalary userSalary = userSalaryService.findByUser(user);
+            User worker = userService.findUserById(userId);
+            UserSalary userSalary = userSalaryService.findByUser(worker);
 
             if (userSalary != null) {
                 if (userSalary.getSalary() != null && userSalary.getSalary() < 0.001) userSalary.setSalary(0F);
                 if (userSalary.getSalaryPercent() != null && userSalary.getSalaryPercent() < 0.001) userSalary.setSalaryPercent(0F);
             } else {
                 userSalary = new UserSalary();
-                userSalary.setUser(user);
+                userSalary.setWorker(worker);
             }
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("user", user);
+            modelAndView.addObject("user", worker);
             modelAndView.addObject("usersalary", userSalary);
             modelAndView.setViewName("cabinet/user/salary/edit");
             return modelAndView;
@@ -201,7 +201,7 @@ public class UserController/* implements ErrorController*/{
                                            UserSalary userSalary,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) && userSalary.getUser().getId().equals(userId) ) {
+        if ( userService.hasUser(principal, userId) && userSalary.getWorker().getId().equals(userId) ) {
             User user = userService.findUserById(userId);
             userSalary.setStartdate(LocalDateTime.now());
             //ToDo: если процент и оклад остались такими же то просто обновить, а не добавлять заново

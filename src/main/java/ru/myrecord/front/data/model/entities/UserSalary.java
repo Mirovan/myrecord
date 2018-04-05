@@ -15,8 +15,8 @@ public class UserSalary {
     private Integer id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "worker_id")
+    private User worker;
 
     @Column(name = "salary")
     private Float salary;
@@ -37,12 +37,12 @@ public class UserSalary {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getWorker() {
+        return worker;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWorker(User worker) {
+        this.worker = worker;
     }
 
     public Float getSalary() {

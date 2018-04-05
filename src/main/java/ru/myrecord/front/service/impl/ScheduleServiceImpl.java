@@ -7,15 +7,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ScheduleDAO;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
-import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
-import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Schedule;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.CalendarService;
 import ru.myrecord.front.service.iface.ScheduleService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<Schedule> findByUser(User user) {
-        return scheduleDAO.findByUser(user);
+        return scheduleDAO.findByWorker(user);
     }
 
     @Override
@@ -43,12 +40,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule findByUserAndDate(User user, LocalDate date) {
-        return scheduleDAO.findByUserAndSdate(user, date);
+        return scheduleDAO.findByWorkerAndSdate(user, date);
     }
 
     @Override
     public void removeScheduleByDate(User user, LocalDate date) {
-        scheduleDAO.deleteByUserAndSdate(user, date);
+        scheduleDAO.deleteByWorkerAndSdate(user, date);
     }
 
     /**

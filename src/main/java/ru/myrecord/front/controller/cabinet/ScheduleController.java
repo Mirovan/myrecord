@@ -60,7 +60,7 @@ public class ScheduleController/* implements ErrorController*/{
                                      Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
-            User user = userService.findUserById(userId);
+            User worker = userService.findUserById(userId);
             LocalDate localDate = LocalDate.of(year, month, 1); //текущая дата полученого года и месяца
             int lastMonthDay = localDate.lengthOfMonth();   //последний день месяца
 
@@ -74,19 +74,19 @@ public class ScheduleController/* implements ErrorController*/{
                 if ( dates.contains(formattedDate) ) {
                     //Создем объект - день расписания
                     Schedule schedule = new Schedule();
-                    schedule.setUser(user);
+                    schedule.setWorker(worker);
                     schedule.setSdate(date);
 
                     //Защита - чтобы левые данные не добавляли, а только этого месяца
                     if ( date.getMonthValue() == month && date.getYear() == year ) {
                         //Определяем есть ли такая запись уже в БД
-                        Schedule existSchedule = scheduleService.findByUserAndDate(user, date);
+                        Schedule existSchedule = scheduleService.findByUserAndDate(worker, date);
                         if ( existSchedule == null ) {  //Такой записи нет - добавляем
                             scheduleService.add(schedule);
                         }
                     }
                 } else {    //Пытаемся удалить i-ю дату из БД
-                    scheduleService.removeScheduleByDate(user, date);
+                    scheduleService.removeScheduleByDate(worker, date);
                 }
             }
 

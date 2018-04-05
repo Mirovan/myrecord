@@ -11,9 +11,9 @@ import java.util.Set;
 
 @Repository("userProductDAO")
 public interface UserProductDAO extends JpaRepository<UserProduct, Integer> {
-    Set<UserProduct> findByUserAndProductAndActiveTrue(User user, Product product);
-    Set<UserProduct> findByUserAndProduct(User user, Product product);
+    Set<UserProduct> findByWorkerAndProductAndActiveTrue(User worker, Product product);
+    Set<UserProduct> findByWorkerAndProduct(User worker, Product product);
     Set<UserProduct> findByProductAndActiveTrue(Product product);
     Set<UserProduct> findByProduct(Product product);
-    Set<UserProduct> findByUserAndActiveTrue(User user);
+    Set<UserProduct> findByWorkerAndActiveTrue(User worker);
 }

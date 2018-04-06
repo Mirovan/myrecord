@@ -133,4 +133,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     }
 
 
+    @Override
+    public List<ClientRecord> findByDates(LocalDate from, LocalDate to) {
+        return clientRecordDAO.findByDateBetweenAndActiveTrue(from, to);
+    }
+
 }

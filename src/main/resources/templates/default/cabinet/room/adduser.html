@@ -26,6 +26,10 @@
 
                         <div class="card-body">
 
+                            <div class="content">
+                                <p>Выберите существующего сотрудника и помещения в которых он оказывает услуги</p>
+                            </div>
+
                             <form th:action="@{'/cabinet/rooms/users/add/'}" method="post">
                                 <input type="hidden" name="userId" id="userId" />
                                 <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
@@ -33,6 +37,7 @@
                                 <div class="ui-widget">
                                     <label for="input-user-selection">Сотрудник: </label>
                                     <input type="text" name="user" id="input-user-selection" />
+                                    <a href="/cabinet/users/add/">Добавить нового сотрудника</a>
                                 </div>
 
                                 <div th:each="product : ${products}" style="display: block;">

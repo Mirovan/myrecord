@@ -29,7 +29,7 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public Set<Room> findRoomsByActive(User ownerUser) {
+    public List<Room> findRoomsByActive(User ownerUser) {
         return roomDAO.findByOwnerUserAndActiveTrueOrderByIdAsc(ownerUser);
     }
 

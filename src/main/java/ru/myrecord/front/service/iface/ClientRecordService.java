@@ -17,4 +17,5 @@ public interface ClientRecordService {
     List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser);
     List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User ownerUser);
     List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser);
+    List<ClientRecord> findByDates(LocalDate from, LocalDate to);
 }

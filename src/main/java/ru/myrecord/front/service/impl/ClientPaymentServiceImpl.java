@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ClientPaymentDAO;
 import ru.myrecord.front.data.model.entities.ClientPayment;
+import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.service.iface.ClientPaymentService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("clientPaymentService")
 public class ClientPaymentServiceImpl implements ClientPaymentService {
@@ -31,5 +35,18 @@ public class ClientPaymentServiceImpl implements ClientPaymentService {
     @Override
     public ClientPayment findById(Integer id) {
         return clientPaymentDAO.findById(id);
+    }
+
+    /**
+     * Возвращаем объекты оплаты клиентов по записям
+     * */
+    @Override
+    public List<ClientPayment> findByRecords(List<ClientRecord> clientRecords) {
+        List<ClientPayment> list = new ArrayList<>();
+        for (ClientRecord item : clientRecords) {
+            if (item.getClientPayment() != null && item.getActive())
+                list.add(item.getClientPayment());
+        }
+        return list;
     }
 }

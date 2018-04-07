@@ -167,11 +167,11 @@ public class UserController/* implements ErrorController*/{
     /**
      * Форма редактирования системы оклада пользователя
      * */
-    @RequestMapping(value="/cabinet/users/{userId}/salary/", method = RequestMethod.GET)
-    public ModelAndView editUserSalaryForm(@PathVariable Integer userId, Principal principal) {
+    @RequestMapping(value="/cabinet/users/{workerId}/salary/", method = RequestMethod.GET)
+    public ModelAndView editUserSalaryForm(@PathVariable Integer workerId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) ) {
-            User worker = userService.findUserById(userId);
+        if ( userService.hasUser(principal, workerId) ) {
+            User worker = userService.findUserById(workerId);
             UserSalary userSalary = userSalaryService.findByUser(worker);
 
             if (userSalary != null) {
@@ -183,7 +183,7 @@ public class UserController/* implements ErrorController*/{
             }
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("user", worker);
+            modelAndView.addObject("worker", worker);
             modelAndView.addObject("usersalary", userSalary);
             modelAndView.setViewName("cabinet/user/salary/edit");
             return modelAndView;
@@ -255,24 +255,24 @@ public class UserController/* implements ErrorController*/{
     /**
      * Форма редактирования системы оклада пользователя
      * */
-    @RequestMapping(value="/cabinet/users/{userId}/products/{productId}/salary/", method = RequestMethod.GET)
-    public ModelAndView editUserProductSalaryForm(@PathVariable Integer userId, @PathVariable Integer productId, Principal principal) {
+    @RequestMapping(value="/cabinet/users/{workerId}/products/{productId}/salary/", method = RequestMethod.GET)
+    public ModelAndView editUserProductSalaryForm(@PathVariable Integer workerId, @PathVariable Integer productId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) ) {
-            User user = userService.findUserById(userId);
+        if ( userService.hasUser(principal, workerId) ) {
+            User worker = userService.findUserById(workerId);
             Product product = productService.findProductById(productId);
 
-            UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+            UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(worker, product);
             //Если з/п у сотрудника еще не установлена
             if ( userProductSalary == null ) {
-                userProductSalary = new UserProductSalary(user, product, 0F, 0F);
+                userProductSalary = new UserProductSalary(worker, product, 0F, 0F);
             }
             if (userProductSalary.getSalary() != null && userProductSalary.getSalary() < 0.001) userProductSalary.setSalary(0F);
             if (userProductSalary.getSalaryPercent() != null && userProductSalary.getSalaryPercent() < 0.001) userProductSalary.setSalaryPercent(0F);
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("user", user);
-            modelAndView.addObject("userId", userId);
+            modelAndView.addObject("worker", worker);
+            modelAndView.addObject("workerId", workerId);
             modelAndView.addObject("product", product);
             modelAndView.addObject("userProductSalary", userProductSalary);
             modelAndView.setViewName("cabinet/user/products/salary/edit");

@@ -25,15 +25,6 @@ public class StatisticController/* implements ErrorController*/{
     private UserService userService;
 
     @Autowired
-    private RoomService roomService;
-
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private UserProductService userProductService;
-
-    @Autowired
     private ClientRecordService clientRecordService;
 
     @Autowired
@@ -42,6 +33,11 @@ public class StatisticController/* implements ErrorController*/{
     @Autowired
     private ClientPaymentProductService clientPaymentProductService;
 
+    @Autowired
+    private UserSalaryService userSalaryService;
+
+    @Autowired
+    private UserProductSalaryService userProductSalaryService;
 
     /**
      * Страница отображения всех пользователей и их з/п за период
@@ -71,12 +67,27 @@ public class StatisticController/* implements ErrorController*/{
 
         List<WorkerSalary> workerSalaries = new ArrayList<>();
         for (User worker : workers) {
-            Integer salary = 0;
+            Integer salaryByRenderProducts = 0;
+            Integer monthSalary = 0;
+            Integer salaryByPercent = 0;
+            Integer salaryByPercentProducts = 0;
+
+            //суммируем доход от оказанных услуг
             for (ClientPaymentProduct item : clientPaymentProducts) {
-                if ( item.getWorker() != null && item.getWorker().getId().equals(worker.getId()) )
-                    salary += item.getPrice();
+                if ( item.getWorker() != null && item.getWorker().getId().equals(worker.getId()) ) {
+                    salaryByRenderProducts += item.getPrice();
+
+                    //UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(worker, item.getProduct());
+                }
             }
-            WorkerSalary workerSalary = new WorkerSalary(worker, salary);
+
+            UserSalary userSalary = userSalaryService.findByUser(worker);
+            if ( userSalary != null ) {
+                monthSalary = userSalary.getSalary().intValue();
+                salaryByPercent = ((Float) (salaryByRenderProducts / 100 * userSalary.getSalaryPercent())).intValue();
+            }
+
+            WorkerSalary workerSalary = new WorkerSalary(worker, salaryByRenderProducts, monthSalary, salaryByPercent, salaryByPercentProducts);
             workerSalaries.add(workerSalary);
         }
 

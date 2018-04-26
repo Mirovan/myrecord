@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
+import ru.myrecord.front.data.model.Enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
@@ -63,7 +64,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
-        Role userRole = roleDAO.findByRole("SYSUSER");
+//        Role userRole = roleDAO.findByRole(UserRoles.SYSUSER.getRole());
+        Role userRole = UserRoles.SYSUSER.createRole();
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userDAO.save(user);
     }
@@ -95,6 +97,14 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<User> findByRole(UserRoles userRoles) {
+        Role role = new Role();
+        role.setId(userRoles.getId());
+        role.setRole(userRoles.getRole());
+        role.setRoleAbout(userRoles.getRole_about());
+        return userDAO.findByRoles(role);
+    }
 
     @Override
     public User findUserById(Integer id) {
@@ -133,8 +143,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<Role> getRolesForSimpleUser() {
         List<String> roleNames = new ArrayList<String>();
-        roleNames.add("MASTER");
-        roleNames.add("MANAGER");
+        roleNames.add(UserRoles.MASTER.getRole());
+        roleNames.add(UserRoles.MANAGER.getRole());
         Set<Role> roles = roleService.findRolesByRoleName( roleNames );
         return roles;
     }

@@ -1,6 +1,7 @@
 package ru.myrecord.front.service.iface;
 
 
+import ru.myrecord.front.data.model.Enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Role;
@@ -19,6 +20,7 @@ public interface UserService {
     public void update(User user);
     Set<User> findUsersByOwner(User ownerUser);  //Поиск всех пользователей для ownerUser
     Set<User> findWorkersByOwner(User ownerUser);  //Поиск всех работников для ownerUser
+    Set<User> findByRole(UserRoles userRoles);  //Поиск всех пользователей с ролью SysUser
     public Set<User> findUsersByRoom(Room room);
     public User findUserById(Integer id);
     //public Set<User> findUsersByUserRooms(Set<UserRoom> userRooms);

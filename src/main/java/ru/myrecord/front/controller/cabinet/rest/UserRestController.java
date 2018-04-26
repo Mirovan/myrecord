@@ -1,9 +1,11 @@
 package ru.myrecord.front.controller.cabinet.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.myrecord.front.data.model.Enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
@@ -92,6 +94,31 @@ public class UserRestController {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
             users = userService.findWorkersByOwner(user);
+        //}
+        return users;
+    }
+
+
+    @RequestMapping(value="/cabinet/users/json-sysusers/", method = RequestMethod.GET)
+    public Set<User> getSysUsers(Principal principal) {
+
+
+        Set<User> users = userService.findByRole(UserRoles.SYSUSER);
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+//        users = userService.findWorkersByOwner(user);
+        //}
+        return users;
+    }
+
+    @RequestMapping(value="/cabinet/users/json-sysusers/{role}", method = RequestMethod.GET)
+    public Set<User> getUsersByRole(Principal principal, @PathVariable String role) {
+
+
+        Set<User> users = userService.findByRole(UserRoles.valueOf(role.toUpperCase()));
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+//        users = userService.findWorkersByOwner(user);
         //}
         return users;
     }

@@ -2,6 +2,7 @@ package ru.myrecord.front.data.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ru.myrecord.front.data.model.entities.Role;
 import ru.myrecord.front.data.model.entities.User;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ public interface UserDAO extends JpaRepository<User, Integer> {
     User findByEmail(String email);
     User findById(Integer id);
     Set<User> findByOwnerUserAndActiveTrueOrderByIdAsc(User ownerUser);
+    Set<User> findByRoles(Role role);
     //Set<User> findByUserroomIn(Set<UserRoom> userRooms);
     //Set<User> findByUserroomIn(Set<UserRoom> userRooms);
 

@@ -29,8 +29,8 @@ public class OrganisationBalance {
     private Float balance;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tarif")
-    private Tarif tarif;
+    @JoinColumn(name = "orgTarif")
+    private OrgTarif orgTarif;
 
 
     public Integer getId() {
@@ -65,11 +65,11 @@ public class OrganisationBalance {
         this.balance = balance;
     }
 
-    public Tarif getTarif() {
-        return tarif;
+    public OrgTarif getOrgTarif() {
+        return orgTarif;
     }
 
-    public void setTarif(Tarif tarif) {
-        this.tarif = tarif;
+    public void setOrgTarif(OrgTarif orgTarif) {
+        this.orgTarif = orgTarif;
     }
 }

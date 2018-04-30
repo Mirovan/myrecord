@@ -4,8 +4,8 @@ package ru.myrecord.front.data.model.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tarif")
-public class Tarif {
+@Table(name = "org_tarif")
+public class OrgTarif {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

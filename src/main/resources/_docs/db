@@ -178,3 +178,24 @@ CREATE TABLE "client_payment_product" (
     price INTEGER DEFAULT 0
 );
 ALTER SEQUENCE client_payment_product_id_seq owned by "client_payment_product".id;
+
+/* Баланс организации */
+CREATE TABLE "organisation_balance" (
+	"id" INTEGER NOT NULL,
+	"balance" REAL NULL DEFAULT NULL,
+	"exp_date" DATE NOT NULL,
+	"owner_user_id" INTEGER NULL DEFAULT NULL,
+	"org_tarif" INTEGER NULL DEFAULT NULL,
+	PRIMARY KEY ("id")
+);
+
+  /* Тарифный план для организаций */
+CREATE TABLE "org_tarif" (
+	"id" INTEGER NOT NULL,
+	"name" VARCHAR(255) NULL DEFAULT NULL,
+	"price" REAL NULL DEFAULT NULL,
+	PRIMARY KEY ("id")
+);
+
+INSERT INTO "org_tarif" (id, name, price) VALUES
+(1, 'Базовый', 999.0);

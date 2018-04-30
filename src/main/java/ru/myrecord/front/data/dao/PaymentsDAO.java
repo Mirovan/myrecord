@@ -9,7 +9,7 @@ import ru.myrecord.front.data.model.entities.User;
 import java.util.Set;
 
 @Repository("paymentsDAO")
-public interface PaymentsDao extends JpaRepository<Payment, Integer> {
+public interface PaymentsDAO extends JpaRepository<Payment, Integer> {
 
     Payment findById(Integer id);
     Set<Payment> findByUser(User user);

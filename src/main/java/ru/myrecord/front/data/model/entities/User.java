@@ -48,6 +48,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+//    @Enumerated(EnumType.STRING)
     @JsonIgnore
     private Set<Role> roles;
 

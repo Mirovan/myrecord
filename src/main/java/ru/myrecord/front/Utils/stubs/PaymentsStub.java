@@ -1,4 +1,4 @@
-package ru.myrecord.front.stubs;
+package ru.myrecord.front.Utils.stubs;
 
 import java.time.LocalDate;
 

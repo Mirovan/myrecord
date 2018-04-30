@@ -1,0 +1,13 @@
+package ru.myrecord.front.data.dao;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ru.myrecord.front.data.model.entities.Tarif;
+
+@Repository("tarifDAO")
+public interface TarifDao extends JpaRepository<Tarif, Integer> {
+
+
+
+}

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.data.model.Enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
+import ru.myrecord.front.data.model.entities.Payment;
 import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.data.model.adapters.ScheduleAdapter;
 import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.ScheduleService;
@@ -121,6 +121,20 @@ public class UserRestController {
 //        users = userService.findWorkersByOwner(user);
         //}
         return users;
+    }
+
+    @RequestMapping(value="/cabinet/users/json-payments/{id}", method = RequestMethod.GET)
+    public Set<Payment> getPaymentsById(Principal principal, @PathVariable int id) {
+
+
+        Set<Payment> payments = null;
+
+
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+//        users = userService.findWorkersByOwner(user);
+        //}
+        return payments;
     }
 
 

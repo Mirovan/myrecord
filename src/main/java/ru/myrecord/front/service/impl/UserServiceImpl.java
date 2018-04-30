@@ -142,10 +142,13 @@ public class UserServiceImpl implements UserService {
      * */
     @Override
     public Set<Role> getRolesForSimpleUser() {
-        List<String> roleNames = new ArrayList<String>();
-        roleNames.add(UserRoles.MASTER.getRole());
-        roleNames.add(UserRoles.MANAGER.getRole());
-        Set<Role> roles = roleService.findRolesByRoleName( roleNames );
+//        List<String> roleNames = new ArrayList<String>();
+        Set<Role> roles = new HashSet<>();
+        roles.add(UserRoles.MASTER.createRole());
+        roles.add(UserRoles.MANAGER.createRole());
+//        roleNames.add(UserRoles.MASTER.getRole());
+//        roleNames.add(UserRoles.MANAGER.getRole());
+//        Set<Role> roles = roleService.findRolesByRoleName( roleNames );
         return roles;
     }
 

@@ -1,4 +1,4 @@
-package ru.myrecord.front.data.model.entities;
+package ru.myrecord.front.data.model.entities.organisation;
 
 
 import javax.persistence.*;

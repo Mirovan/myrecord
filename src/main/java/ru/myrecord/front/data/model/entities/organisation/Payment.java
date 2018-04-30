@@ -1,7 +1,8 @@
-package ru.myrecord.front.data.model.entities;
+package ru.myrecord.front.data.model.entities.organisation;
 
 
 import ru.myrecord.front.Utils.LocalDateConverter;
+import ru.myrecord.front.data.model.entities.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

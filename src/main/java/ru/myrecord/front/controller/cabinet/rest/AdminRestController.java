@@ -6,16 +6,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.myrecord.front.Utils.stubs.PaymentsStub;
 import ru.myrecord.front.Utils.stubs.Utils;
-import ru.myrecord.front.data.model.entities.OrganisationBalance;
-import ru.myrecord.front.data.model.entities.Payment;
-import ru.myrecord.front.service.iface.OrganisationBalanceService;
-import ru.myrecord.front.service.iface.PaymentsService;
+import ru.myrecord.front.data.model.entities.organisation.OrganisationBalance;
+import ru.myrecord.front.data.model.entities.organisation.Payment;
+import ru.myrecord.front.service.iface.organisation.OrganisationBalanceService;
+import ru.myrecord.front.service.iface.organisation.PaymentsService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 @RestController

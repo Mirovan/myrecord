@@ -1,11 +1,11 @@
-package ru.myrecord.front.service.impl;
+package ru.myrecord.front.service.impl.organisation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.myrecord.front.data.dao.OrgTarifDAO;
-import ru.myrecord.front.data.model.entities.OrgTarif;
-import ru.myrecord.front.service.iface.OrgTarifService;
+import ru.myrecord.front.data.dao.organisation.OrgTarifDAO;
+import ru.myrecord.front.data.model.entities.organisation.OrgTarif;
+import ru.myrecord.front.service.iface.organisation.OrgTarifService;
 
 import java.util.List;
 

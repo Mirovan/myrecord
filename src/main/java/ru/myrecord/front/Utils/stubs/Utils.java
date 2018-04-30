@@ -1,13 +1,11 @@
 package ru.myrecord.front.Utils.stubs;
 
-import ru.myrecord.front.data.model.Enums.UserRoles;
-import ru.myrecord.front.data.model.entities.Payment;
-import ru.myrecord.front.service.iface.PaymentsService;
+import ru.myrecord.front.data.model.entities.organisation.Payment;
+import ru.myrecord.front.service.iface.organisation.PaymentsService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Utils {

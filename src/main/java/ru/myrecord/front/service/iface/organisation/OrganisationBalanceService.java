@@ -1,7 +1,7 @@
-package ru.myrecord.front.service.iface;
+package ru.myrecord.front.service.iface.organisation;
 
-import ru.myrecord.front.data.model.entities.OrganisationBalance;
-import ru.myrecord.front.data.model.entities.Payment;
+import ru.myrecord.front.data.model.entities.organisation.OrganisationBalance;
+import ru.myrecord.front.data.model.entities.organisation.Payment;
 import ru.myrecord.front.data.model.entities.User;
 
 public interface OrganisationBalanceService {

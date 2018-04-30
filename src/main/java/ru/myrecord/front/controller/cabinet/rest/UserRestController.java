@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.data.model.Enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
-import ru.myrecord.front.data.model.entities.Payment;
+import ru.myrecord.front.data.model.entities.organisation.Payment;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ProductService;
 import ru.myrecord.front.service.iface.RoomService;

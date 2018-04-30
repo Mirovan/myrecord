@@ -1,15 +1,15 @@
-package ru.myrecord.front.service.impl;
+package ru.myrecord.front.service.impl.organisation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.myrecord.front.data.dao.OrganisationBalanceDAO;
-import ru.myrecord.front.data.model.entities.OrgTarif;
-import ru.myrecord.front.data.model.entities.OrganisationBalance;
-import ru.myrecord.front.data.model.entities.Payment;
+import ru.myrecord.front.data.dao.organisation.OrganisationBalanceDAO;
+import ru.myrecord.front.data.model.entities.organisation.OrgTarif;
+import ru.myrecord.front.data.model.entities.organisation.OrganisationBalance;
+import ru.myrecord.front.data.model.entities.organisation.Payment;
 import ru.myrecord.front.data.model.entities.User;
-import ru.myrecord.front.service.iface.OrganisationBalanceService;
-import ru.myrecord.front.service.iface.OrgTarifService;
+import ru.myrecord.front.service.iface.organisation.OrgTarifService;
+import ru.myrecord.front.service.iface.organisation.OrganisationBalanceService;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,6 +1,6 @@
-package ru.myrecord.front.service.iface;
+package ru.myrecord.front.service.iface.organisation;
 
-import ru.myrecord.front.data.model.entities.OrgTarif;
+import ru.myrecord.front.data.model.entities.organisation.OrgTarif;
 
 import java.util.List;
 

@@ -19,7 +19,7 @@ public class IndexController/* implements ErrorController*/{
         return modelAndView;
     }
 
-    @RequestMapping(value="/cabinet/", method = RequestMethod.GET)
+    @RequestMapping(value={"/cabinet/", "/cabinet"}, method = RequestMethod.GET)
     public ModelAndView cabinet() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("cabinet/index");

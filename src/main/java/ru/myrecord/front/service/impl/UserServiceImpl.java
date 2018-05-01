@@ -9,10 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
+import ru.myrecord.front.data.dao.organisation.OrganisationBalanceDAO;
 import ru.myrecord.front.data.model.Enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
+import ru.myrecord.front.data.model.entities.organisation.OrgTarif;
+import ru.myrecord.front.data.model.entities.organisation.OrganisationBalance;
 import ru.myrecord.front.service.iface.*;
+import ru.myrecord.front.service.iface.organisation.OrgTarifService;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -31,6 +35,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("roleDAO")
     private RoleDAO roleDAO;
+
+    @Autowired
+    @Qualifier("organisationBalanceDAO")
+    private OrganisationBalanceDAO balanceDao;
+
+    @Autowired
+    @Qualifier("orgTarifService")
+    private OrgTarifService orgTarifService;
 
     @Autowired
     private RoleService roleService;
@@ -64,10 +76,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addSysUser(User user) {
         user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
-//        Role userRole = roleDAO.findByRole(UserRoles.SYSUSER.getRole());
-        Role userRole = UserRoles.SYSUSER.createRole();
+        Role userRole = roleDAO.findByRole(UserRoles.SYSUSER.getRole());
+//        Role userRole = UserRoles.SYSUSER.createRole();
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userDAO.save(user);
+        OrganisationBalance organisationBalance = new OrganisationBalance();
+        organisationBalance.setBalance(0.0f);
+        organisationBalance.setUser(user);
+        List<OrgTarif> orgTarifs = orgTarifService.getTarifs();
+        organisationBalance.setOrgTarif(orgTarifs.size() > 0 ? orgTarifs.get(0) : new OrgTarif());
+        organisationBalance.setExpDate(LocalDate.now().minusDays(1));
+        balanceDao.save(organisationBalance);
     }
 
 

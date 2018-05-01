@@ -10,5 +10,6 @@ public interface OrganisationBalanceService {
     void addPayment (Payment payment);
     void updateBalance(User user);
     OrganisationBalance getBalanceByUser(User user);
+    boolean isActive(User user);
 
 }

@@ -26,14 +26,14 @@
                         </div>
                         <div class="card-body">
 
-                            <form th:action="@{'/billing/pay/'}" method="post" class="form-horizontal">
+                            <form th:action="@{'/cabinet/billing/pay/'}" method="post" class="form-horizontal">
                                 <div class="form-group row">
                                     <label class="col-sm-2 form-control-label">Сумма</label>
                                     <div class="col-sm-4 mb-3">
                                         <select name="amount" class="form-control">
-                                            <option value="500">Оплата за месяц (500 руб.)</option>
-                                            <option value="1000">Оплата за 2 месяца (1000 руб.)</option>
-                                            <option value="1500">Оплата за 3 месяца (1500 руб.)</option>
+                                            <option th:value="${balance.orgTarif.price}">Оплата за месяц (<span th:text="${balance.orgTarif.price}"></span> руб.)</option>
+                                            <option th:value="(${balance.orgTarif.price}*2)">Оплата за 2 месяца (<span th:text="(${balance.orgTarif.price}*2)"></span> руб.)</option>
+                                            <option th:value="(${balance.orgTarif.price}*3)">Оплата за 3 месяца (<span th:text="(${balance.orgTarif.price}*3)"></span> руб.)</option>
                                         </select>
                                     </div>
                                 </div>

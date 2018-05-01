@@ -27,19 +27,35 @@
                         <div class="card-body">
 
                             <div class="form-group">
-                                <a href="/billing/pay/" class="btn btn-primary">Пополнить баланс</a>
+                                <a href="/cabinet/billing/pay/" class="btn btn-primary">Пополнить баланс</a>
                             </div>
-
                             <div class="row">
-                                <strong>Баланс</strong>
-                                <span>0 руб.</span>
+                                <table style="width:300px">
+                                    <tr>
+                                        <td><Strong>Баланс</Strong></td>
+                                        <td th:text="${balance.balance}"> руб.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><Strong>Оплачено до</Strong></td>
+                                        <td th:text="${balance.expDate}"></td>
+                                    </tr>
+                                </table>
                             </div>
-
+                            <br/>
                             <div class="row">
-                                <strong>Оплачено до</strong>
-                                <span>21-05-2018 руб.</span>
+                                <table style="width:300px">
+                                    <thead>
+                                        <td><Strong>Дата</Strong></td>
+                                        <td><Strong>Сумма</Strong></td>
+                                    </thead>
+                                    <th:block th:each="payment : ${payments}">
+                                        <tr>
+                                            <td th:text="${payment.paymentDate}"></td>
+                                            <td th:text="${payment.price}"></td>
+                                        </tr>
+                                    </th:block>
+                                </table>
                             </div>
-
                         </div>
                     </div>
                 </div>

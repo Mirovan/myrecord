@@ -68,4 +68,12 @@ public class OrganisationBalanceServiceImpl implements OrganisationBalanceServic
     public OrganisationBalance getBalanceByUser(User user) {
         return balanceDao.findFirstByUserOrderByIdDesc(user);
     }
+
+    @Override
+    public boolean isActive(User user) {
+        OrganisationBalance organisationBalance = getBalanceByUser(user);
+        if(organisationBalance.getExpDate().isAfter(LocalDate.now()))
+            return true;
+        return false;
+    }
 }

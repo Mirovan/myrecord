@@ -52,7 +52,6 @@ public class BillingController {
     public ModelAndView pay(Principal principal, int amount) {
         User user = userService.findUserByEmail( principal.getName() );
 
-        ModelAndView modelAndView = new ModelAndView();
         Payment payment = new Payment();
         payment.setPaymentDate(LocalDate.now());
         payment.setPrice(amount);

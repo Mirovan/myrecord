@@ -6,7 +6,7 @@ import ru.myrecord.front.data.model.entities.User;
 
 public interface OrganisationBalanceService {
 
-
+    void createBalance(User user);
     void addPayment (Payment payment);
     void updateBalance(User user);
     OrganisationBalance getBalanceByUser(User user);

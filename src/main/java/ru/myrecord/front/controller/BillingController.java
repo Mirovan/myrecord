@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ru.myrecord.front.data.model.entities.organisation.OrganisationBalance;
 import ru.myrecord.front.data.model.entities.organisation.Payment;
 import ru.myrecord.front.service.iface.UserService;
 import ru.myrecord.front.data.model.entities.User;
@@ -33,7 +34,12 @@ public class BillingController {
         User user = userService.findUserByEmail(principal.getName());
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "balance", balanceService.getBalanceByUser(user));
+        OrganisationBalance balance = balanceService.getBalanceByUser(user);
+        if (balance == null) {
+            balanceService.createBalance(user);
+            balance = balanceService.getBalanceByUser(user);
+        }
+        modelAndView.addObject( "balance", balance);
         modelAndView.addObject("payments", paymentsService.getPayments(user));
         modelAndView.setViewName("cabinet/billing/index");
         return modelAndView;
@@ -49,7 +55,7 @@ public class BillingController {
     }
 
     @RequestMapping(value={"/pay/"}, method = RequestMethod.POST)
-    public ModelAndView pay(Principal principal, int amount) {
+    public ModelAndView pay(Principal principal, float amount) {
         User user = userService.findUserByEmail( principal.getName() );
 
         Payment payment = new Payment();

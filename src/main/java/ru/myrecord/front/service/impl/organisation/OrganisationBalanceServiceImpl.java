@@ -27,6 +27,17 @@ public class OrganisationBalanceServiceImpl implements OrganisationBalanceServic
     private OrgTarifService orgTarifService;
 
     @Override
+    public void createBalance(User user) {
+        OrganisationBalance organisationBalance = new OrganisationBalance();
+        organisationBalance.setBalance(0.0f);
+        organisationBalance.setUser(user);
+        List<OrgTarif> orgTarifs = orgTarifService.getTarifs();
+        organisationBalance.setOrgTarif(orgTarifs.size() > 0 ? orgTarifs.get(0) : new OrgTarif());
+        organisationBalance.setExpDate(LocalDate.now().minusDays(1));
+        balanceDao.save(organisationBalance);
+    }
+
+    @Override
     public void addPayment(Payment payment) {
         OrganisationBalance organisationBalanceDao = balanceDao.findFirstByUserOrderByIdDesc(payment.getUser());
         OrganisationBalance organisationBalance = new OrganisationBalance();

@@ -116,10 +116,9 @@ public class ClientRecordRestController {
                     item.getId(),
                     name,
                     start.format(formatter),
-                    end.format(formatter),
-                    "",
-                    String.valueOf(master.getId())
+                    end.format(formatter)
             );
+            calendarRecord.setResourceId( String.valueOf(master.getId()) );
             calendarMap.add(calendarRecord);
         }
 
@@ -150,6 +149,91 @@ public class ClientRecordRestController {
         }
 
         return calendarWorkers;
+    }
+
+
+    /**
+     * Отображаем рабочие дни мастеров
+     * */
+    @RequestMapping(value="/cabinet/clients/json-month-schedule/", method = RequestMethod.GET)
+    public Set<CalendarRecord> getWorkersByDate2(Integer day,
+                                                 Integer month,
+                                                 Integer year,
+                                                 @RequestParam(required = false) Integer productId,
+                                                 @RequestParam(required = false) Integer workerId,
+                                                 Principal principal) {
+//        User ownerUser = userService.findUserByEmail(principal.getName());
+//        Set<CalendarWorker> calendarWorkers = new HashSet<>();
+//
+//        LocalDate date = LocalDate.of(year, month, day);
+//
+//        Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
+//
+//        for (Schedule item : schedules) {
+//            String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
+//
+//            CalendarWorker calendarRecord = new CalendarWorker(item.getWorker().getId(), name);
+//            calendarWorkers.add(calendarRecord);
+//        }
+//
+//        return calendarWorkers;
+        User ownerUser = userService.findUserByEmail(principal.getName());
+
+        //if (day == null) day = LocalDate.now().getDayOfMonth();
+        if (year == null) year = LocalDate.now().getYear();
+        if (month == null) month = LocalDate.now().getMonthValue();
+
+        //Находим все дни когда сотрудники работают в конкретном месяце конкретного года
+        List<CalendarAdapter> calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
+
+        Set<CalendarRecord> calendarMap = new HashSet<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (CalendarAdapter item: calendar) {
+            if ( item != null && item.getData() != null ) {
+                Set<UserAdapter> workers = (Set<UserAdapter>) item.getData();
+                if (workers.size() > 0) {
+                    int dayOfMonth = item.getDate().getDayOfMonth();
+                    CalendarRecord calendarRecord = new CalendarRecord(
+                            dayOfMonth,
+                            "",
+                            item.getDate().format(formatter),
+                            item.getDate().format(formatter)
+                    );
+                    calendarRecord.setOverlap(true);
+                    calendarRecord.setRendering("background");
+                    calendarRecord.setColor("#11ff11");
+                    calendarMap.add(calendarRecord);
+                }
+            }
+        }
+
+//        Set<CalendarRecord> calendarMap = new HashSet<>();
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        LocalDate date = LocalDate.of(year, month, day);
+//
+//        Set<ClientRecordProduct> clientRecords = clientRecordProductService.findByDate(date);
+//
+//        for (ClientRecordProduct item : clientRecords) {
+//            LocalDateTime start = item.getSdate();
+//            LocalDateTime end = item.getSdate().plusHours(2);
+//
+//            String name = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
+//            UserAdapter master = userService.getUserAdapter(item.getWorker());
+//
+//            CalendarRecord calendarRecord = new CalendarRecord(
+//                    item.getId(),
+//                    name,
+//                    start.format(formatter),
+//                    end.format(formatter),
+//                    "",
+//                    String.valueOf(master.getId())
+//            );
+//            calendarMap.add(calendarRecord);
+//        }
+
+        return calendarMap;
     }
 
 }

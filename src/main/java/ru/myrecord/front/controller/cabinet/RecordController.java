@@ -57,6 +57,20 @@ public class RecordController/* implements ErrorController*/{
     }
 
 
+    //ToDO: NEW
+    @RequestMapping(value="/cabinet/clients/record2/", method = RequestMethod.GET)
+    public ModelAndView showMonthCalendar2(Principal principal) {
+        LocalDate date = LocalDate.now();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("day", date.getDayOfMonth());
+        modelAndView.addObject("year", date.getYear());
+        modelAndView.addObject("month", date.getMonthValue());
+        modelAndView.setViewName("/cabinet/client/record/index2");
+        return modelAndView;
+    }
+
+
     /**
      * Календарь для определенного дня
      * */

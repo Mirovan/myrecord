@@ -1,4 +1,4 @@
-package ru.myrecord.front.controller;
+package ru.myrecord.front.controller.cabinet;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

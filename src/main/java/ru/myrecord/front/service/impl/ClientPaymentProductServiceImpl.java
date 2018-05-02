@@ -8,13 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ClientPaymentProductDAO;
 import ru.myrecord.front.data.model.entities.ClientPayment;
 import ru.myrecord.front.data.model.entities.ClientPaymentProduct;
-import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ClientPaymentProductService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service("clientPaymentProductService")
 public class ClientPaymentProductServiceImpl implements ClientPaymentProductService {

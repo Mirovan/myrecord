@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Room;
-import ru.myrecord.front.data.model.entities.User;
 
 import java.util.List;
 import java.util.Set;

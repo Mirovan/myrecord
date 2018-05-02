@@ -1,11 +1,9 @@
 package ru.myrecord.front.data.model.entities;
 
-import ru.myrecord.front.Utils.LocalDateConverter;
 import ru.myrecord.front.Utils.LocalDateTimeConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

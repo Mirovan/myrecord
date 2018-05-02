@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.entities.UserProductSalary;
-import ru.myrecord.front.data.model.entities.UserSalary;
 
 import java.util.Set;
 

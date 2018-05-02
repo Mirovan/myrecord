@@ -6,7 +6,6 @@ import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.entities.UserProduct;
 
-import java.util.List;
 import java.util.Set;
 
 @Repository("userProductDAO")

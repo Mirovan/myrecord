@@ -11,7 +11,6 @@ import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.List;
-import java.util.Set;
 
 @Service("roomService")
 public class RoomServiceImpl implements RoomService {

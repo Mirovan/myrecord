@@ -41,32 +41,13 @@ public class RecordController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/clients/record/", method = RequestMethod.GET)
     public ModelAndView showMonthCalendar(Principal principal) {
-        User ownerUser = userService.findUserByEmail(principal.getName());
-        Set<User> workers = userService.findWorkersByOwner(ownerUser);
-        Set<Product> products = productService.findProductsByOwnerUser(ownerUser);
-
-        LocalDate date = LocalDate.now();
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("year", date.getYear());
-        modelAndView.addObject("month", date.getMonthValue());
-        modelAndView.addObject("workers", workers);
-        modelAndView.addObject("products", products);
-        modelAndView.setViewName("/cabinet/client/record/index");
-        return modelAndView;
-    }
-
-
-    //ToDO: NEW
-    @RequestMapping(value="/cabinet/clients/record2/", method = RequestMethod.GET)
-    public ModelAndView showMonthCalendar2(Principal principal) {
         LocalDate date = LocalDate.now();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("day", date.getDayOfMonth());
         modelAndView.addObject("year", date.getYear());
         modelAndView.addObject("month", date.getMonthValue());
-        modelAndView.setViewName("/cabinet/client/record/index2");
+        modelAndView.setViewName("/cabinet/client/record/index");
         return modelAndView;
     }
 

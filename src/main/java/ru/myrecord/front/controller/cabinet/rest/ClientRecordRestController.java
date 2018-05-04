@@ -155,28 +155,12 @@ public class ClientRecordRestController {
     /**
      * Отображаем рабочие дни мастеров
      * */
-    @RequestMapping(value="/cabinet/clients/json-month-schedule/", method = RequestMethod.GET)
-    public Set<CalendarRecord> getWorkersByDate2(Integer day,
-                                                 Integer month,
-                                                 Integer year,
-                                                 @RequestParam(required = false) Integer productId,
-                                                 @RequestParam(required = false) Integer workerId,
-                                                 Principal principal) {
-//        User ownerUser = userService.findUserByEmail(principal.getName());
-//        Set<CalendarWorker> calendarWorkers = new HashSet<>();
-//
-//        LocalDate date = LocalDate.of(year, month, day);
-//
-//        Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
-//
-//        for (Schedule item : schedules) {
-//            String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
-//
-//            CalendarWorker calendarRecord = new CalendarWorker(item.getWorker().getId(), name);
-//            calendarWorkers.add(calendarRecord);
-//        }
-//
-//        return calendarWorkers;
+    @RequestMapping(value="/cabinet/clients/json-worker-month-schedule/", method = RequestMethod.GET)
+    public Set<CalendarRecord> getWorkersSchedule(Integer month,
+                                                  Integer year,
+                                                  @RequestParam(required = false) Integer productId,
+                                                  @RequestParam(required = false) Integer workerId,
+                                                  Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
 
         //if (day == null) day = LocalDate.now().getDayOfMonth();
@@ -207,31 +191,6 @@ public class ClientRecordRestController {
                 }
             }
         }
-
-//        Set<CalendarRecord> calendarMap = new HashSet<>();
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        LocalDate date = LocalDate.of(year, month, day);
-//
-//        Set<ClientRecordProduct> clientRecords = clientRecordProductService.findByDate(date);
-//
-//        for (ClientRecordProduct item : clientRecords) {
-//            LocalDateTime start = item.getSdate();
-//            LocalDateTime end = item.getSdate().plusHours(2);
-//
-//            String name = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
-//            UserAdapter master = userService.getUserAdapter(item.getWorker());
-//
-//            CalendarRecord calendarRecord = new CalendarRecord(
-//                    item.getId(),
-//                    name,
-//                    start.format(formatter),
-//                    end.format(formatter),
-//                    "",
-//                    String.valueOf(master.getId())
-//            );
-//            calendarMap.add(calendarRecord);
-//        }
 
         return calendarMap;
     }

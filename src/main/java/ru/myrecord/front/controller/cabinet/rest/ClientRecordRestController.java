@@ -6,13 +6,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
-import ru.myrecord.front.data.model.adapters.UserAdapter;
-import ru.myrecord.front.data.model.entities.ClientRecordProduct;
-import ru.myrecord.front.data.model.entities.Product;
-import ru.myrecord.front.data.model.entities.Schedule;
-import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.data.model.adapters.CalendarRecord;
 import ru.myrecord.front.data.model.adapters.CalendarWorker;
+import ru.myrecord.front.data.model.adapters.UserAdapter;
+import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
@@ -45,29 +42,47 @@ public class ClientRecordRestController {
     /**
      * Запрос месяца
      * */
-    @RequestMapping(value="/cabinet/clients/json-calendar/", method = RequestMethod.GET)
-    public List<CalendarAdapter> getCalendar(@RequestParam(required = false) Integer year,
+    @RequestMapping(value="/cabinet/clients/json-month-records/", method = RequestMethod.GET)
+    public Set<CalendarRecord> getCalendar(@RequestParam(required = false) Integer year,
                                              @RequestParam(required = false) Integer month,
                                              @RequestParam(required = false) Integer productId,
                                              @RequestParam(required = false) Integer workerId,
                                              Principal principal) {
-        User ownerUser = userService.findUserByEmail(principal.getName());
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
-        List<CalendarAdapter> calendar = null;
-        if (productId != null && workerId != null) {
-            User worker = userService.findUserById(workerId);
-            calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
-        } else if (productId != null) {
-            Product product = productService.findProductById(productId);
-            calendar = clientRecordService.getMonthCalendar(year, month, product, ownerUser);
-        } else if (workerId != null) {
-            User worker = userService.findUserById(workerId);
-            calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
-        } else {
-            calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
+
+        LocalDate from = LocalDate.of(year, month, 1);
+        LocalDate to = from.plusMonths(1).minusDays(1);
+
+        //Получаем все записи по диапазону дат
+        List<ClientRecord> records = clientRecordService.findByDates(from, to);
+
+        //Массив с числом записей в i-м дне месяца
+        int[] recordsCount = new int[31];
+
+        Set<CalendarRecord> calendarSet = new HashSet<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        //Находим число записей в каждом дне
+        for (ClientRecord item : records) {
+            int dayOfMonth = item.getDate().getDayOfMonth();
+            recordsCount[dayOfMonth] += 1;
         }
-        return calendar;
+
+        for (int i=0; i<recordsCount.length; i++) {
+            if ( recordsCount[i] != 0 ) {
+                LocalDate date = LocalDate.of(year, month, i);
+                CalendarRecord calendarRecord = new CalendarRecord(
+                        "bg" + String.valueOf(i),
+                        recordsCount[i] + " записей",
+                        date.format(formatter),
+                        date.format(formatter)
+                );
+                calendarSet.add(calendarRecord);
+            }
+        }
+
+        return calendarSet;
     }
 
 
@@ -113,7 +128,7 @@ public class ClientRecordRestController {
             UserAdapter master = userService.getUserAdapter(item.getWorker());
 
             CalendarRecord calendarRecord = new CalendarRecord(
-                    item.getId(),
+                    String.valueOf(item.getId()),
                     name,
                     start.format(formatter),
                     end.format(formatter)
@@ -167,6 +182,7 @@ public class ClientRecordRestController {
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
 
+        //ToDo: переделать сущность CalendarAdapter
         //Находим все дни когда сотрудники работают в конкретном месяце конкретного года
         List<CalendarAdapter> calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
 
@@ -179,7 +195,7 @@ public class ClientRecordRestController {
                 if (workers.size() > 0) {
                     int dayOfMonth = item.getDate().getDayOfMonth();
                     CalendarRecord calendarRecord = new CalendarRecord(
-                            dayOfMonth,
+                            String.valueOf(dayOfMonth),
                             "",
                             item.getDate().format(formatter),
                             item.getDate().format(formatter)

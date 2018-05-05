@@ -14,7 +14,7 @@ package ru.myrecord.front.data.model.adapters;
  }
 * */
 public class CalendarRecord {
-    private int id;
+    private String id;
     private String title;
     private String start;
     private String end;
@@ -24,18 +24,18 @@ public class CalendarRecord {
     private String rendering;
     private String color;
 
-    public CalendarRecord(int id, String title, String start, String end) {
+    public CalendarRecord(String id, String title, String start, String end) {
         this.id = id;
         this.title = title;
         this.start = start;
         this.end = end;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

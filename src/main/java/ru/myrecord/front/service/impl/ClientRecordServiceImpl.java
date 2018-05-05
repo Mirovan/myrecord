@@ -78,6 +78,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     }
 
 
+    /**
+     * Отображение месячного календаря для записи
+     * */
     @Override
     public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser) {
         List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
@@ -96,6 +99,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     }
 
 
+    /**
+     * Отображение месячного календаря для записи
+     * */
     @Override
     public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User ownerUser) {
         List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
@@ -113,6 +119,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     }
 
 
+    /**
+     * Отображение месячного календаря для записи
+     * */
     @Override
     public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser) {
         List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
@@ -136,8 +145,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
 
 
     @Override
-    public List<ClientRecord> findByDates(LocalDate from, LocalDate to) {
-        return clientRecordDAO.findByDateBetweenAndActiveTrue(from, to);
+    public List<ClientRecord> findByDates(LocalDate from, LocalDate to, User ownerUser) {
+        //ToDo: добавить список клиентов, чтобы найти среди них у кого ownerUser
+        return clientRecordDAO.findByOwnerUserAndDateBetweenAndActiveTrue(from, to, ownerUser);
     }
 
 }

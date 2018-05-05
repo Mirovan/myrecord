@@ -1,7 +1,7 @@
 package ru.myrecord.front.service.iface;
 
 
-import ru.myrecord.front.data.model.Enums.UserRoles;
+import ru.myrecord.front.data.model.enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Role;

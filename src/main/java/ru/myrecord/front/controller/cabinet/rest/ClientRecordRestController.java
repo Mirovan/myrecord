@@ -48,6 +48,7 @@ public class ClientRecordRestController {
                                              @RequestParam(required = false) Integer productId,
                                              @RequestParam(required = false) Integer workerId,
                                              Principal principal) {
+        User ownerUser = userService.findUserByEmail( principal.getName() );
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
 
@@ -55,7 +56,7 @@ public class ClientRecordRestController {
         LocalDate to = from.plusMonths(1).minusDays(1);
 
         //Получаем все записи по диапазону дат
-        List<ClientRecord> records = clientRecordService.findByDates(from, to);
+        List<ClientRecord> records = clientRecordService.findByDates(from, to, ownerUser);
 
         //Массив с числом записей в i-м дне месяца
         int[] recordsCount = new int[31];

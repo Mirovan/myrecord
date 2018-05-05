@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.myrecord.front.data.model.Enums.UserRoles;
+import ru.myrecord.front.data.model.enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.entities.organisation.Payment;
 import ru.myrecord.front.data.model.entities.User;

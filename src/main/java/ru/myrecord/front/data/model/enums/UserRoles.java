@@ -1,4 +1,4 @@
-package ru.myrecord.front.data.model.Enums;
+package ru.myrecord.front.data.model.enums;
 
 import ru.myrecord.front.data.model.entities.Role;
 

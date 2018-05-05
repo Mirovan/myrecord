@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
 import ru.myrecord.front.data.dao.organisation.OrganisationBalanceDAO;
-import ru.myrecord.front.data.model.Enums.UserRoles;
+import ru.myrecord.front.data.model.enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.data.model.entities.organisation.OrgTarif;
@@ -45,6 +45,9 @@ public class UserServiceImpl implements UserService {
     private OrgTarifService orgTarifService;
 
     @Autowired
+    private ConfigService configService;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -75,11 +78,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addSysUser(User user) {
-        user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
         Role userRole = roleDAO.findByRole(UserRoles.SYSUSER.getRole());
-//        Role userRole = UserRoles.SYSUSER.createRole();
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userDAO.save(user);
+
+        Config config = new Config();
+        config.setSetSchedule(false);
+        configService.add(config);
+
         OrganisationBalance organisationBalance = new OrganisationBalance();
         organisationBalance.setBalance(0.0f);
         organisationBalance.setUser(user);

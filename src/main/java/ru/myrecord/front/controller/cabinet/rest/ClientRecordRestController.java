@@ -83,24 +83,6 @@ public class ClientRecordRestController {
         }
 
         return calendarSet;
-
-//        User ownerUser = userService.findUserByEmail(principal.getName());
-//        if (year == null) year = LocalDate.now().getYear();
-//        if (month == null) month = LocalDate.now().getMonthValue();
-//        List<CalendarAdapter> calendar = null;
-//        if (productId != null && workerId != null) {
-//            User worker = userService.findUserById(workerId);
-//            calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
-//        } else if (productId != null) {
-//            Product product = productService.findProductById(productId);
-//            calendar = clientRecordService.getMonthCalendar(year, month, product, ownerUser);
-//        } else if (workerId != null) {
-//            User worker = userService.findUserById(workerId);
-//            calendar = clientRecordService.getMonthCalendar(year, month, worker, ownerUser);
-//        } else {
-//            calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
-//        }
-//        return calendar;
     }
 
 

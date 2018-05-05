@@ -81,6 +81,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("products", products);
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
@@ -118,6 +119,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("products" , products);
@@ -156,6 +158,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("products" , products);

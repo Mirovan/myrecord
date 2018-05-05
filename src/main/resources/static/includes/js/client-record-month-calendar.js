@@ -70,7 +70,7 @@ function showCalendar(month, year) {
                     year: year
                 },
                 function(eventRecordsData) {
-                    var eventData = eventRecordsData.concat(eventBackgroundData);
+                    var eventData = eventBackgroundData.concat(eventRecordsData);
                     drawCalendar(eventData);
                 }
             );

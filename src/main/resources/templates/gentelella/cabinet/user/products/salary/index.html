@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="cabinet/inc/head.inc::head"></head>
+<body>
+<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
+<div class="page">
+    <!-- navbar-->
+    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
+    <!-- Breadcrumb-->
+    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
+
+    <section>
+        <div class="container-fluid">
+            <!-- Page Header-->
+            <header>
+                <h1 class="h3 display">Пользователи</h1>
+            </header>
+
+            <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">Заработная плата</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/salary/'}">Процент за услуги</a>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h4>Установка дополнительной оплаты за услуги</h4>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label class="col-sm-2 form-control-label">Сотрудник</label>
+                                <div class="col-sm-4">
+                                    <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Услуга</th>
+                                        <th>Фиксированная плата</th>
+                                        <th>Процент</th>
+                                        <th>Изменить</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="userProductSalary, iterator : ${userProductSalaries}">
+                                        <th scope="row" th:text="@{${iterator.index} + 1}"></th>
+                                        <td>
+                                            <span th:text="*{userProductSalary.product.name}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:text="*{userProductSalary.salary}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:text="*{userProductSalary.salaryPercent}"></span>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/' + *{userProductSalary.product.id} + '/salary/'}">Edit</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+</div>
+<div th:include="cabinet/inc/js.inc::js"></div>
+</body>
+</html>

@@ -34,6 +34,9 @@ public class RecordController/* implements ErrorController*/{
     private RoleService roleService;
 
     @Autowired
+    private ConfigService configService;
+
+    @Autowired
     private ClientRecordProductService clientRecordProductService;
 
     /**
@@ -44,7 +47,7 @@ public class RecordController/* implements ErrorController*/{
         LocalDate date = LocalDate.now();
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("day", date.getDayOfMonth());
+//        modelAndView.addObject("day", date.getDayOfMonth());
         modelAndView.addObject("year", date.getYear());
         modelAndView.addObject("month", date.getMonthValue());
         modelAndView.setViewName("/cabinet/client/record/index");
@@ -55,6 +58,7 @@ public class RecordController/* implements ErrorController*/{
     /**
      * Календарь для определенного дня
      * */
+    //ToDo: переделать с учетом конфига без утановки расписания сотрудников
     @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/", method = RequestMethod.GET)
     public ModelAndView showDailyCalendar(@PathVariable Integer day,
                                           @PathVariable Integer month,
@@ -63,12 +67,26 @@ public class RecordController/* implements ErrorController*/{
         //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
         if ( true ) {
             User ownerUser = userService.findUserByEmail(principal.getName());
+            Config config = configService.findByOwnerUser(ownerUser);
 
-            //Находим всех мастеров кто работает в этот день
             LocalDate date = LocalDate.of(year, month, day);
-            Set<User> workers = userService.findWorkersByDate(date, ownerUser);
+            Set<Product> products = null;
+            Set<User> workers = null;
+
+            //без учета расписания сотрудников
+            if (config.getIsSetSchedule() == false) {
+                //Находим всех мастеров без учета расписания
+                workers = userService.findWorkersByOwner(ownerUser);
+            } else {
+                //Находим всех мастеров кто работает в этот день
+                workers = userService.findWorkersByDate(date, ownerUser);
+            }
+
+            //Список сотрудников
             Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
-            Set<Product> products = new HashSet<>();
+
+            //Список услуг
+            products = new HashSet<>();
             for (User worker : workers) {
                 Set<Product> workerProducts = productService.findProductsByWorker(worker);
                 products.addAll(workerProducts);

@@ -3,7 +3,7 @@ package ru.myrecord.front.data.model.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "config")
+@Table(name = "user_config")
 public class Config {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,7 +16,7 @@ public class Config {
     private User ownerUser;
 
     @Column(name = "is_set_schedule")
-    private Boolean isSetSchedule;
+    private boolean isSetSchedule;
 
     public Integer getId() {
         return id;
@@ -34,11 +34,11 @@ public class Config {
         this.ownerUser = ownerUser;
     }
 
-    public Boolean getSetSchedule() {
+    public boolean getIsSetSchedule() {
         return isSetSchedule;
     }
 
-    public void setSetSchedule(Boolean setSchedule) {
+    public void setIsSetSchedule(boolean setSchedule) {
         isSetSchedule = setSchedule;
     }
 }

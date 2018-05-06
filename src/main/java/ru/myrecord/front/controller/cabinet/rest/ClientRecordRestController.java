@@ -27,6 +27,9 @@ public class ClientRecordRestController {
     private UserService userService;
 
     @Autowired
+    private ConfigService configService;
+
+    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -44,14 +47,15 @@ public class ClientRecordRestController {
      * */
     @RequestMapping(value="/cabinet/clients/json-month-records/", method = RequestMethod.GET)
     public Set<CalendarRecord> getCalendar(@RequestParam(required = false) Integer year,
-                                             @RequestParam(required = false) Integer month,
-                                             @RequestParam(required = false) Integer productId,
-                                             @RequestParam(required = false) Integer workerId,
-                                             Principal principal) {
+                                           @RequestParam(required = false) Integer month,
+                                           @RequestParam(required = false) Integer productId,
+                                           @RequestParam(required = false) Integer workerId,
+                                           Principal principal) {
         User ownerUser = userService.findUserByEmail( principal.getName() );
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
 
+        //Период показа календаря
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = from.plusMonths(1).minusDays(1);
 
@@ -151,17 +155,30 @@ public class ClientRecordRestController {
                                                 Integer year,
                                                 Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
+
+        Config config = configService.findByOwnerUser(ownerUser);
+
         Set<CalendarWorker> calendarWorkers = new HashSet<>();
 
-        LocalDate date = LocalDate.of(year, month, day);
+        //без учета расписания сотрудников
+        if (config.getIsSetSchedule() == false) {
+            //Находим всех мастеров без учета расписания
+            Set<User> workers = userService.findWorkersByOwner(ownerUser);
+            for (User worker: workers) {
+                calendarWorkers.add(new CalendarWorker(worker.getId(), worker.getName()));
+            }
+        } else {
+            //Находим всех мастеров кто работает в этот день
+            LocalDate date = LocalDate.of(year, month, day);
 
-        Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
+            Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
 
-        for (Schedule item : schedules) {
-            String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
+            for (Schedule item : schedules) {
+                String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
 
-            CalendarWorker calendarRecord = new CalendarWorker(item.getWorker().getId(), name);
-            calendarWorkers.add(calendarRecord);
+                CalendarWorker calendarRecord = new CalendarWorker(item.getWorker().getId(), name);
+                calendarWorkers.add(calendarRecord);
+            }
         }
 
         return calendarWorkers;

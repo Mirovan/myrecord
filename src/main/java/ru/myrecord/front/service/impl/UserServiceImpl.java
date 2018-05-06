@@ -77,18 +77,19 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void addSysUser(User user) {
+    public void addSysUser(User ownerUser) {
         Role userRole = roleDAO.findByRole(UserRoles.SYSUSER.getRole());
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-        userDAO.save(user);
+        ownerUser.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        userDAO.save(ownerUser);
 
         Config config = new Config();
-        config.setSetSchedule(false);
+        config.setOwnerUser(ownerUser);
+        config.setIsSetSchedule(false);
         configService.add(config);
 
         OrganisationBalance organisationBalance = new OrganisationBalance();
         organisationBalance.setBalance(0.0f);
-        organisationBalance.setUser(user);
+        organisationBalance.setUser(ownerUser);
         List<OrgTarif> orgTarifs = orgTarifService.getTarifs();
         organisationBalance.setOrgTarif(orgTarifs.size() > 0 ? orgTarifs.get(0) : new OrgTarif());
         organisationBalance.setExpDate(LocalDate.now().minusDays(1));

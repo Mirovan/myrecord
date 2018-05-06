@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.myrecord.front.data.dao.ConfigDAO;
 import ru.myrecord.front.data.model.entities.Config;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ConfigService;
 
 @Service("configService")
@@ -27,5 +28,10 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void update(Config config) {
         configDAO.save(config);
+    }
+
+    @Override
+    public Config findByOwnerUser(User ownerUser) {
+        return configDAO.findByOwnerUser(ownerUser);
     }
 }

@@ -47,6 +47,7 @@
                                             <a href="" class="btn btn-primary"
                                                th:href="@{'/cabinet/clients/payment/record/' + ${record.id} + '/pay/'}"
                                                th:if="${(record.clientPayment == null) or (record.clientPayment != null and record.clientPayment.getPaid() == false)}">Оплатить</a>
+                                            <!-- else -->
                                             <span
                                                th:if="${record.clientPayment != null and record.clientPayment.getPaid() == true}">Оплачено</span>
                                         </td>

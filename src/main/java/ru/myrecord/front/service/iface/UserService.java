@@ -15,7 +15,7 @@ import java.util.Set;
 
 public interface UserService {
     public User findUserByEmail(String email);
-    public void addSysUser(User user);
+    public void addSysUser(User ownerUser);
     public void addSimpleUser(User user);
     public void update(User user);
     Set<User> findUsersByOwner(User ownerUser);  //Поиск всех пользователей для ownerUser

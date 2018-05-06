@@ -171,7 +171,7 @@ public class ClientRecordRestController {
             //Находим всех мастеров кто работает в этот день
             LocalDate date = LocalDate.of(year, month, day);
 
-            Set<Schedule> schedules = scheduleService.findByDate(date, ownerUser);
+            Set<Schedule> schedules = scheduleService.findWorkersByDate(date, ownerUser);
 
             for (Schedule item : schedules) {
                 String name = item.getWorker().getName() +  " " + item.getWorker().getSirname();
@@ -196,24 +196,28 @@ public class ClientRecordRestController {
                                                   Principal principal) {
         User ownerUser = userService.findUserByEmail(principal.getName());
 
-        //if (day == null) day = LocalDate.now().getDayOfMonth();
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
 
+        Product product = productService.findProductById(productId);
+        User worker = userService.findUserById(workerId);
+
         //ToDo: переделать сущность CalendarAdapter
         //Находим все дни когда сотрудники работают в конкретном месяце конкретного года
-        List<CalendarAdapter> calendar = clientRecordService.getMonthCalendar(year, month, ownerUser);
+        List<CalendarAdapter> calendar = clientRecordService.getMonthCalendar(year, month, product, worker, ownerUser);
 
         Set<CalendarRecord> calendarMap = new HashSet<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        for (CalendarAdapter item: calendar) {
-            if ( item != null && item.getData() != null ) {
-                Set<UserAdapter> workers = (Set<UserAdapter>) item.getData();
-                if (workers.size() > 0) {
-                    int dayOfMonth = item.getDate().getDayOfMonth();
+        Config config = configService.findByOwnerUser(ownerUser);
+
+        //ToDo: переделать по нормальному
+        //Без учета расписания
+        if (config.getIsSetSchedule() == false) {
+            for (CalendarAdapter item : calendar) {
+                if (item != null) {
                     CalendarRecord calendarRecord = new CalendarRecord(
-                            String.valueOf(dayOfMonth),
+                            String.valueOf(item.getDate().getDayOfMonth()),
                             "",
                             item.getDate().format(formatter),
                             item.getDate().format(formatter)
@@ -222,6 +226,26 @@ public class ClientRecordRestController {
                     calendarRecord.setRendering("background");
                     calendarRecord.setColor("#11ff11");
                     calendarMap.add(calendarRecord);
+                }
+            }
+        } else {
+            //с учетом расписания
+            for (CalendarAdapter item : calendar) {
+                if (item != null && item.getData() != null) {
+                    Set<UserAdapter> workers = (Set<UserAdapter>) item.getData();
+                    if (workers.size() > 0) {
+                        int dayOfMonth = item.getDate().getDayOfMonth();
+                        CalendarRecord calendarRecord = new CalendarRecord(
+                                String.valueOf(dayOfMonth),
+                                "",
+                                item.getDate().format(formatter),
+                                item.getDate().format(formatter)
+                        );
+                        calendarRecord.setOverlap(true);
+                        calendarRecord.setRendering("background");
+                        calendarRecord.setColor("#11ff11");
+                        calendarMap.add(calendarRecord);
+                    }
                 }
             }
         }

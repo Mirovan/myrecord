@@ -15,10 +15,7 @@ import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @Service("clientRecordService")
 public class ClientRecordServiceImpl implements ClientRecordService {
@@ -82,66 +79,107 @@ public class ClientRecordServiceImpl implements ClientRecordService {
      * Отображение месячного календаря для записи
      * */
     @Override
-    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser) {
+    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User worker, User ownerUser) {
         List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
         for (CalendarAdapter item : calendar) {
             //null - это просто пустые дни в начале месяца начиная с понедельника
             if (item != null) {
-                //Находим всех мастеров, у кого есть в расписании этот день
-                Set<User> users = userService.findWorkersByDate(item.getDate(), ownerUser);
-                Set<UserAdapter> usersAdapter =
-                        userService.getUserAdapterCollection(users);
-                item.setData(usersAdapter);
-            }
-        }
-
-        return calendar;
-    }
-
-
-    /**
-     * Отображение месячного календаря для записи
-     * */
-    @Override
-    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User ownerUser) {
-        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
-        for (CalendarAdapter item : calendar) {
-            //null - это просто пустые дни в начале месяца начиная с понедельника
-            if (item != null) {
-                //Находим всех мастеров, у кого есть в расписании этот день
-                Set<User> users = userService.findWorkersByDateAndProduct(item.getDate(), product, ownerUser);
-                Set<UserAdapter> usersAdapter = userService.getUserAdapterCollection(users);
-                item.setData(usersAdapter);
-            }
-        }
-
-        return calendar;
-    }
-
-
-    /**
-     * Отображение месячного календаря для записи
-     * */
-    @Override
-    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser) {
-        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
-        for (CalendarAdapter item : calendar) {
-            //null - это просто пустые дни в начале месяца начиная с понедельника
-            if (item != null) {
-                //Находим всех мастеров, у кого есть в расписании этот день
-                Schedule schedule = scheduleService.findByUserAndDate(worker, item.getDate());
-                if (schedule != null) {
-                    UserAdapter userAdapter = userService.getUserAdapter(worker);
-                    //добавляем всего одного сотрудника в сэт
-                    Set<UserAdapter> users = new HashSet<>();
-                    users.add(userAdapter);
-                    item.setData(users);
+                //Если не указан сотрудник и услуга
+                if (product == null && worker == null) {
+                    item.setData( getWorkersByDate(item.getDate(), ownerUser) );
+                } else if (worker != null) {
+                    if (scheduleService.hasWorkerWorkingDay(worker, item.getDate())) {
+                        item.setData(
+                                userService.getUserAdapterCollection( Collections.singleton(worker) )
+                        );
+                    }
+                } else if (product != null) {
+                    item.setData( getWorkersByDateAndProduct(item.getDate(), product, ownerUser) );
                 }
             }
         }
 
         return calendar;
     }
+
+//
+//    /**
+//     * Получаем сотрудника, кто работает в этот день
+//     * */
+//    private Object getWorkerByDate(LocalDate date, User worker, User ownerUser) {
+//        //находим всех сотрудников кто работает в этот день
+//        Set<UserAdapter> workers = getWorkersByDate(date, ownerUser);
+//
+//        //если сотрудник работает в этот день
+//        if (workers != null && workers.contains(userService.getUserAdapter(worker)))
+//            return userService.getUserAdapterCollection( Collections.singleton(worker) );
+//        else
+//            return null;
+//    }
+
+
+    /**
+     * Находим всех мастеров, у кого есть в расписании этот день
+     * */
+    private Set<UserAdapter> getWorkersByDate(LocalDate date, User ownerUser) {
+        Set<User> users = userService.findWorkersByDate(date, ownerUser);
+        return userService.getUserAdapterCollection(users);
+    }
+
+
+    /**
+     * Находим всех мастеров, у кого есть в расписании этот день, которые оказывают услугу product
+     * */
+    private Object getWorkersByDateAndProduct(LocalDate date, Product product, User ownerUser) {
+        Set<User> users = userService.findWorkersByDateAndProduct(date, product, ownerUser);
+        return userService.getUserAdapterCollection(users);
+    }
+
+
+
+//    /**
+//     * Отображение месячного календаря для записи
+//     * */
+//    @Override
+//    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User ownerUser) {
+//        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
+//        for (CalendarAdapter item : calendar) {
+//            //null - это просто пустые дни в начале месяца начиная с понедельника
+//            if (item != null) {
+//                //Находим всех мастеров, у кого есть в расписании этот день
+//                Set<User> users = userService.findWorkersByDateAndProduct(item.getDate(), product, ownerUser);
+//                Set<UserAdapter> usersAdapter = userService.getUserAdapterCollection(users);
+//                item.setData(usersAdapter);
+//            }
+//        }
+//
+//        return calendar;
+//    }
+//
+//
+//    /**
+//     * Отображение месячного календаря для записи
+//     * */
+//    @Override
+//    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser) {
+//        List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
+//        for (CalendarAdapter item : calendar) {
+//            //null - это просто пустые дни в начале месяца начиная с понедельника
+//            if (item != null) {
+//                //Находим всех мастеров, у кого есть в расписании этот день
+//                Schedule schedule = scheduleService.findByWorkerAndDate(worker, item.getDate());
+//                if (schedule != null) {
+//                    UserAdapter userAdapter = userService.getUserAdapter(worker);
+//                    //добавляем всего одного сотрудника в сэт
+//                    Set<UserAdapter> users = new HashSet<>();
+//                    users.add(userAdapter);
+//                    item.setData(users);
+//                }
+//            }
+//        }
+//
+//        return calendar;
+//    }
 
 
     @Override

@@ -220,6 +220,16 @@ public class UserServiceImpl implements UserService {
         return hasUser(ownerUser.getId(), childUserId);
     }
 
+
+    /**
+     * Проверка - принадлежит ли системному пользователю обычный пользователь
+     * */
+    @Override
+    public Boolean hasUser(User ownerUser, Integer childUserId) {
+        return hasUser(ownerUser.getId(), childUserId);
+    }
+
+
     /**
      * Проверка - принадлежит ли системному пользователю данное помещение
      * */
@@ -330,14 +340,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    /**
+     * Поиск сотрудников, которые работают в определенный день
+     * */
     @Override
     public Set<User> findWorkersByDate(LocalDate date, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
+        Set<Schedule> scheduleSet = scheduleService.findWorkersByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
-            User user = schedule.getWorker();
-            if ( hasUser(ownerUser.getId(), user.getId()) )
-                res.add( user );
+            User worker = schedule.getWorker();
+            if ( hasUser(ownerUser.getId(), worker.getId()) )
+                res.add( worker );
         }
         return res;
     }
@@ -346,7 +359,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<User> findWorkersByDateAndProduct(LocalDate date, Product product, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
+        Set<Schedule> scheduleSet = scheduleService.findWorkersByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
             User user = schedule.getWorker();
             //Если сист. польователь имеет этого раюотника и у раюботника есть этот продукт

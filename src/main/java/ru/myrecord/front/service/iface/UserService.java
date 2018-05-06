@@ -29,8 +29,9 @@ public interface UserService {
     UserAdapter getUserAdapter(User user);
     Set<Role> getRolesForSimpleUser();
     Boolean userEquals(Integer userId1, Integer userId2);
-    Boolean hasUser(Integer ownerUserId, Integer childUser);
+    Boolean hasUser(Integer ownerUserId, Integer childUserId);
     Boolean hasUser(Principal principal, Integer childUserId);
+    Boolean hasUser(User ownerUser, Integer childUserId);
     Boolean hasRoom(Integer ownerUserId, Integer roomId);
     Boolean hasRoom(Principal principal, Integer roomId);
     Boolean hasProduct(Integer ownerUserId, Integer productId);

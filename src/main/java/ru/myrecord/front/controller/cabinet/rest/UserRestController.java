@@ -66,10 +66,10 @@ public class UserRestController {
      * */
     @RequestMapping(value="/cabinet/users/json-month-schedule/", method = RequestMethod.GET)
     public List<CalendarAdapter> getCalendar(Integer workerId, Integer year, Integer month, Principal principal) {
-        User user = userService.findUserById(workerId);
-        User ownerUser = user.getOwnerUser();
+        User worker = userService.findUserById(workerId);
+        User ownerUser = worker.getOwnerUser();
 
-        List<CalendarAdapter> calendar = scheduleService.getMonthCalendar(year, month, ownerUser, user);
+        List<CalendarAdapter> calendar = scheduleService.getMonthCalendar(year, month, worker, ownerUser);
 
         //ScheduleAdapter userMonthSchedule = new ScheduleAdapter();
 

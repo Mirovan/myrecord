@@ -11,8 +11,10 @@ import ru.myrecord.front.data.model.entities.Schedule;
 import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.CalendarService;
 import ru.myrecord.front.service.iface.ScheduleService;
+import ru.myrecord.front.service.iface.UserService;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,9 +30,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private CalendarService calendarService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public List<Schedule> findByUser(User user) {
-        return scheduleDAO.findByWorker(user);
+    public List<Schedule> findByWorker(User worker) {
+        return scheduleDAO.findByWorker(worker);
     }
 
     @Override
@@ -39,28 +44,29 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule findByUserAndDate(User user, LocalDate date) {
-        return scheduleDAO.findByWorkerAndSdate(user, date);
+    public Schedule findByWorkerAndDate(User worker, LocalDate date) {
+        return scheduleDAO.findByWorkerAndSdate(worker, date);
     }
 
     @Override
-    public void removeScheduleByDate(User user, LocalDate date) {
-        scheduleDAO.deleteByWorkerAndSdate(user, date);
+    public void removeScheduleByDate(User worker, LocalDate date) {
+        scheduleDAO.deleteByWorkerAndSdate(worker, date);
     }
+
 
     /**
      * Получаем список - месячный календарь
      * */
     @Override
-    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser, User user) {
+    public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser) {
         //Расписание пользователя
-        List<Schedule> userSchedule = findByUser(user);
+        List<Schedule> userSchedule = findByWorker(worker);
 
         List<CalendarAdapter> calendar = calendarService.getMonthCalendar(year, month);
         for (CalendarAdapter item : calendar) {
             //null - это просто пустые дни в начале месяца начиная с понедельника
             if (item != null) {
-                Schedule schedule = findByUserAndDate(user, item.getDate());
+                Schedule schedule = findByWorkerAndDate(worker, item.getDate());
                 //ToDo: сделать через адаптер
                 //ScheduleAdapter scheduleAdapter = new ScheduleAdapter();
                 item.setData(schedule);
@@ -71,10 +77,32 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
+    /**
+     * поиск сотрудников по дате работы
+     * */
     @Override
-    public Set<Schedule> findByDate(LocalDate date, User ownerUser) {
-        //Todo: улучшить выборку - добавить еще чтобы выбирал по ownerUser
-        return scheduleDAO.findBySdate(date);
+    public Set<Schedule> findWorkersByDate(LocalDate date, User ownerUser) {
+        //Todo: улучшить выборку
+        Set<Schedule> allWorkersSchedule = scheduleDAO.findBySdate(date);
+        Set<Schedule> result = new HashSet<>();
+        for (Schedule item: allWorkersSchedule) {
+            if ( userService.hasUser(ownerUser, item.getWorker().getId()) )
+                result.add( item );
+        }
+        return result;
+    }
+
+
+    /**
+     * Работает ли сотрудник в определенный день
+     * */
+    @Override
+    public boolean hasWorkerWorkingDay(User worker, LocalDate date) {
+        Schedule schedule = findByWorkerAndDate(worker, date);
+        if (schedule == null)
+            return false;
+        else
+            return true;
     }
 
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="cabinet/inc/head.inc::head"></head>
+<body>
+<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
+<div class="page">
+    <!-- navbar-->
+    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
+    <!-- Breadcrumb-->
+    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
+
+    <section>
+        <div class="container-fluid">
+            <!-- Page Header-->
+            <header>
+                <h1 class="h3 display">Настройки</h1>
+            </header>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <form th:object="${config}" action="/cabinet/config/" method="post">
+                                <input type="hidden" th:field="*{id}" /> <br/>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 form-control-label">Использовать расписание</label>
+                                    <div class="col-sm-4 mb-3">
+                                        <select th:field="*{isSetSchedule}" class="form-control">
+                                            <!-- if -->
+                                            <div th:if="*{isSetSchedule}">
+                                                <option th:value="true" selected="selected">Да</option>
+                                                <option th:value="false">Нет</option>
+                                            </div>
+                                            <!-- else -->
+                                            <div th:unless="*{isSetSchedule}">
+                                                <option th:value="true">Да</option>
+                                                <option th:value="false" selected="selected">Нет</option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <input value="Сохранить" class="btn btn-primary" type="submit" />
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+</div>
+<div th:include="cabinet/inc/js.inc::js"></div>
+</body>
+</html>

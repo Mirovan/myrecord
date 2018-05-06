@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 public interface ScheduleService {
-    List<Schedule> findByUser(User user);
-    Schedule findByUserAndDate(User user, LocalDate date);
+    List<Schedule> findByWorker(User worker);
+    Schedule findByWorkerAndDate(User worker, LocalDate date);
     void add(Schedule schedule);
     void removeScheduleByDate(User user, LocalDate date);
-    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser, User user);
-    Set<Schedule> findByDate(LocalDate date, User ownerUser);
+    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser);
+    Set<Schedule> findWorkersByDate(LocalDate date, User ownerUser);    //поиск сотрудников по дате работы
+    boolean hasWorkerWorkingDay(User worker, LocalDate date);   //Работает ли сотрудник в определенный день
 }

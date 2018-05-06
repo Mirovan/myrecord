@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.myrecord.front.data.model.Enums.UserRoles;
+import ru.myrecord.front.data.model.enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
 import ru.myrecord.front.data.model.entities.organisation.Payment;
 import ru.myrecord.front.data.model.entities.User;
@@ -66,10 +66,10 @@ public class UserRestController {
      * */
     @RequestMapping(value="/cabinet/users/json-month-schedule/", method = RequestMethod.GET)
     public List<CalendarAdapter> getCalendar(Integer workerId, Integer year, Integer month, Principal principal) {
-        User user = userService.findUserById(workerId);
-        User ownerUser = user.getOwnerUser();
+        User worker = userService.findUserById(workerId);
+        User ownerUser = worker.getOwnerUser();
 
-        List<CalendarAdapter> calendar = scheduleService.getMonthCalendar(year, month, ownerUser, user);
+        List<CalendarAdapter> calendar = scheduleService.getMonthCalendar(year, month, worker, ownerUser);
 
         //ScheduleAdapter userMonthSchedule = new ScheduleAdapter();
 

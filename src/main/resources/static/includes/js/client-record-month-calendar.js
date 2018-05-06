@@ -16,7 +16,7 @@ $(document).on(
         month = month + '';
         year = year + '';
 
-        showCalendar(month, year);
+        showCalendar(month, year, $('#productId').val(), $('#workerId').val());
     }
 );
 
@@ -39,7 +39,7 @@ $(document).on(
         month = month + '';
         year = year + '';
 
-        showCalendar(month, year);
+        showCalendar(month, year, $('#productId').val(), $('#workerId').val());
     }
 );
 
@@ -50,17 +50,31 @@ $(document).ready(
         if (month.length < 2) month = '0' + month;
         var year = parseInt($('#yearInput').val()) + '';
 
-        showCalendar(month, year);
+        $('#productId').change (
+            function () {
+                changeUserSelectList();
+            }
+        );
+
+        $('#workerId').change (
+            function () {
+                showCalendar(month, year, $('#productId').val(), $('#workerId').val());
+            }
+        );
+
+        showCalendar(month, year, $('#productId').val(), $('#workerId').val());
     }
 );
 
 
-function showCalendar(month, year) {
+function showCalendar(month, year, productId, workerId) {
     $.getJSON(
         "/cabinet/clients/json-worker-month-schedule/",
         {
             month: month,
-            year: year
+            year: year,
+            productId: productId,
+            workerId: workerId
         },
         function(eventBackgroundData) {
             $.getJSON(
@@ -103,4 +117,27 @@ function drawCalendar(eventData) {
 
     $('#calendar').fullCalendar('addEventSource', eventData);
     $('#calendar').fullCalendar('rerenderEvents');
+}
+
+
+function changeUserSelectList() {
+    $.getJSON(
+        "/cabinet/clients/json-users-by-product/",
+        {
+            productId: $('#productId').val(),
+        },
+        function(data) {
+            $('#workerId').html('');
+            $('#workerId').append('<option value="">-- Все мастера --</option>');
+            $.each(data, function(key, item) {
+                $('#workerId').append('<option value="' + item.id + '">' + item.name + ' ' + item.sirname + '</option>');
+            });
+
+            var month = parseInt($('#monthInput').val()) + '';
+            if (month.length < 2) month = '0' + month;
+            var year = parseInt($('#yearInput').val()) + '';
+            
+            showCalendar(month, year, $('#productId').val(), $('#workerId').val());
+        }
+    );
 }

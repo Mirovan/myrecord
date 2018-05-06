@@ -15,6 +15,9 @@ public class CalendarServiceImpl implements CalendarService {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Получение календаря (всеъ дней) по месяцу и году
+     * */
     @Override
     public List<CalendarAdapter> getMonthCalendar(Integer year, Integer month) {
         List<CalendarAdapter> calendar = new ArrayList<>();

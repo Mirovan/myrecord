@@ -51,7 +51,7 @@ public class StatisticController/* implements ErrorController*/{
         User ownerUser = userService.findUserByEmail(principal.getName());
 
         //находим все записи по дате
-        List<ClientRecord> clientRecords = clientRecordService.findByDates(from, to);
+        List<ClientRecord> clientRecords = clientRecordService.findByDates(from, to, ownerUser);
 
         //находим все оплаты по записям
         List<ClientPayment> clientPayments = clientPaymentService.findByRecords(clientRecords);

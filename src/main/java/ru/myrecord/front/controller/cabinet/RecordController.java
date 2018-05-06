@@ -31,7 +31,7 @@ public class RecordController/* implements ErrorController*/{
     private ClientRecordService clientRecordService;
 
     @Autowired
-    private UserProductService userProductService;
+    private RoleService roleService;
 
     @Autowired
     private ClientRecordProductService clientRecordProductService;
@@ -210,6 +210,10 @@ public class RecordController/* implements ErrorController*/{
             LocalDate recordDate = LocalDate.parse(date, timeFormatter);
 
             User ownerUser = userService.findUserByEmail(principal.getName());
+            client.setActive(true);
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleService.findRoleByName("CLIENT"));
+            client.setRoles(roles);
             ClientRecord clientRecord = new ClientRecord(client, recordDate);
             clientRecord = clientRecordService.add(clientRecord, ownerUser);
 
@@ -217,6 +221,7 @@ public class RecordController/* implements ErrorController*/{
             clientRecordProduct.setClientRecord(clientRecord);
             Product product = productService.findProductById(productId);
             clientRecordProduct.setProduct(product);
+
             User master = userService.findUserById(masterId);
             clientRecordProduct.setWorker(master);
             clientRecordProduct.setSdate(recordDateTime);

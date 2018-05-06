@@ -122,6 +122,16 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toSet());
     }
 
+
+    @Override
+    public Set<User> findClientsByOwner(User ownerUser) {
+        return findUsersByOwner(ownerUser)
+                .stream()
+                .filter(user -> user.getRoles().contains(roleService.findRoleByName("CLIENT")))
+                .collect(Collectors.toSet());
+    }
+
+
     @Override
     public Set<User> findByRole(UserRoles userRoles) {
         Role role = new Role();

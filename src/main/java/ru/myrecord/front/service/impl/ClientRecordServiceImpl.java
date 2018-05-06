@@ -147,7 +147,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     @Override
     public List<ClientRecord> findByDates(LocalDate from, LocalDate to, User ownerUser) {
         //ToDo: добавить список клиентов, чтобы найти среди них у кого ownerUser
-        return clientRecordDAO.findByOwnerUserAndDateBetweenAndActiveTrue(from, to, ownerUser);
+        //Находим всех клиентов у ownerUser
+        Set<User> clients = userService.findClientsByOwner(ownerUser);
+        return clientRecordDAO.findByDateBetweenAndUserInAndActiveTrue(from, to, clients);
     }
 
 }

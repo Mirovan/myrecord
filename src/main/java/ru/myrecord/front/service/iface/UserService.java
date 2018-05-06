@@ -20,6 +20,7 @@ public interface UserService {
     public void update(User user);
     Set<User> findUsersByOwner(User ownerUser);  //Поиск всех пользователей для ownerUser
     Set<User> findWorkersByOwner(User ownerUser);  //Поиск всех работников для ownerUser
+    Set<User> findClientsByOwner(User ownerUser);  //Поиск всех работников для ownerUser
     Set<User> findByRole(UserRoles userRoles);  //Поиск всех пользователей с ролью SysUser
     public Set<User> findUsersByRoom(Room room);
     public User findUserById(Integer id);

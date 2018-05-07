@@ -48,6 +48,7 @@ public class RoomController/* implements ErrorController*/{
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject( "rooms", roomService.findRoomsByActive(user) );
+        modelAndView.addObject("menuSelect", "");
         modelAndView.setViewName("cabinet/room/index");
         return modelAndView;
     }

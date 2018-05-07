@@ -41,6 +41,7 @@ public class BillingController {
         }
         modelAndView.addObject( "balance", balance);
         modelAndView.addObject("payments", paymentsService.getPayments(user));
+        modelAndView.addObject("menuSelect", "billing");
         modelAndView.setViewName("cabinet/billing/index");
         return modelAndView;
     }
@@ -50,6 +51,7 @@ public class BillingController {
         ModelAndView modelAndView = new ModelAndView();
         User user = userService.findUserByEmail(principal.getName());
         modelAndView.addObject( "balance", balanceService.getBalanceByUser(user));
+        modelAndView.addObject("menuSelect", "billing");
         modelAndView.setViewName("cabinet/billing/pay");
         return modelAndView;
     }

@@ -48,8 +48,10 @@ public class UserController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/users/", method = RequestMethod.GET)
     public ModelAndView showUsers(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
+
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "users", userService.findWorkersByOwner(user));
+        modelAndView.addObject("users", userService.findWorkersByOwner(user));
+        modelAndView.addObject("menuSelect", "users");
         modelAndView.setViewName("cabinet/user/index");
         return modelAndView;
     }
@@ -67,6 +69,7 @@ public class UserController/* implements ErrorController*/{
         Set<Role> rolesAvailable = userService.getRolesForSimpleUser();
         modelAndView.addObject("roles", rolesAvailable); //Роли из БД
         modelAndView.addObject("user", user);
+        modelAndView.addObject("menuSelect", "users");
         modelAndView.setViewName("cabinet/user/edit");
         return modelAndView;
     }
@@ -109,7 +112,7 @@ public class UserController/* implements ErrorController*/{
                 //Все доступные роли
                 Set<Role> rolesAvailable = userService.getRolesForSimpleUser();
                 modelAndView.addObject("roles", rolesAvailable);
-
+                modelAndView.addObject("menuSelect", "users");
                 modelAndView.setViewName("cabinet/user/edit");
             } else {
                 return new ModelAndView("redirect:/cabinet/users/");
@@ -120,7 +123,6 @@ public class UserController/* implements ErrorController*/{
         }
     }
 
-
     /**
      * Сохранение редактируемого пользователя
      * */
@@ -129,20 +131,64 @@ public class UserController/* implements ErrorController*/{
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         // и роль существует в списке доступных для этого системного пользователя
         if ( userService.hasUser(principal, userUpd.getId()) &&
-             userService.hasAccessToRoles(principal, userUpd.getRoles()) ) {
+                userService.hasAccessToRoles(principal, userUpd.getRoles()) ) {
             //Находим этого пользователя
             User user = userService.findUserById(userUpd.getId());
             //Обновляем данные
             user.setName(userUpd.getName());
             user.setSirname(userUpd.getSirname());
+            user.setEmail(userUpd.getEmail());
             user.setRoles(userUpd.getRoles());
-            if (userUpd.getPass() != null) {
+            if (userUpd.getPass() != null && userUpd.getPass() != "") {
                 user.setPass(bCryptPasswordEncoder.encode(userUpd.getPass()));
             }
             user.setOwnerUser(user.getOwnerUser());
             userService.update(user);
         }
         return new ModelAndView("redirect:/cabinet/users/");
+    }
+
+
+    /**
+     * Конфиг - Форма редактирования пользователя - самого себя
+     * */
+    @RequestMapping(value="/cabinet/config/user/", method = RequestMethod.GET)
+    public ModelAndView updateSelfUserForm(Principal principal) {
+        User selfUser = userService.findUserByEmail(principal.getName());
+
+        ModelAndView modelAndView = new ModelAndView();
+        if (selfUser.getActive() == true) {
+            selfUser.setPass("");
+            modelAndView.addObject("user", selfUser);
+            modelAndView.addObject("menuSelect", "config");
+            modelAndView.setViewName("cabinet/user/editself");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Сохранение редактируемого пользователя
+     * */
+    @RequestMapping(value="/cabinet/config/user/", method = RequestMethod.POST)
+    public ModelAndView updateSelfUserFormPost(User userUpd, Principal principal) {
+        User selfUser = userService.findUserByEmail(principal.getName());
+
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.userEquals(selfUser.getId(), userUpd.getId()) ) {
+            //Обновляем данные
+            selfUser.setName(userUpd.getName());
+            selfUser.setEmail(userUpd.getEmail());
+            selfUser.setSirname(userUpd.getSirname());
+            if (userUpd.getPass() != null && userUpd.getPass() != "") {
+                selfUser.setPass(bCryptPasswordEncoder.encode(userUpd.getPass()));
+            }
+            selfUser.setPhone(userUpd.getPhone());
+            userService.update(selfUser);
+        }
+        return new ModelAndView("redirect:/cabinet/config/user/");
     }
 
 
@@ -182,6 +228,7 @@ public class UserController/* implements ErrorController*/{
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("worker", worker);
             modelAndView.addObject("usersalary", userSalary);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/salary/edit");
             return modelAndView;
         } else {
@@ -241,6 +288,7 @@ public class UserController/* implements ErrorController*/{
             modelAndView.addObject("user", user);
             modelAndView.addObject("userId", userId);
             modelAndView.addObject("userProductSalaries", userProductSalaries);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/products/salary/index");
             return modelAndView;
         } else {
@@ -272,6 +320,7 @@ public class UserController/* implements ErrorController*/{
             modelAndView.addObject("workerId", workerId);
             modelAndView.addObject("product", product);
             modelAndView.addObject("userProductSalary", userProductSalary);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/products/salary/edit");
             return modelAndView;
         } else {

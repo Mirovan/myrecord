@@ -55,6 +55,7 @@ public class RecordController/* implements ErrorController*/{
         modelAndView.addObject("month", date.getMonthValue());
         modelAndView.addObject("workers", workers);
         modelAndView.addObject("products", products);
+        modelAndView.addObject("menuSelect", "record");
         modelAndView.setViewName("/cabinet/client/record/index");
         return modelAndView;
     }
@@ -104,9 +105,10 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
-            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy 00:00")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("products", products);
+            modelAndView.addObject("menuSelect", "record");
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
             return modelAndView;
         } else {
@@ -146,6 +148,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("client", client);
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("products" , products);
+            modelAndView.addObject("menuSelect", "record");
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
             return modelAndView;
         } else {
@@ -185,6 +188,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("client", client);
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("products" , products);
+            modelAndView.addObject("menuSelect", "record");
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
             return modelAndView;
         } else {
@@ -209,6 +213,7 @@ public class RecordController/* implements ErrorController*/{
         modelAndView.addObject("products", products);
         modelAndView.addObject("masters", masters);
         modelAndView.addObject("client", client);
+        modelAndView.addObject("menuSelect", "record");
         modelAndView.setViewName("cabinet/client/record/edit");
         return modelAndView;
     }

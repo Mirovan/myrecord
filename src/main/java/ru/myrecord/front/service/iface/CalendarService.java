@@ -1,7 +1,6 @@
 package ru.myrecord.front.service.iface;
 
 import ru.myrecord.front.data.model.adapters.CalendarAdapter;
-import ru.myrecord.front.data.model.entities.ClientRecord;
 import ru.myrecord.front.data.model.entities.User;
 
 import java.util.List;

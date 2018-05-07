@@ -82,8 +82,8 @@ table {
 }
 
 .page {
-  position: absolute;
-  top: 0;
+  position: relative;
+  margin-left: 200px;
   right: 0;
   -webkit-transition: width 0.3s linear;
   transition: width 0.3s linear;

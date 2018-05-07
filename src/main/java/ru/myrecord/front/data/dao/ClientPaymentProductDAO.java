@@ -6,4 +6,7 @@ import ru.myrecord.front.data.model.entities.ClientPaymentProduct;
 
 @Repository("clientPaymentProductDAO")
 public interface ClientPaymentProductDAO extends JpaRepository<ClientPaymentProduct, Integer> {
+
+
+
 }

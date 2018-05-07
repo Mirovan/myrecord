@@ -14,7 +14,8 @@ public interface ClientRecordService {
     ClientRecord findByUser(User user);
     ClientRecord findById(Integer Id);   //Поиск по Id
     Set<ClientRecord> findByDate(LocalDate date);   //Поиск по дате
-    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User ownerUser);
-    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User ownerUser);
-    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser);
+    List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User worker, User ownerUser);
+    //List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, User worker, User ownerUser);
+    //List<CalendarAdapter> getMonthCalendar(Integer year, Integer month, Product product, User ownerUser);
+    List<ClientRecord> findByDates(LocalDate from, LocalDate to, User ownerUser);
 }

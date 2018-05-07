@@ -18,6 +18,7 @@ import ru.myrecord.front.service.iface.UserProductService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,9 +49,9 @@ public class ProductController/* implements ErrorController*/{
     public ModelAndView showRoomsProducts(Principal principal) {
         User ownerUser = userService.findUserByEmail( principal.getName() );
         //Ищем все комнаты пользователя
-        Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
+        List<Room> rooms = roomService.findRoomsByActive(ownerUser);
 
-        Set<RoomProductsAdapter> roomProducts = new HashSet<>();
+        List<RoomProductsAdapter> roomProducts = new ArrayList<>();
         //Ищем все услуги в этих комнатах
         for (Room room: rooms) {
             Set<Product> products = productService.findProductsByRoom(room);
@@ -147,14 +148,16 @@ public class ProductController/* implements ErrorController*/{
         }
     }
 
-
+    /**
+     * Добавление услуг в опреденное помещение
+     * */
     @RequestMapping(value="/cabinet/rooms/{roomId}/addproduct/", method = RequestMethod.GET)
     public ModelAndView addProductToRoom(@PathVariable Integer roomId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasRoom(principal, roomId) ) {
             Room room = roomService.findRoomById(roomId);
             User user = room.getOwnerUser();
-            Set<Room> rooms = roomService.findRoomsByActive(user);
+            List<Room> rooms = roomService.findRoomsByActive(user);
             Product product = new Product();
             product.setRoom(room);
 
@@ -162,25 +165,27 @@ public class ProductController/* implements ErrorController*/{
             modelAndView.addObject("action", "add");
             modelAndView.addObject("rooms", rooms);
             modelAndView.addObject("product", product);
-            modelAndView.setViewName("cabinet/product/edit");
+            modelAndView.setViewName("cabinet/room/product/editproduct");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }
     }
 
-
+    /**
+     * Добавление услуги без привязки к комнате
+     * */
     @RequestMapping(value="/cabinet/rooms/addproduct/", method = RequestMethod.GET)
     public ModelAndView addProductToRoom(Principal principal) {
         User ownerUser = userService.findUserByEmail( principal.getName() );
-        Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
+        List<Room> rooms = roomService.findRoomsByActive(ownerUser);
         Product product = new Product();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("action", "add");
         modelAndView.addObject("rooms", rooms);
         modelAndView.addObject("product", product);
-        modelAndView.setViewName("cabinet/product/edit");
+        modelAndView.setViewName("cabinet/room/product/editproduct");
         return modelAndView;
     }
 
@@ -205,13 +210,13 @@ public class ProductController/* implements ErrorController*/{
         if ( userService.hasProduct(principal, productId) ) {
             Product product = productService.findProductById(productId);
             User ownerUser = product.getRoom().getOwnerUser();   //пользователь которому принадлежит помещение с этой услугой
-            Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
+            List<Room> rooms = roomService.findRoomsByActive(ownerUser);
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
             modelAndView.addObject("rooms", rooms);
             modelAndView.addObject("product", product);
-            modelAndView.setViewName("cabinet/product/edit");
+            modelAndView.setViewName("cabinet/room/product/editproduct");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/");

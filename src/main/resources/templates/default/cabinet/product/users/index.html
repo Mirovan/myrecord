@@ -40,7 +40,7 @@
 
                                 <div th:each="user : ${involveUsers}" class="col-sm-10">
                                     <input name="involveUsers[]" th:value="${user.id}" type="checkbox" checked="checked" />
-                                    <label th:text="${user.name}"></label>
+                                    <label th:text="@{${user.name} + ' ' + ${user.sirname}}"></label>
                                 </div>
 
                                 <div th:each="user : ${freeUsers}" class="col-sm-10">

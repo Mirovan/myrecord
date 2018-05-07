@@ -1,23 +1,21 @@
 package ru.myrecord.front.controller.cabinet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.entities.*;
-import ru.myrecord.front.service.iface.*;
+import ru.myrecord.front.data.model.entities.Schedule;
+import ru.myrecord.front.data.model.entities.User;
+import ru.myrecord.front.service.iface.ScheduleService;
+import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Controller
@@ -80,7 +78,7 @@ public class ScheduleController/* implements ErrorController*/{
                     //Защита - чтобы левые данные не добавляли, а только этого месяца
                     if ( date.getMonthValue() == month && date.getYear() == year ) {
                         //Определяем есть ли такая запись уже в БД
-                        Schedule existSchedule = scheduleService.findByUserAndDate(worker, date);
+                        Schedule existSchedule = scheduleService.findByWorkerAndDate(worker, date);
                         if ( existSchedule == null ) {  //Такой записи нет - добавляем
                             scheduleService.add(schedule);
                         }

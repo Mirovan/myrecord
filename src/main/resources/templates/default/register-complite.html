@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="cabinet/inc/head.inc::head"></head>
+<body>
+
+<div class="login-page">
+	<div class="container">
+		<div class="form-outer text-center d-flex align-items-center">
+			<div class="form-inner container">
+				<div class="logo text-uppercase">
+					<strong class="text-primary">Регистрация успешна</strong>
+				</div>
+				<p>
+					<strong>Ваш пароль:</strong> <span th:text="${password}"></span>
+				</p>
+				<p>
+					<a href="/login/">Войти в личный кабинет</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:include="cabinet/inc/js.inc::js"></div>
+</body>
+</html>

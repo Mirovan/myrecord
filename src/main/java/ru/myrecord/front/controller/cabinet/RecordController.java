@@ -31,7 +31,10 @@ public class RecordController/* implements ErrorController*/{
     private ClientRecordService clientRecordService;
 
     @Autowired
-    private UserProductService userProductService;
+    private RoleService roleService;
+
+    @Autowired
+    private ConfigService configService;
 
     @Autowired
     private ClientRecordProductService clientRecordProductService;
@@ -60,6 +63,7 @@ public class RecordController/* implements ErrorController*/{
     /**
      * Календарь для определенного дня
      * */
+    //ToDo: переделать с учетом конфига без утановки расписания сотрудников
     @RequestMapping(value="/cabinet/clients/record-day/{day}/{month}/{year}/", method = RequestMethod.GET)
     public ModelAndView showDailyCalendar(@PathVariable Integer day,
                                           @PathVariable Integer month,
@@ -68,12 +72,26 @@ public class RecordController/* implements ErrorController*/{
         //ToDo: Проверка - имеет ли текущий пользователь записывать клиентов
         if ( true ) {
             User ownerUser = userService.findUserByEmail(principal.getName());
+            Config config = configService.findByOwnerUser(ownerUser);
 
-            //Находим всех мастеров кто работает в этот день
             LocalDate date = LocalDate.of(year, month, day);
-            Set<User> workers = userService.findWorkersByDate(date, ownerUser);
+            Set<Product> products = null;
+            Set<User> workers = null;
+
+            //без учета расписания сотрудников
+            if (config.getIsSetSchedule() == false) {
+                //Находим всех мастеров без учета расписания
+                workers = userService.findWorkersByOwner(ownerUser);
+            } else {
+                //Находим всех мастеров кто работает в этот день
+                workers = userService.findWorkersByDate(date, ownerUser);
+            }
+
+            //Список сотрудников
             Set<UserAdapter> workersAdapter = userService.getUserAdapterCollection(workers);
-            Set<Product> products = new HashSet<>();
+
+            //Список услуг
+            products = new HashSet<>();
             for (User worker : workers) {
                 Set<Product> workerProducts = productService.findProductsByWorker(worker);
                 products.addAll(workerProducts);
@@ -86,6 +104,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("products", products);
             modelAndView.setViewName("cabinet/client/record/dailycalendar");
@@ -123,6 +142,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("products" , products);
@@ -161,6 +181,7 @@ public class RecordController/* implements ErrorController*/{
             modelAndView.addObject("day", day);
             modelAndView.addObject("month", month);
             modelAndView.addObject("year", year);
+            modelAndView.addObject("date", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             modelAndView.addObject("client", client);
             modelAndView.addObject("workers" , workersAdapter);
             modelAndView.addObject("products" , products);
@@ -212,6 +233,10 @@ public class RecordController/* implements ErrorController*/{
             LocalDate recordDate = LocalDate.parse(date, timeFormatter);
 
             User ownerUser = userService.findUserByEmail(principal.getName());
+            client.setActive(true);
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleService.findRoleByName("CLIENT"));
+            client.setRoles(roles);
             ClientRecord clientRecord = new ClientRecord(client, recordDate);
             clientRecord = clientRecordService.add(clientRecord, ownerUser);
 
@@ -219,6 +244,7 @@ public class RecordController/* implements ErrorController*/{
             clientRecordProduct.setClientRecord(clientRecord);
             Product product = productService.findProductById(productId);
             clientRecordProduct.setProduct(product);
+
             User master = userService.findUserById(masterId);
             clientRecordProduct.setWorker(master);
             clientRecordProduct.setSdate(recordDateTime);

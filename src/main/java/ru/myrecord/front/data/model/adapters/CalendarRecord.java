@@ -3,28 +3,39 @@ package ru.myrecord.front.data.model.adapters;
 /**
  * Класс для отображения и передачи через JSON в JS-скрипт fullcalendar
  */
+
+/*
+{
+ start: '2018-04-24',
+ end: '2018-04-28',
+ overlap: false,
+ rendering: 'background',
+ color: '#ff9f89'
+ }
+* */
 public class CalendarRecord {
-    private int id;
+    private String id;
     private String title;
     private String start;
     private String end;
     private String allDay;
     private String resourceId;
+    private boolean overlap;
+    private String rendering;
+    private String color;
 
-    public CalendarRecord(int id, String title, String start, String end, String allDay, String resourceId) {
+    public CalendarRecord(String id, String title, String start, String end) {
         this.id = id;
         this.title = title;
         this.start = start;
         this.end = end;
-        this.allDay = allDay;
-        this.resourceId = resourceId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,5 +77,29 @@ public class CalendarRecord {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
+    }
+
+    public boolean isOverlap() {
+        return overlap;
+    }
+
+    public void setOverlap(boolean overlap) {
+        this.overlap = overlap;
+    }
+
+    public String getRendering() {
+        return rendering;
+    }
+
+    public void setRendering(String rendering) {
+        this.rendering = rendering;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

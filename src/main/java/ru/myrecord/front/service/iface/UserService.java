@@ -1,6 +1,7 @@
 package ru.myrecord.front.service.iface;
 
 
+import ru.myrecord.front.data.model.enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.Product;
 import ru.myrecord.front.data.model.entities.Role;
@@ -14,11 +15,13 @@ import java.util.Set;
 
 public interface UserService {
     public User findUserByEmail(String email);
-    public void addSysUser(User user);
+    public void addSysUser(User ownerUser);
     public void addSimpleUser(User user);
     public void update(User user);
     Set<User> findUsersByOwner(User ownerUser);  //Поиск всех пользователей для ownerUser
     Set<User> findWorkersByOwner(User ownerUser);  //Поиск всех работников для ownerUser
+    Set<User> findClientsByOwner(User ownerUser);  //Поиск всех работников для ownerUser
+    Set<User> findByRole(UserRoles userRoles);  //Поиск всех пользователей с ролью SysUser
     public Set<User> findUsersByRoom(Room room);
     public User findUserById(Integer id);
     //public Set<User> findUsersByUserRooms(Set<UserRoom> userRooms);
@@ -26,8 +29,9 @@ public interface UserService {
     UserAdapter getUserAdapter(User user);
     Set<Role> getRolesForSimpleUser();
     Boolean userEquals(Integer userId1, Integer userId2);
-    Boolean hasUser(Integer ownerUserId, Integer childUser);
+    Boolean hasUser(Integer ownerUserId, Integer childUserId);
     Boolean hasUser(Principal principal, Integer childUserId);
+    Boolean hasUser(User ownerUser, Integer childUserId);
     Boolean hasRoom(Integer ownerUserId, Integer roomId);
     Boolean hasRoom(Principal principal, Integer roomId);
     Boolean hasProduct(Integer ownerUserId, Integer productId);

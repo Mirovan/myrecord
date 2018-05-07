@@ -42,47 +42,42 @@
                     </div>
                 </div>
 
-                <div class="col-lg-9">
-                    <strong>Filter:</strong>
-                    <br />
-
-                    Услуга:
-                    <select name="productId" id="productId">
-                        <option value="">-- Все услуги --</option>
-                        <option th:each="product: ${products}" th:value="${product.id}" th:text="${product.name}"></option>
-                    </select>
-
-                    Мастер:
-                    <select name="workerId" id="workerId">
-                        <option value="">-- Все мастера --</option>
-                        <option th:each="worker: ${workers}" th:value="${worker.id}" th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
-                    </select>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <a href="/cabinet/clients/record/add/" class="btn btn-primary">Новая запись</a>
-                    </div>
-                </div>
-
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <a id="aPrev" href="#prev">Prev</a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a id="aNext" href="#next">Next</a>
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <strong>Filter:</strong>
+                                <br />
+
+                                Услуга:
+                                <select name="productId" id="productId">
+                                    <option value="">-- Все услуги --</option>
+                                    <option th:each="product: ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+                                </select>
+
+                                Мастер:
+                                <select name="workerId" id="workerId">
+                                    <option value="">-- Все мастера --</option>
+                                    <option th:each="worker: ${workers}" th:value="${worker.id}" th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
+                                </select>
                             </div>
 
-                            <div class="form-group">
-                                <input type="hidden" id="yearInput" name="year" th:value="${year}" />
-                                <input type="hidden" id="monthInput" name="month" th:value="${month}" />
-
-                                <!-- calendar -->
-                                <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <a href="/cabinet/clients/record/add/" class="btn btn-primary">Новая запись</a>
+                                </div>
                             </div>
                         </div>
+
+                        <!--<input type="hidden" id="dayInput" name="day" th:value="${day}" />-->
+                        <input type="hidden" id="monthInput" name="month" th:value="${month}" />
+                        <input type="hidden" id="yearInput" name="year" th:value="${year}" />
                     </div>
+
+                    <div class="card">
+                        <div id='calendar'></div>
+                    </div>
+
                 </div>
 
             </div>
@@ -92,6 +87,19 @@
     <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
 </div>
 <div th:include="cabinet/inc/js.inc::js"></div>
-<script th:src="@{/static/default/js/mycrm/client-record.js}"></script>
+
+<!-- calendar -->
+<link href='/static/default/vendor/fullcalendar-3.9.0/fullcalendar.min.css' rel='stylesheet' />
+<link href='/static/default/vendor/fullcalendar-3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link href='/static/default/vendor/fullcalendar-scheduler-1.9.4/scheduler.min.css' rel='stylesheet' />
+
+<script src='/static/default/vendor/fullcalendar-3.9.0/lib/moment.min.js'></script>
+<script src='/static/default/vendor/fullcalendar-3.9.0/lib/jquery.min.js'></script>
+<script src='/static/default/vendor/fullcalendar-3.9.0/fullcalendar.min.js'></script>
+<script src='/static/default/vendor/fullcalendar-scheduler-1.9.4/scheduler.min.js'></script>
+
+
+<script th:src="@{/static/includes/js/client-record-month-calendar.js}"></script>
+<!-- end calendar -->
 </body>
 </html>

@@ -1,6 +1,7 @@
 package ru.myrecord.front.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,12 +11,17 @@ import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.UserService;
 
 import javax.validation.Valid;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Controller
 public class LoginController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 	@RequestMapping(value="/login/", method = RequestMethod.GET)
 	public ModelAndView login(){
@@ -48,11 +54,15 @@ public class LoginController {
 		} else {
 			if (user.getPhone() == null) user.setPhone("");
 			user.setActive(true);
+			//random password
+			String password = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 999999));
+			user.setPass( bCryptPasswordEncoder.encode(password) );
 			userService.addSysUser(user);
 
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
-			modelAndView.setViewName("register");
+			modelAndView.addObject("password", password);
+			modelAndView.setViewName("register-complite");
 		}
 		return modelAndView;
 	}

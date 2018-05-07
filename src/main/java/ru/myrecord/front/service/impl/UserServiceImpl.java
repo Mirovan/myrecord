@@ -9,9 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrecord.front.data.dao.RoleDAO;
 import ru.myrecord.front.data.dao.UserDAO;
+import ru.myrecord.front.data.dao.organisation.OrganisationBalanceDAO;
+import ru.myrecord.front.data.model.enums.UserRoles;
 import ru.myrecord.front.data.model.adapters.UserAdapter;
 import ru.myrecord.front.data.model.entities.*;
+import ru.myrecord.front.data.model.entities.organisation.OrgTarif;
+import ru.myrecord.front.data.model.entities.organisation.OrganisationBalance;
 import ru.myrecord.front.service.iface.*;
+import ru.myrecord.front.service.iface.organisation.OrgTarifService;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -30,6 +35,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("roleDAO")
     private RoleDAO roleDAO;
+
+    @Autowired
+    @Qualifier("organisationBalanceDAO")
+    private OrganisationBalanceDAO balanceDao;
+
+    @Autowired
+    @Qualifier("orgTarifService")
+    private OrgTarifService orgTarifService;
+
+    @Autowired
+    private ConfigService configService;
 
     @Autowired
     private RoleService roleService;
@@ -61,11 +77,23 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void addSysUser(User user) {
-        user.setPass(bCryptPasswordEncoder.encode("000000")); //ToDo: make random password
-        Role userRole = roleDAO.findByRole("SYSUSER");
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-        userDAO.save(user);
+    public void addSysUser(User ownerUser) {
+        Role userRole = roleDAO.findByRole(UserRoles.SYSUSER.getRole());
+        ownerUser.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        userDAO.save(ownerUser);
+
+        Config config = new Config();
+        config.setOwnerUser(ownerUser);
+        config.setIsSetSchedule(false);
+        configService.add(config);
+
+        OrganisationBalance organisationBalance = new OrganisationBalance();
+        organisationBalance.setBalance(0.0f);
+        organisationBalance.setUser(ownerUser);
+        List<OrgTarif> orgTarifs = orgTarifService.getTarifs();
+        organisationBalance.setOrgTarif(orgTarifs.size() > 0 ? orgTarifs.get(0) : new OrgTarif());
+        organisationBalance.setExpDate(LocalDate.now().minusDays(1));
+        balanceDao.save(organisationBalance);
     }
 
 
@@ -95,6 +123,24 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toSet());
     }
 
+
+    @Override
+    public Set<User> findClientsByOwner(User ownerUser) {
+        return findUsersByOwner(ownerUser)
+                .stream()
+                .filter(user -> user.getRoles().contains(roleService.findRoleByName("CLIENT")))
+                .collect(Collectors.toSet());
+    }
+
+
+    @Override
+    public Set<User> findByRole(UserRoles userRoles) {
+        Role role = new Role();
+        role.setId(userRoles.getId());
+        role.setRole(userRoles.getRole());
+        role.setRoleAbout(userRoles.getRole_about());
+        return userDAO.findByRoles(role);
+    }
 
     @Override
     public User findUserById(Integer id) {
@@ -132,10 +178,13 @@ public class UserServiceImpl implements UserService {
      * */
     @Override
     public Set<Role> getRolesForSimpleUser() {
-        List<String> roleNames = new ArrayList<String>();
-        roleNames.add("MASTER");
-        roleNames.add("MANAGER");
-        Set<Role> roles = roleService.findRolesByRoleName( roleNames );
+//        List<String> roleNames = new ArrayList<String>();
+        Set<Role> roles = new HashSet<>();
+        roles.add(UserRoles.MASTER.createRole());
+        roles.add(UserRoles.MANAGER.createRole());
+//        roleNames.add(UserRoles.MASTER.getRole());
+//        roleNames.add(UserRoles.MANAGER.getRole());
+//        Set<Role> roles = roleService.findRolesByRoleName( roleNames );
         return roles;
     }
 
@@ -170,6 +219,16 @@ public class UserServiceImpl implements UserService {
         User ownerUser = findUserByEmail(principal.getName());
         return hasUser(ownerUser.getId(), childUserId);
     }
+
+
+    /**
+     * Проверка - принадлежит ли системному пользователю обычный пользователь
+     * */
+    @Override
+    public Boolean hasUser(User ownerUser, Integer childUserId) {
+        return hasUser(ownerUser.getId(), childUserId);
+    }
+
 
     /**
      * Проверка - принадлежит ли системному пользователю данное помещение
@@ -281,14 +340,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    /**
+     * Поиск сотрудников, которые работают в определенный день
+     * */
     @Override
     public Set<User> findWorkersByDate(LocalDate date, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
+        Set<Schedule> scheduleSet = scheduleService.findWorkersByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
-            User user = schedule.getWorker();
-            if ( hasUser(ownerUser.getId(), user.getId()) )
-                res.add( user );
+            User worker = schedule.getWorker();
+            if ( hasUser(ownerUser.getId(), worker.getId()) )
+                res.add( worker );
         }
         return res;
     }
@@ -297,7 +359,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<User> findWorkersByDateAndProduct(LocalDate date, Product product, User ownerUser) {
         Set<User> res = new HashSet<>();
-        Set<Schedule> scheduleSet = scheduleService.findByDate(date, ownerUser);
+        Set<Schedule> scheduleSet = scheduleService.findWorkersByDate(date, ownerUser);
         for (Schedule schedule : scheduleSet ) {
             User user = schedule.getWorker();
             //Если сист. польователь имеет этого раюотника и у раюботника есть этот продукт

@@ -45,15 +45,15 @@ CREATE TABLE "user_role" (
 );
 
 
-/*Баланс денег пользователя системы*/
-/*
-CREATE SEQUENCE sys_balance_id_seq START WITH 1;
+/*Конфигурация для организации-системного пользователя*/
+CREATE SEQUENCE user_config_id_seq START WITH 1;
 
-CREATE TABLE "sys_balance" (
-    id INTEGER NOT NULL default nextval('sys_balance_id_seq'),
+CREATE TABLE "user_config" (
+    id INTEGER NOT NULL default nextval('user_config_id_seq'),
+    owner_user_id INTEGER REFERENCES "users"(id),
+    is_set_schedule BOOLEAN
 );
-ALTER SEQUENCE sys_balance_id_seq owned by "sys_balance".id;
-*/
+ALTER SEQUENCE user_config_id_seq owned by "user_config".id;
 
 
 /*------------------ Клиентские сущности ----------------------*/
@@ -100,7 +100,7 @@ CREATE SEQUENCE schedule_id_seq START WITH 1;
 CREATE TABLE "schedule" (
     id INTEGER NOT NULL default nextval('schedule_id_seq') PRIMARY KEY,
     worker_id INTEGER,
-	date TIMESTAMP
+	sdate TIMESTAMP
 );
 ALTER SEQUENCE schedule_id_seq owned by "schedule".id;
 
@@ -138,7 +138,7 @@ CREATE SEQUENCE client_record_id_seq START WITH 1;
 CREATE TABLE "client_record" (
     id INTEGER NOT NULL default nextval('client_record_id_seq') PRIMARY KEY,
     client_id INTEGER REFERENCES "users"(id),
-	date TIMESTAMP,    /*дата записи*/
+	sdate TIMESTAMP,    /*дата записи*/
 	active BOOLEAN DEFAULT TRUE
 );
 ALTER SEQUENCE client_record_id_seq owned by "client_record".id;
@@ -151,7 +151,7 @@ CREATE TABLE "client_record_product" (
     record_id INTEGER REFERENCES "client_record"(id),
     product_id INTEGER REFERENCES "product"(id),
     worker_id INTEGER REFERENCES "users"(id),
-	date TIMESTAMP     /*дата и время записи*/
+	sdate TIMESTAMP     /*дата и время записи*/
 );
 ALTER SEQUENCE client_record_product_id_seq owned by "client_record_product".id;
 
@@ -178,3 +178,24 @@ CREATE TABLE "client_payment_product" (
     price INTEGER DEFAULT 0
 );
 ALTER SEQUENCE client_payment_product_id_seq owned by "client_payment_product".id;
+
+/* Баланс организации */
+CREATE TABLE "organisation_balance" (
+	"id" INTEGER NOT NULL,
+	"balance" REAL NULL DEFAULT NULL,
+	"exp_date" DATE NOT NULL,
+	"owner_user_id" INTEGER NULL DEFAULT NULL,
+	"org_tarif" INTEGER NULL DEFAULT NULL,
+	PRIMARY KEY ("id")
+);
+
+  /* Тарифный план для организаций */
+CREATE TABLE "org_tarif" (
+	"id" INTEGER NOT NULL,
+	"name" VARCHAR(255) NULL DEFAULT NULL,
+	"price" REAL NULL DEFAULT NULL,
+	PRIMARY KEY ("id")
+);
+
+INSERT INTO "org_tarif" (id, name, price) VALUES
+(1, 'Базовый', 999.0);

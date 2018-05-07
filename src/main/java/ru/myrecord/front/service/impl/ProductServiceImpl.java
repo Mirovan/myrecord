@@ -15,6 +15,7 @@ import ru.myrecord.front.service.iface.RoomService;
 import ru.myrecord.front.service.iface.UserProductService;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service("productService")
@@ -54,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Set<Product> findProductsByOwnerUser(User ownerUser) {
-        Set<Room> rooms = roomService.findRoomsByActive(ownerUser);
+        List<Room> rooms = roomService.findRoomsByActive(ownerUser);
         return productDAO.findByRoomInAndActiveTrueOrderByIdAsc(rooms);
     }
 

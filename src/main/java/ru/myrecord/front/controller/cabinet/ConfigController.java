@@ -34,6 +34,7 @@ public class ConfigController/* implements ErrorController*/{
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("config", config);
+        modelAndView.addObject("menuSelect", "config");
         modelAndView.setViewName("cabinet/config/index");
         return modelAndView;
     }

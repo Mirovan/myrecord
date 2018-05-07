@@ -55,6 +55,7 @@ public class PaymentController/* implements ErrorController*/{
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("records", clientRecords);
+        modelAndView.addObject("menuSelect", "payment");
         modelAndView.setViewName("cabinet/client/payment/index");
         return modelAndView;
     }
@@ -75,6 +76,7 @@ public class PaymentController/* implements ErrorController*/{
         modelAndView.addObject("record", clientRecord);
         modelAndView.addObject("products", products);
         modelAndView.addObject("workers", workers);
+        modelAndView.addObject("menuSelect", "payment");
         modelAndView.setViewName("cabinet/client/payment/record");
         return modelAndView;
     }
@@ -131,6 +133,7 @@ public class PaymentController/* implements ErrorController*/{
         modelAndView.addObject("paymentSum", paymentSum);
         modelAndView.addObject("client", client);
         modelAndView.addObject("paymentProducts", clientPaymentProducts);
+        modelAndView.addObject("menuSelect", "payment");
         modelAndView.setViewName("cabinet/client/payment/product");
         return modelAndView;
     }

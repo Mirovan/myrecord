@@ -90,6 +90,7 @@ public class StatisticController/* implements ErrorController*/{
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("workerSalaries", workerSalaries);
+        modelAndView.addObject("menuSelect", "statistics");
         modelAndView.setViewName("cabinet/statistic/worker/index");
         return modelAndView;
     }

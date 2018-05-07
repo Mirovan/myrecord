@@ -60,6 +60,7 @@ public class ProductController/* implements ErrorController*/{
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("roomProducts", roomProducts);
+        modelAndView.addObject("menuSelect", "products");
         modelAndView.setViewName("cabinet/product/index");
         return modelAndView;
     }
@@ -91,6 +92,7 @@ public class ProductController/* implements ErrorController*/{
             modelAndView.addObject("room", room);
             modelAndView.addObject("involveUsers", involveUsers);
             modelAndView.addObject("freeUsers", freeUsers);
+            modelAndView.addObject("menuSelect", "products");
             modelAndView.setViewName("cabinet/product/users/index");
             return modelAndView;
         } else {
@@ -165,6 +167,7 @@ public class ProductController/* implements ErrorController*/{
             modelAndView.addObject("action", "add");
             modelAndView.addObject("rooms", rooms);
             modelAndView.addObject("product", product);
+            modelAndView.addObject("menuSelect", "products");
             modelAndView.setViewName("cabinet/room/product/editproduct");
             return modelAndView;
         } else {
@@ -185,6 +188,7 @@ public class ProductController/* implements ErrorController*/{
         modelAndView.addObject("action", "add");
         modelAndView.addObject("rooms", rooms);
         modelAndView.addObject("product", product);
+        modelAndView.addObject("menuSelect", "products");
         modelAndView.setViewName("cabinet/room/product/editproduct");
         return modelAndView;
     }
@@ -216,6 +220,7 @@ public class ProductController/* implements ErrorController*/{
             modelAndView.addObject("action", "edit");
             modelAndView.addObject("rooms", rooms);
             modelAndView.addObject("product", product);
+            modelAndView.addObject("menuSelect", "products");
             modelAndView.setViewName("cabinet/room/product/editproduct");
             return modelAndView;
         } else {

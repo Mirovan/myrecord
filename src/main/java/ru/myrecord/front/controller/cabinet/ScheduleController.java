@@ -39,6 +39,7 @@ public class ScheduleController/* implements ErrorController*/{
             modelAndView.addObject("year", date.getYear());
             modelAndView.addObject("month", date.getMonthValue());
             modelAndView.addObject("userId", userId);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/schedule/index");
             return modelAndView;
         } else {

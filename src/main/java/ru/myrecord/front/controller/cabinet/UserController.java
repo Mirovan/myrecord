@@ -123,7 +123,6 @@ public class UserController/* implements ErrorController*/{
         }
     }
 
-
     /**
      * Сохранение редактируемого пользователя
      * */
@@ -132,20 +131,64 @@ public class UserController/* implements ErrorController*/{
         //Проверка - исеет ли текущий сис.пользователь доступ к сущности
         // и роль существует в списке доступных для этого системного пользователя
         if ( userService.hasUser(principal, userUpd.getId()) &&
-             userService.hasAccessToRoles(principal, userUpd.getRoles()) ) {
+                userService.hasAccessToRoles(principal, userUpd.getRoles()) ) {
             //Находим этого пользователя
             User user = userService.findUserById(userUpd.getId());
             //Обновляем данные
             user.setName(userUpd.getName());
             user.setSirname(userUpd.getSirname());
+            user.setEmail(userUpd.getEmail());
             user.setRoles(userUpd.getRoles());
-            if (userUpd.getPass() != null) {
+            if (userUpd.getPass() != null && userUpd.getPass() != "") {
                 user.setPass(bCryptPasswordEncoder.encode(userUpd.getPass()));
             }
             user.setOwnerUser(user.getOwnerUser());
             userService.update(user);
         }
         return new ModelAndView("redirect:/cabinet/users/");
+    }
+
+
+    /**
+     * Конфиг - Форма редактирования пользователя - самого себя
+     * */
+    @RequestMapping(value="/cabinet/config/user/", method = RequestMethod.GET)
+    public ModelAndView updateSelfUserForm(Principal principal) {
+        User selfUser = userService.findUserByEmail(principal.getName());
+
+        ModelAndView modelAndView = new ModelAndView();
+        if (selfUser.getActive() == true) {
+            selfUser.setPass("");
+            modelAndView.addObject("user", selfUser);
+            modelAndView.addObject("menuSelect", "config");
+            modelAndView.setViewName("cabinet/user/editself");
+            return modelAndView;
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Сохранение редактируемого пользователя
+     * */
+    @RequestMapping(value="/cabinet/config/user/", method = RequestMethod.POST)
+    public ModelAndView updateSelfUserFormPost(User userUpd, Principal principal) {
+        User selfUser = userService.findUserByEmail(principal.getName());
+
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( userService.userEquals(selfUser.getId(), userUpd.getId()) ) {
+            //Обновляем данные
+            selfUser.setName(userUpd.getName());
+            selfUser.setEmail(userUpd.getEmail());
+            selfUser.setSirname(userUpd.getSirname());
+            if (userUpd.getPass() != null && userUpd.getPass() != "") {
+                selfUser.setPass(bCryptPasswordEncoder.encode(userUpd.getPass()));
+            }
+            selfUser.setPhone(userUpd.getPhone());
+            userService.update(selfUser);
+        }
+        return new ModelAndView("redirect:/cabinet/config/user/");
     }
 
 

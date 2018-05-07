@@ -14,23 +14,22 @@ public class IndexController/* implements ErrorController*/{
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        return modelAndView;
+        return new ModelAndView("redirect:/cabinet/");
     }
 
     @RequestMapping(value={"/cabinet/", "/cabinet"}, method = RequestMethod.GET)
     public ModelAndView cabinet() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("menuSelect", "config");
         modelAndView.setViewName("cabinet/index");
         return modelAndView;
     }
 
-    @RequestMapping(value="/temp/", method = RequestMethod.GET)
-    public ModelAndView temp() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("temp");
-        return modelAndView;
-    }
+//    @RequestMapping(value="/temp/", method = RequestMethod.GET)
+//    public ModelAndView temp() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("temp");
+//        return modelAndView;
+//    }
 
 }

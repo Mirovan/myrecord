@@ -48,8 +48,10 @@ public class UserController/* implements ErrorController*/{
     @RequestMapping(value="/cabinet/users/", method = RequestMethod.GET)
     public ModelAndView showUsers(Principal principal) {
         User user = userService.findUserByEmail( principal.getName() );
+
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject( "users", userService.findWorkersByOwner(user));
+        modelAndView.addObject("users", userService.findWorkersByOwner(user));
+        modelAndView.addObject("menuSelect", "users");
         modelAndView.setViewName("cabinet/user/index");
         return modelAndView;
     }
@@ -67,6 +69,7 @@ public class UserController/* implements ErrorController*/{
         Set<Role> rolesAvailable = userService.getRolesForSimpleUser();
         modelAndView.addObject("roles", rolesAvailable); //Роли из БД
         modelAndView.addObject("user", user);
+        modelAndView.addObject("menuSelect", "users");
         modelAndView.setViewName("cabinet/user/edit");
         return modelAndView;
     }
@@ -109,7 +112,7 @@ public class UserController/* implements ErrorController*/{
                 //Все доступные роли
                 Set<Role> rolesAvailable = userService.getRolesForSimpleUser();
                 modelAndView.addObject("roles", rolesAvailable);
-
+                modelAndView.addObject("menuSelect", "users");
                 modelAndView.setViewName("cabinet/user/edit");
             } else {
                 return new ModelAndView("redirect:/cabinet/users/");
@@ -182,6 +185,7 @@ public class UserController/* implements ErrorController*/{
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("worker", worker);
             modelAndView.addObject("usersalary", userSalary);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/salary/edit");
             return modelAndView;
         } else {
@@ -241,6 +245,7 @@ public class UserController/* implements ErrorController*/{
             modelAndView.addObject("user", user);
             modelAndView.addObject("userId", userId);
             modelAndView.addObject("userProductSalaries", userProductSalaries);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/products/salary/index");
             return modelAndView;
         } else {
@@ -272,6 +277,7 @@ public class UserController/* implements ErrorController*/{
             modelAndView.addObject("workerId", workerId);
             modelAndView.addObject("product", product);
             modelAndView.addObject("userProductSalary", userProductSalary);
+            modelAndView.addObject("menuSelect", "users");
             modelAndView.setViewName("cabinet/user/products/salary/edit");
             return modelAndView;
         } else {

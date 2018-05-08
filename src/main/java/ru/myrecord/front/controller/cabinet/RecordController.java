@@ -56,7 +56,7 @@ public class RecordController/* implements ErrorController*/{
         modelAndView.addObject("workers", workers);
         modelAndView.addObject("products", products);
         modelAndView.addObject("menuSelect", "record");
-        modelAndView.setViewName("/cabinet/client/record/index");
+        modelAndView.setViewName("cabinet/client/record/index");
         return modelAndView;
     }
 

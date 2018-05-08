@@ -20,7 +20,7 @@ public class IndexController/* implements ErrorController*/{
     @RequestMapping(value={"/cabinet/", "/cabinet"}, method = RequestMethod.GET)
     public ModelAndView cabinet() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("menuSelect", "config");
+        modelAndView.addObject("menuSelect", "home");
         modelAndView.setViewName("cabinet/index");
         return modelAndView;
     }

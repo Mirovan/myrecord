@@ -17,9 +17,9 @@
                 <h1 class="h3 display">Пользователи</h1>
             </header>
 
-            <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">Заработная плата</a>
+            <a th:href="@{'/cabinet/users/' + ${worker.id} + '/salary/'}">Заработная плата</a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/salary/'}">Процент за услуги</a>
+            <a th:href="@{'/cabinet/users/' + ${worker.id} + '/products/salary/'}">Процент за услуги</a>
 
 
             <div class="row">
@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 form-control-label">Сотрудник</label>
                                 <div class="col-sm-4">
-                                    <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
+                                    <span th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></span>
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
                                             <span th:text="*{userProductSalary.salaryPercent}"></span>
                                         </td>
                                         <td>
-                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/' + *{userProductSalary.product.id} + '/salary/'}">Edit</a>
+                                            <a th:href="@{'/cabinet/users/' + ${worker.id} + '/products/' + *{userProductSalary.product.id} + '/salary/'}">Edit</a>
                                         </td>
                                     </tr>
                                     </tbody>

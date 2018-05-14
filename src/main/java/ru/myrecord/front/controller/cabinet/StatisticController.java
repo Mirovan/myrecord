@@ -1,9 +1,11 @@
 package ru.myrecord.front.controller.cabinet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.WorkerSalary;
 import ru.myrecord.front.data.model.entities.*;
@@ -11,6 +13,7 @@ import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,18 +43,18 @@ public class StatisticController/* implements ErrorController*/{
      * Страница отображения всех пользователей и их з/п за период
      * */
     @RequestMapping(value="/cabinet/statistics/workers/", method = RequestMethod.GET)
-    public ModelAndView showRecords(Principal principal) {
-//        @RequestParam(required = false) String from,
-//        @RequestParam(required = false) String to,
+    public ModelAndView showPeriodRecords(Principal principal,
+                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
+                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate) {
 
-        //LocalDate from = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
-        LocalDate from = LocalDate.now().withDayOfMonth(1);
-        LocalDate to = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if (fromDate == null) fromDate = LocalDate.now().withDayOfMonth(1);
+        if (toDate == null) toDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
 
         User ownerUser = userService.findUserByEmail(principal.getName());
 
         //находим все записи по дате
-        List<ClientRecord> clientRecords = clientRecordService.findByDates(from, to, ownerUser);
+        List<ClientRecord> clientRecords = clientRecordService.findByDates(fromDate, toDate, ownerUser);
 
         //находим все оплаты по записям
         List<ClientPayment> clientPayments = clientPaymentService.findByRecords(clientRecords);
@@ -90,6 +93,8 @@ public class StatisticController/* implements ErrorController*/{
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("workerSalaries", workerSalaries);
+        modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
+        modelAndView.addObject("toDate", toDate.format(timeFormatter));
         modelAndView.addObject("menuSelect", "statistics");
         modelAndView.setViewName("cabinet/statistic/worker/index");
         return modelAndView;

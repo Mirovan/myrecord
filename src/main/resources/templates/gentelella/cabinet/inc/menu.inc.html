@@ -1,15 +1,17 @@
 <div th:fragment="menu">
-    <div class="main-menu">
-        <h5 class="sidenav-heading">Main</h5>
-        <ul id="side-main-menu" class="side-menu list-unstyled">
-            <li class="active"><a href="/cabinet/"> <i class="icon-home"></i>Home</a></li>
-            <li><a href="/cabinet/rooms/"> <i class="icon-form"></i>Помещения</a></li>
-            <li><a href="/cabinet/products/"> <i class="icon-line-chart"></i>Услуги</a></li>
-            <li><a href="/cabinet/users/"> <i class="icon-user"></i>Сотрудники</a></li>
-            <li><a href="/cabinet/clients/record/"> <i class="icon-grid"></i>Запись</a></li>
-            <li><a href="/cabinet/clients/payment/"> <i class="icon-bill"></i>Оплата</a></li>
-            <li><a href="/cabinet/statistics/workers/"> <i class="fa fa-bar-chart"></i>Статистика</a></li>
-            <li><a href="/cabinet/billing/"> <i class="fa fa-bar-chart"></i>Биллинг</a></li>
-        </ul>
-    </div>
+    <ul class="nav side-menu">
+        <li th:classappend="${menuSelect} == 'home' ? current-page : ''"><a href="/cabinet/"><i class="fa fa-home"></i> Главная</a></li>
+        <li><a><i class="fa fa-folder-open"></i> Услуги <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li th:classappend="${menuSelect} == 'rooms' ? current-page : ''"><a href="/cabinet/rooms/">Группы услуг</a></li>
+                <li th:classappend="${menuSelect} == 'products' ? current-page : ''"><a href="/cabinet/products/">Услуги</a></li>
+            </ul>
+        </li>
+        <li th:classappend="${menuSelect} == 'users' ? current-page : ''"><a href="/cabinet/users/"><i class="fa fa-users"></i> Сотрудники</a></li>
+        <li th:classappend="${menuSelect} == 'record' ? current-page : ''"><a href="/cabinet/clients/record/"><i class="fa fa-pencil-square"></i> Запись</a></li>
+        <li th:classappend="${menuSelect} == 'payment' ? current-page : ''"><a href="/cabinet/clients/payment/daily/"><i class="fa fa-money"></i> Оплата</a></li>
+        <li th:classappend="${menuSelect} == 'statistics' ? current-page : ''"><a href="/cabinet/statistics/workers/"><i class="fa fa-bar-chart"></i> Статистика</a></li>
+        <li th:classappend="${menuSelect} == 'billing' ? current-page : ''"><a href="/cabinet/billing/"><i class="fa fa-credit-card"></i> Биллинг</a></li>
+        <li th:classappend="${menuSelect} == 'config' ? current-page : ''"><a href="/cabinet/config/"><i class="fa fa-gear"></i> Настройки</a></li>
+    </ul>
 </div>

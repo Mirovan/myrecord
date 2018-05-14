@@ -12,60 +12,78 @@
         background: #F00; /* Or some other color */
     }
 </style>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Расписание</h1>
-            </header>
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Расписание</h4>
-                        </div>
-                        <div class="card-body">
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Расписание</h3>
+                    </div>
+                </div>
 
+                <div class="clearfix"></div>
 
+                <div class="row">
+                    <div class="col-md-12">
 
-                            <a id="aPrev" href="#prev">Prev</a>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <a id="aNext" href="#next">Next</a>
+                        <div class="x_panel">
 
-                            <br /><br /><br />
-
-                            <div id="divFormContainer">
-                                <form th:action="@{'/cabinet/users/saveschedule/'}" method="post" id="selectDate">
-                                    <input type="hidden" id="userInput" name="userId" th:value="${userId}" />
-                                    <input type="hidden" id="yearInput" name="year" th:value="${year}" />
-                                    <input type="hidden" id="monthInput" name="month" th:value="${month}" />
-                                    <div id="divSelectContainer"></div>
-                                    <input type="submit" />
-                                </form>
+                            <div class="x_title">
+                                <h2>Расписание пользователя</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
                             </div>
 
-                            <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
+                            <div class="x_content">
+                                <a id="aPrev" href="#prev">Предыдущий месяц</a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a id="aNext" href="#next">Следующий месяц</a>
+
+                                <br /><br /><br />
+
+                                <div id="divFormContainer">
+                                    <form th:action="@{'/cabinet/users/saveschedule/'}" method="post" id="selectDate">
+                                        <input type="hidden" id="userInput" name="userId" th:value="${userId}" />
+                                        <input type="hidden" id="yearInput" name="year" th:value="${year}" />
+                                        <input type="hidden" id="monthInput" name="month" th:value="${month}" />
+                                        <div id="divSelectContainer"></div>
+                                        <input type="submit" />
+                                    </form>
+                                </div>
+
+                                <table id="monthCalendarContainerTable" style="margin: 10px;" border="1"></table>
+                            </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+            <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+            <!-- footer content -->
+            <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+            <!-- /footer content -->
+        </div>
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 <script th:src="@{/static/includes/js/schedule.js}"></script>
+
 </body>
 </html>
 

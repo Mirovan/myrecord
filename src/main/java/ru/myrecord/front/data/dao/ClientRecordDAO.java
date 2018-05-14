@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Repository("clientRecordDAO")
 public interface ClientRecordDAO extends JpaRepository<ClientRecord, Integer> {
-    Set<ClientRecord> findByDate(LocalDate date); //Поиск всех записей клиентов по дате
+    List<ClientRecord> findByDateAndUserInAndActiveTrue(LocalDate date, Set<User> clients); //Поиск всех записей клиентов по дате
     ClientRecord findById(Integer id);  //Поиск клиентской записи по Id
     List<ClientRecord> findByDateBetweenAndUserInAndActiveTrue(LocalDate from, LocalDate to, Set<User> clients);   //Поиск записей по дате
 }

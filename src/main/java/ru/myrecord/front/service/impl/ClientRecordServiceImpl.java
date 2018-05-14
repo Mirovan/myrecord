@@ -70,8 +70,9 @@ public class ClientRecordServiceImpl implements ClientRecordService {
     }
 
     @Override
-    public Set<ClientRecord> findByDate(LocalDate date) {
-        return clientRecordDAO.findByDate(date);
+    public List<ClientRecord> findByDate(LocalDate date, User ownerUser) {
+        Set<User> clients = userService.findClientsByOwner(ownerUser);
+        return clientRecordDAO.findByDateAndUserInAndActiveTrue(date, clients);
     }
 
 

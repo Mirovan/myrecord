@@ -2,91 +2,108 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Услуги</h1>
-            </header>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-            <div class="container">
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
 
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Список услуг</h4>
-                        </div>
-                        <div class="card-body">
-
-                            <div class="row">
-                                <div class="col-lg-10"></div>
-                                <div class="col-lg-2">
-                                    <a href="/cabinet/rooms/addproduct/" class="btn btn-primary">Добавить</a>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div th:each="roomProduct : ${roomProducts}" class="container">
-                                    <div th:each="room : ${roomProduct.room}" class="col-lg-12">
-                                        <div>
-                                            <strong>Помещение</strong>
-                                            <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
-                                                <span th:text="${room.name}"></span>
-                                            </a>
-                                        </div>
-
-                                        <div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                    <tr>
-                                                        <th width="100">#</th>
-                                                        <th width="400">Услуга</th>
-                                                        <th>Редактировать</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr th:each="product, iterator : ${roomProduct.products}">
-                                                        <th scope="row" th:text="@{${iterator.index} + 1}"></th>
-                                                        <td>
-                                                            <a th:href="@{'/cabinet/products/' + ${product.id} + '/users/'}" th:text="${product.name}"></a>
-                                                        </td>
-                                                        <td>
-                                                            <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">Редактировать</a>
-                                                        </td>
-                                                        <!--<td>-->
-                                                        <!--<a th:href="@{'/cabinet/products/delete/' + ${product.id} + '/'}">Удалить</a>-->
-                                                        <!--</td>-->
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <hr />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Услуги</h3>
                     </div>
                 </div>
 
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Список услуг</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <div class="row">
+                                    <div class="col-lg-10"></div>
+                                    <div class="col-lg-2">
+                                        <a href="/cabinet/rooms/addproduct/" class="btn btn-primary">Добавить</a>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div th:each="roomProduct : ${roomProducts}" class="container">
+                                        <div th:each="room : ${roomProduct.room}" class="col-lg-12">
+                                            <div>
+                                                <strong>Помещение</strong>
+                                                <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
+                                                    <span th:text="${room.name}"></span>
+                                                </a>
+                                            </div>
+
+                                            <div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th width="100">#</th>
+                                                            <th width="400">Услуга</th>
+                                                            <th>Редактировать</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr th:each="product, iterator : ${roomProduct.products}">
+                                                            <th scope="row" th:text="@{${iterator.index} + 1}"></th>
+                                                            <td>
+                                                                <a th:href="@{'/cabinet/products/' + ${product.id} + '/users/'}" th:text="${product.name}"></a>
+                                                            </td>
+                                                            <td>
+                                                                <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">Редактировать</a>
+                                                            </td>
+                                                            <!--<td>-->
+                                                            <!--<a th:href="@{'/cabinet/products/delete/' + ${product.id} + '/'}">Удалить</a>-->
+                                                            <!--</td>-->
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <hr />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-    </section>
+        <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- footer content -->
+        <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- /footer content -->
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 </body>
 </html>

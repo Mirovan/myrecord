@@ -265,19 +265,19 @@ public class UserController/* implements ErrorController*/{
     public ModelAndView showUserProductSalaries(@PathVariable Integer userId, Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasUser(principal, userId) ) {
-            User user = userService.findUserById(userId);
+            User worker = userService.findUserById(userId);
 
             //Set<Product> products = new HashSet<>();
             Set<UserProductSalary> userProductSalaries = new HashSet<>();
             //находим все услуги пользователя
-            Set<UserProduct> userProducts = userProductService.findByUserActiveLink(user);
+            Set<UserProduct> userProducts = userProductService.findByUserActiveLink(worker);
             for (UserProduct userProduct: userProducts) {
                 Product product = userProduct.getProduct();
                 //products.add(product);
-                UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+                UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(worker, product);
                 //Если з/п у сотрудника еще не установлена
                 if ( userProductSalary == null ) {
-                    userProductSalary = new UserProductSalary(user, product, 0F, 0F);
+                    userProductSalary = new UserProductSalary(worker, product, 0F, 0F);
                 }
                 if (userProductSalary.getSalary() != null && userProductSalary.getSalary() < 0.001) userProductSalary.setSalary(0F);
                 if (userProductSalary.getSalaryPercent() != null && userProductSalary.getSalaryPercent() < 0.001) userProductSalary.setSalaryPercent(0F);
@@ -285,7 +285,7 @@ public class UserController/* implements ErrorController*/{
             }
 
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("user", user);
+            modelAndView.addObject("worker", worker);
             modelAndView.addObject("userId", userId);
             modelAndView.addObject("userProductSalaries", userProductSalaries);
             modelAndView.addObject("menuSelect", "users");

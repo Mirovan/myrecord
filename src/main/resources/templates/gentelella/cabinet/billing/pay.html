@@ -2,56 +2,74 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Биллинг</h1>
-            </header>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-            <div class="row">
-                <div class="col-lg-12">
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
 
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Пополнение баланса</h4>
-                        </div>
-                        <div class="card-body">
-
-                            <form th:action="@{'/cabinet/billing/pay/'}" method="post" class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 form-control-label">Сумма</label>
-                                    <div class="col-sm-4 mb-3">
-                                        <select name="amount" class="form-control">
-                                            <option th:value="${balance.orgTarif.price}">Оплата за месяц (<span th:text="${balance.orgTarif.price}"></span> руб.)</option>
-                                            <option th:value="(${balance.orgTarif.price}*2)">Оплата за 2 месяца (<span th:text="(${balance.orgTarif.price}*2)"></span> руб.)</option>
-                                            <option th:value="(${balance.orgTarif.price}*3)">Оплата за 3 месяца (<span th:text="(${balance.orgTarif.price}*3)"></span> руб.)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" />
-                                </div>
-                            </form>
-
-                        </div>
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Биллинг</h3>
                     </div>
+                </div>
 
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Пополнение баланса</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <form th:action="@{'/cabinet/billing/pay/'}" method="post" class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Сумма</label>
+                                        <div class="col-sm-4 mb-3">
+                                            <select name="amount" class="form-control">
+                                                <option th:value="${balance.orgTarif.price}">Оплата за месяц (<span th:text="${balance.orgTarif.price}"></span> руб.)</option>
+                                                <option th:value="(${balance.orgTarif.price}*2)">Оплата за 2 месяца (<span th:text="(${balance.orgTarif.price}*2)"></span> руб.)</option>
+                                                <option th:value="(${balance.orgTarif.price}*3)">Оплата за 3 месяца (<span th:text="(${balance.orgTarif.price}*3)"></span> руб.)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+        <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- footer content -->
+        <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- /footer content -->
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 </body>
 </html>

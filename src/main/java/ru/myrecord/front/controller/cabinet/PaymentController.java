@@ -1,6 +1,7 @@
 package ru.myrecord.front.controller.cabinet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,9 @@ import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -43,10 +47,12 @@ public class PaymentController/* implements ErrorController*/{
     /**
      * Страница всех записей с отображением кнопки для оплаты
      * */
-    @RequestMapping(value="/cabinet/clients/payment/", method = RequestMethod.GET)
-    public ModelAndView showRecords(Principal principal) {
+    @RequestMapping(value="/cabinet/clients/payment/daily/", method = RequestMethod.GET)
+    public ModelAndView showDailyRecords(Principal principal) {
+        User ownerUser = userService.findUserByEmail(principal.getName());
+
         LocalDate date = LocalDate.now();
-        Set<ClientRecord> clientRecords = clientRecordService.findByDate(date);
+        List<ClientRecord> clientRecords = clientRecordService.findByDate(date, ownerUser);
 
         for (ClientRecord item : clientRecords) {
             User user = new User(item.getUser().getId(), item.getUser().getName(), item.getUser().getSirname());
@@ -55,6 +61,37 @@ public class PaymentController/* implements ErrorController*/{
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("records", clientRecords);
+        modelAndView.addObject("pageSelect", "daily");
+        modelAndView.addObject("menuSelect", "payment");
+        modelAndView.setViewName("cabinet/client/payment/index");
+        return modelAndView;
+    }
+
+    /**
+     * Страница всех записей с отображением кнопки для оплаты
+     * */
+    @RequestMapping(value = "/cabinet/clients/payment/period/", method = RequestMethod.GET)
+    public ModelAndView showPeriodRecords(Principal principal,
+                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
+                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate) {
+        User ownerUser = userService.findUserByEmail(principal.getName());
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if (fromDate == null) fromDate = LocalDate.now();
+        if (toDate == null) toDate = LocalDate.now();
+
+        List<ClientRecord> clientRecords = clientRecordService.findByDates(fromDate, toDate, ownerUser);
+
+        for (ClientRecord item : clientRecords) {
+            User user = new User(item.getUser().getId(), item.getUser().getName(), item.getUser().getSirname());
+            item.setUser(user);
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("records", clientRecords);
+        modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
+        modelAndView.addObject("toDate", toDate.format(timeFormatter));
+        modelAndView.addObject("pageSelect", "period");
         modelAndView.addObject("menuSelect", "payment");
         modelAndView.setViewName("cabinet/client/payment/index");
         return modelAndView;

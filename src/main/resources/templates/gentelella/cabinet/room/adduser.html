@@ -2,63 +2,81 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Помещения</h1>
-            </header>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Список помещений</h4>
-                        </div>
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
 
-                        <div class="card-body">
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Группы услуг</h3>
+                    </div>
+                </div>
 
-                            <div class="content">
-                                <p>Выберите существующего сотрудника и помещения в которых он оказывает услуги</p>
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Группы услуг</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
                             </div>
 
-                            <form th:action="@{'/cabinet/rooms/users/add/'}" method="post">
-                                <input type="hidden" name="userId" id="userId" />
-                                <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
-
-                                <div class="ui-widget">
-                                    <label for="input-user-selection">Сотрудник: </label>
-                                    <input type="text" name="user" id="input-user-selection" />
-                                    <a href="/cabinet/users/add/">Добавить нового сотрудника</a>
+                            <div class="x_content">
+                                <div class="content">
+                                    <p>Выберите существующего сотрудника и помещения в которых он оказывает услуги</p>
                                 </div>
 
-                                <div th:each="product : ${products}" style="display: block;">
-                                    <input type="checkbox" th:name="products[]" th:value="${product.id}" th:text="${product.name}" />
-                                </div>
+                                <form th:action="@{'/cabinet/rooms/users/add/'}" method="post">
+                                    <input type="hidden" name="userId" id="userId" />
+                                    <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
 
-                                <div class="form-group">
-                                    <input value="Add user" class="btn btn-primary" type="submit" />
-                                </div>
-                            </form>
+                                    <div class="ui-widget">
+                                        <label for="input-user-selection">Сотрудник: </label>
+                                        <input type="text" name="user" id="input-user-selection" />
+                                        <a href="/cabinet/users/add/">Добавить нового сотрудника</a>
+                                    </div>
+
+                                    <div th:each="product : ${products}" style="display: block;">
+                                        <input type="checkbox" th:name="products[]" th:value="${product.id}" th:text="${product.name}" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input value="Add user" class="btn btn-primary" type="submit" />
+                                    </div>
+                                </form>
+                            </div>
 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- footer content -->
+        <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- /footer content -->
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(
@@ -81,5 +99,6 @@
     );
     /*]]>*/
 </script>
+
 </body>
 </html>

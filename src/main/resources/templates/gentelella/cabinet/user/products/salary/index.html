@@ -2,42 +2,62 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Пользователи</h1>
-            </header>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-            <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">Заработная плата</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/salary/'}">Процент за услуги</a>
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
 
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Сотрудники</h3>
+                    </div>
+                </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Установка дополнительной оплаты за услуги</h4>
-                        </div>
-                        <div class="card-body">
+                <div class="clearfix"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 form-control-label">Сотрудник</label>
-                                <div class="col-sm-4">
-                                    <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
-                                </div>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Установка дополнительной оплаты за услуги</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
                             </div>
 
-                            <div class="table-responsive">
+                            <div class="x_content">
+                                <div class="form-group">
+                                    <a th:href="@{'/cabinet/users/' + ${worker.id} + '/salary/'}" class="btn btn-default">Заработная плата</a>
+                                    <a th:href="@{'/cabinet/users/' + ${worker.id} + '/products/salary/'}" class="btn btn-dark">Процент за услуги</a>
+                                </div>
+
+                                <div class="form-group">
+                                    <hr />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="user">Сотрудник</label>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <div class="btn-group">
+                                            <label style="padding-top: 8px;">
+                                                <span th:text="@{${worker.name} + ' ' + ${worker.sirname}}" id="user"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
@@ -45,7 +65,7 @@
                                         <th>Услуга</th>
                                         <th>Фиксированная плата</th>
                                         <th>Процент</th>
-                                        <th>Изменить</th>
+                                        <th>Редактирование</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -61,7 +81,7 @@
                                             <span th:text="*{userProductSalary.salaryPercent}"></span>
                                         </td>
                                         <td>
-                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/products/' + *{userProductSalary.product.id} + '/salary/'}">Edit</a>
+                                            <a th:href="@{'/cabinet/users/' + ${worker.id} + '/products/' + *{userProductSalary.product.id} + '/salary/'}">Редактировать</a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -69,14 +89,20 @@
                             </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- footer content -->
+        <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- /footer content -->
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 </body>
 </html>

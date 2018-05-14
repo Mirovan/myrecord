@@ -2,79 +2,99 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Пользователи</h1>
-            </header>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Добавление/изменение</h4>
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Сотрудники</h3>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Профиль пользователя</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <form th:object="${user}" th:action="@{'/cabinet/users/' + ${action} + '/'}" method="post">
+                                    <input type="hidden" th:field="*{id}" />
+                                    <div class="form-group">
+                                        <label class="col-sm-2 form-control-label">Email</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" th:field="*{email}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 form-control-label">Password</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" th:field="*{pass}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 form-control-label">Name</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" th:field="*{name}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 form-control-label">Sirname</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" th:field="*{sirname}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 form-control-label">Role</label>
+                                        <div class="col-sm-4">
+                                            <select th:field="*{roles}" multiple="multiple">
+                                                <option th:each="role : ${roles}"
+                                                        th:value="${role.id}"
+                                                        th:text="${role.roleAbout}">role</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input value="Add user" class="btn btn-primary" type="submit" />
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
-                        <div class="card-body">
 
-                            <form th:object="${user}" th:action="@{'/cabinet/users/' + ${action} + '/'}" method="post">
-                                <input type="hidden" th:field="*{id}" />
-                                <div class="form-group">
-                                    <label class="col-sm-2 form-control-label">Email</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" th:field="*{email}" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 form-control-label">Password</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" th:field="*{pass}" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 form-control-label">Name</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" th:field="*{name}" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 form-control-label">Sirname</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" th:field="*{sirname}" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 form-control-label">Role</label>
-                                    <div class="col-sm-4">
-                                        <select th:field="*{roles}" multiple="multiple">
-                                            <option th:each="role : ${roles}"
-                                                    th:value="${role.id}"
-                                                    th:text="${role.roleAbout}">role</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input value="Add user" class="btn btn-primary" type="submit" />
-                                </div>
-                            </form>
-
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- footer content -->
+        <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- /footer content -->
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 </body>
 </html>

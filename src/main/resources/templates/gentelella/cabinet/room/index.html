@@ -2,30 +2,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="cabinet/inc/head.inc::head"></head>
-<body>
-<nav class="side-navbar" th:include="cabinet/inc/navbar.inc::navbar"></nav>
-<div class="page">
-    <!-- navbar-->
-    <header class="header" th:include="cabinet/inc/header.inc::header"></header>
-    <!-- Breadcrumb-->
-    <div class="breadcrumb-holder" th:include="cabinet/inc/breadcrumb.inc::breadcrumb"></div>
 
-    <section>
-        <div class="container-fluid">
-            <!-- Page Header-->
-            <header>
-                <h1 class="h3 display">Помещения</h1>
-            </header>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col" th:include="cabinet/inc/left_col.inc::left_col"></div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>Список помещений</h4>
-                        </div>
+        <!-- top navigation -->
+        <div class="top_nav" th:include="cabinet/inc/top_nav.inc::top_nav"></div>
+        <!-- /top navigation -->
 
-                        <div class="card-body">
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Добавление/редактироваие группы услуг</h3>
+                    </div>
+                </div>
 
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="x_panel">
                             <div class="form-group">
                                 <a href="/cabinet/rooms/add/" class="btn btn-primary">Добавить</a>
                             </div>
@@ -33,41 +34,46 @@
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Название</th>
-                                            <th>Добавить услуги</th>
-                                            <th>Добавить сотрудников</th>
-                                            <th>Редактировать</th>
-                                            <th>Удалить</th>
-                                        </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Название</th>
+                                        <th>Добавить услуги</th>
+                                        <th>Добавить сотрудников</th>
+                                        <th>Редактировать</th>
+                                        <th>Удалить</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="room, iterator : ${rooms}">
-                                            <th scope="row" th:text="@{${iterator.index} + 1}"></th>
-                                            <td>
-                                                <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
-                                                    <span th:text="${room.name}"></span>
-                                                </a>
-                                            </td>
-                                            <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">=[Add Service]=</a></td>
-                                            <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">=[Add User]=</a></td>
-                                            <td><a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">[Edit]</a></td>
-                                            <td><a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a></td>
-                                        </tr>
+                                    <tr th:each="room, iterator : ${rooms}">
+                                        <th scope="row" th:text="@{${iterator.index} + 1}"></th>
+                                        <td>
+                                            <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
+                                                <span th:text="${room.name}"></span>
+                                            </a>
+                                        </td>
+                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">=[Add Service]=</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">=[Add User]=</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">[Edit]</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a></td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        <!-- /page content -->
 
-    <footer class="main-footer" th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- footer content -->
+        <footer th:include="cabinet/inc/footer.inc::footer"></footer>
+        <!-- /footer content -->
+    </div>
 </div>
+
 <div th:include="cabinet/inc/js.inc::js"></div>
+
 </body>
 </html>

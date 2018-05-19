@@ -8,6 +8,8 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/pom_tomcat.xml" />
+        <option value="$PROJECT_DIR$/pom_appengine.xml" />
       </list>
     </option>
   </component>

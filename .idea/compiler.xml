@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="crm" />
+        <module name="crm (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="crm" target="1.8" />
+      <module name="crm (1)" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

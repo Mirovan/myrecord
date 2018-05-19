@@ -10,7 +10,7 @@ import java.util.Set;
 @Repository("userDAO")
 public interface UserDAO extends JpaRepository<User, Integer> {
     User findByEmail(String email);
-    User findById(Integer id);
+    //User findById(Integer id);
     Set<User> findByOwnerUserAndActiveTrueOrderByIdAsc(User ownerUser);
     Set<User> findByRoles(Role role);
     //Set<User> findByUserroomIn(Set<UserRoom> userRooms);

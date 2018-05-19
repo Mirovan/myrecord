@@ -11,7 +11,7 @@ import java.util.Set;
 @Repository("paymentsDAO")
 public interface PaymentsDAO extends JpaRepository<Payment, Integer> {
 
-    Payment findById(Integer id);
+    //Payment findById(Integer id);
     Set<Payment> findByUser(User user);
 
 }

@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(Integer id) {
-        User user = userDAO.findById(id);
+        User user = userDAO.findById(id).get();
         if (user != null) {
             int size = user.getRoles().size();  //Для LAZY hibernate initialization
         }

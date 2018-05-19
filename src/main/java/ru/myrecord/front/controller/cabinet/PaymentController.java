@@ -145,7 +145,7 @@ public class PaymentController/* implements ErrorController*/{
         clientPayment.setPaid(true);
         clientPaymentService.update(clientPayment);
 
-        return( new ModelAndView("redirect:/cabinet/clients/payment/") );
+        return( new ModelAndView("redirect:/cabinet/clients/payment/daily/") );
     }
 
 

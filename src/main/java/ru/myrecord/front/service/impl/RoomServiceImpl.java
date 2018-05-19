@@ -11,7 +11,6 @@ import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.RoomService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service("roomService")
 public class RoomServiceImpl implements RoomService {
@@ -24,7 +23,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room findRoomById(Integer id) {
-        return roomDAO.findById(id).get();
+        return roomDAO.findById(id);
     }
 
 

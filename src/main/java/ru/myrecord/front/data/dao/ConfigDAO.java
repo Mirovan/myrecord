@@ -7,6 +7,6 @@ import ru.myrecord.front.data.model.entities.User;
 
 @Repository("configDAO")
 public interface ConfigDAO extends JpaRepository<Config, Integer> {
-	//Config findById(Integer id);
+	Config findById(Integer id);
 	Config findByOwnerUser(User ownerUser);
 }

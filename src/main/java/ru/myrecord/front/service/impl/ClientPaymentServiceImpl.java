@@ -34,7 +34,7 @@ public class ClientPaymentServiceImpl implements ClientPaymentService {
 
     @Override
     public ClientPayment findById(Integer id) {
-        return clientPaymentDAO.findById(id).get();
+        return clientPaymentDAO.findById(id);
     }
 
     /**

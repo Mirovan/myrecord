@@ -24,7 +24,10 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room findRoomById(Integer id) {
-        return roomDAO.findById(id).get();
+        if (id == null)
+            return null;
+        else
+            return roomDAO.findById(id).get();
     }
 
 

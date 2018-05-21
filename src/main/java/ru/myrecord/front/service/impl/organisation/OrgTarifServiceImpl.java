@@ -22,8 +22,11 @@ public class OrgTarifServiceImpl implements OrgTarifService {
     }
 
     @Override
-    public OrgTarif getTarifById(int id) {
-        return orgTarifDAO.findById(id);
+    public OrgTarif getTarifById(Integer id) {
+        if (id == null)
+            return null;
+        else
+            return orgTarifDAO.findById(id).get();
     }
 
     @Override

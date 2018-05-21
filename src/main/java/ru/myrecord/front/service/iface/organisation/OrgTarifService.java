@@ -7,7 +7,7 @@ import java.util.List;
 public interface OrgTarifService {
 
     List<OrgTarif> getTarifs();
-    OrgTarif getTarifById(int id);
+    OrgTarif getTarifById(Integer id);
     void addTarif(OrgTarif orgTarif);
 
 }

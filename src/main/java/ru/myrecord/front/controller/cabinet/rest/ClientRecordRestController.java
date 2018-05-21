@@ -199,8 +199,10 @@ public class ClientRecordRestController {
         if (year == null) year = LocalDate.now().getYear();
         if (month == null) month = LocalDate.now().getMonthValue();
 
-        Product product = productService.findProductById(productId);
-        User worker = userService.findUserById(workerId);
+        Product product = null;
+        if (productId != null) productService.findProductById(productId);
+        User worker = null;
+        if (workerId != null) worker = userService.findUserById(workerId);
 
         //ToDo: переделать сущность CalendarAdapter
         //Находим все дни когда сотрудники работают в конкретном месяце конкретного года

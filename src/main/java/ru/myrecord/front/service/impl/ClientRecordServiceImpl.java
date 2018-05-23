@@ -66,7 +66,10 @@ public class ClientRecordServiceImpl implements ClientRecordService {
 
     @Override
     public ClientRecord findById(Integer id) {
-        return clientRecordDAO.findById(id);
+        if (id == null)
+            return null;
+        else
+            return clientRecordDAO.findById(id).get();
     }
 
     @Override

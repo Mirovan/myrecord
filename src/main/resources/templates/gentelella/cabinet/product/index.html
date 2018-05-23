@@ -25,6 +25,18 @@
 
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="x_panel">
+                            <div class="x_content">
+                                <div class="form-group">
+                                    <a href="/cabinet/rooms/addproduct/" class="btn btn-primary">Добавить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
 
                         <div class="x_panel">
 
@@ -38,13 +50,6 @@
                             </div>
 
                             <div class="x_content">
-                                <div class="row">
-                                    <div class="col-lg-10"></div>
-                                    <div class="col-lg-2">
-                                        <a href="/cabinet/rooms/addproduct/" class="btn btn-primary">Добавить</a>
-                                    </div>
-                                </div>
-
                                 <div class="row">
                                     <div th:each="roomProduct : ${roomProducts}" class="container">
                                         <div th:each="room : ${roomProduct.room}" class="col-lg-12">

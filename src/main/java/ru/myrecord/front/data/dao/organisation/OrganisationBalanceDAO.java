@@ -9,7 +9,7 @@ import ru.myrecord.front.data.model.entities.User;
 @Repository("organisationBalanceDAO")
 public interface OrganisationBalanceDAO extends JpaRepository<OrganisationBalance, Integer> {
 
-    OrganisationBalance findFirstByUserOrderByIdDesc (User user);
+    OrganisationBalance findFirstByUserOrderByIdDesc(User user);
 
 
 }

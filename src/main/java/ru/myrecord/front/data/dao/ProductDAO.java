@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Repository("productDAO")
 public interface ProductDAO extends JpaRepository<Product, Integer> {
-	Product findById(Integer id);
+	//Product findById(Integer id);
 	Set<Product> findByRoomAndActiveTrueOrderByIdAsc(Room room);
 	Set<Product> findByRoomInAndActiveTrueOrderByIdAsc(List<Room> rooms);
 }

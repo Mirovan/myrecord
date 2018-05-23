@@ -35,7 +35,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findProductById(Integer id) {
-        return productDAO.findById(id);
+        if (id == null)
+            return null;
+        else
+            return productDAO.findById(id).get();
     }
 
     @Override

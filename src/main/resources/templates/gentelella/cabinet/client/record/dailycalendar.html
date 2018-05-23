@@ -90,28 +90,28 @@
                                                 <input type="hidden" th:field="*{id}" />
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="firstname">Имя</label>
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="firstname">Имя</label>
                                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                                         <input th:field="*{name}" type="text" id="firstname" required="required" class="form-control col-md-7 col-xs-12" />
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="sirname">Фамилия</label>
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="sirname">Фамилия</label>
                                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                                         <input th:field="*{sirname}" type="text" id="sirname" required="required" class="form-control col-md-7 col-xs-12" />
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="phone">Телефон</label>
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="phone">Телефон</label>
                                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                                         <input th:field="*{phone}" type="text" id="phone" required="required" class="form-control col-md-7 col-xs-12" />
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label class="control-label col-md-2 col-sm-3 col-xs-12">Услуга</label>
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Услуга</label>
                                                     <div class="col-md-3 col-sm-9 col-xs-12">
                                                         <select name="productId" class="form-control">
                                                             <option th:each="product : ${products}"
@@ -122,7 +122,7 @@
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label class="control-label col-md-2 col-sm-3 col-xs-12">Сотрудник</label>
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Сотрудник</label>
                                                     <div class="col-md-3 col-sm-9 col-xs-12">
                                                         <select name="masterId" class="form-control">
                                                             <option th:each="worker : ${workers}"
@@ -133,14 +133,16 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="datetimepicker">Время и дата</label>
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="datetimepicker">Время и дата</label>
                                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                                         <input name="date" th:value="${date}" type="text" id="datetimepicker" required="required" class="form-control col-md-7 col-xs-12" />
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <input value="Записать" class="btn btn-primary" type="submit" />
+                                                    <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-3">
+                                                        <input value="Записать" class="btn btn-primary" type="submit" />
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>

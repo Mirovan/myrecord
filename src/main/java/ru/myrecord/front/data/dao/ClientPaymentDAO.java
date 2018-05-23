@@ -6,5 +6,5 @@ import ru.myrecord.front.data.model.entities.ClientPayment;
 
 @Repository("clientPaymentDAO")
 public interface ClientPaymentDAO extends JpaRepository<ClientPayment, Integer> {
-    ClientPayment findById(Integer id);
+    //ClientPayment findById(Integer id);
 }

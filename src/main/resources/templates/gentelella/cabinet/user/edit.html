@@ -38,44 +38,48 @@
                             </div>
 
                             <div class="x_content">
-                                <form th:object="${user}" th:action="@{'/cabinet/users/' + ${action} + '/'}" method="post">
+                                <form th:object="${user}" th:action="@{'/cabinet/users/' + ${action} + '/'}" method="post" class="form-horizontal form-label-left">
                                     <input type="hidden" th:field="*{id}" />
+
                                     <div class="form-group">
-                                        <label class="col-sm-2 form-control-label">Email</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" th:field="*{email}" class="form-control" />
+                                        <label class="control-label col-md-1 col-sm-4 col-xs-12" for="email">Email</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input th:field="*{email}" id="email" type="text" required="required" class="form-control col-md-7 col-xs-12" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 form-control-label">Password</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" th:field="*{pass}" class="form-control" />
+                                        <label class="control-label col-md-1 col-sm-4 col-xs-12" for="pass">Пароль</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input th:field="*{pass}" id="pass" type="text" required="required" class="form-control col-md-7 col-xs-12" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 form-control-label">Name</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" th:field="*{name}" class="form-control" />
+                                        <label class="control-label col-md-1 col-sm-4 col-xs-12" for="name">Имя</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input th:field="*{name}" id="name" type="text" required="required" class="form-control col-md-7 col-xs-12" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 form-control-label">Sirname</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" th:field="*{sirname}" class="form-control" />
+                                        <label class="control-label col-md-1 col-sm-4 col-xs-12" for="sirname">Фамилия</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input th:field="*{sirname}" id="sirname" type="text" required="required" class="form-control col-md-7 col-xs-12" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 form-control-label">Role</label>
-                                        <div class="col-sm-4">
-                                            <select th:field="*{roles}" multiple="multiple">
+                                        <label class="control-label col-md-1 col-sm-4 col-xs-12" for="role">Роль</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <select th:field="*{roles}" multiple="multiple" id="role">
                                                 <option th:each="role : ${roles}"
                                                         th:value="${role.id}"
                                                         th:text="${role.roleAbout}">role</option>
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="form-group">
-                                        <input value="Add user" class="btn btn-primary" type="submit" />
+                                        <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-1">
+                                            <input value="Сохранить" class="btn btn-primary" type="submit" />
+                                        </div>
                                     </div>
                                 </form>
                             </div>

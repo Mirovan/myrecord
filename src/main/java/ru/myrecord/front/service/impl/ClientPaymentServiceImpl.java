@@ -34,7 +34,10 @@ public class ClientPaymentServiceImpl implements ClientPaymentService {
 
     @Override
     public ClientPayment findById(Integer id) {
-        return clientPaymentDAO.findById(id);
+        if (id == null)
+            return null;
+        else
+            return clientPaymentDAO.findById(id).get();
     }
 
     /**

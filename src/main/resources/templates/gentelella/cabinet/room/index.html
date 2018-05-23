@@ -17,7 +17,7 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>Добавление/редактироваие группы услуг</h3>
+                        <h3>Добавление/редактирование группы услуг</h3>
                     </div>
                 </div>
 
@@ -25,12 +25,20 @@
 
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="x_panel">
+                            <div class="x_content">
+                                <div class="form-group">
+                                    <a href="/cabinet/rooms/add/" class="btn btn-primary">Добавить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
 
                         <div class="x_panel">
-                            <div class="form-group">
-                                <a href="/cabinet/rooms/add/" class="btn btn-primary">Добавить</a>
-                            </div>
-
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -51,10 +59,10 @@
                                                 <span th:text="${room.name}"></span>
                                             </a>
                                         </td>
-                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">=[Add Service]=</a></td>
-                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">=[Add User]=</a></td>
-                                        <td><a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">[Edit]</a></td>
-                                        <td><a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">[Delete]</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">Добавить услугу</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">Добавить сотрудника</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">Редактировать</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">Удалить</a></td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -17,7 +17,7 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>Добавление/редактироваие группы услуг</h3>
+                        <h3>Добавление/редактирование группы услуг</h3>
                     </div>
                 </div>
 
@@ -30,10 +30,12 @@
                             <form th:object="${room}" th:action="@{'/cabinet/rooms/' + ${action} + '/'}" method="post">
                                 <input type="hidden" th:field="*{id}" /> <br/>
                                 <div class="form-group">
-                                    <input type="text" th:field="*{name}" class="form-control" />
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <input type="text" th:field="*{name}" required="required" class="form-control col-md-7 col-xs-12" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input value="Add user" class="btn btn-primary" type="submit" />
+                                    <input value="Сохранить" class="btn btn-primary" type="submit" />
                                 </div>
                             </form>
                         </div>

@@ -58,7 +58,7 @@ ALTER SEQUENCE user_config_id_seq owned by "user_config".id;
 
 /*------------------ Клиентские сущности ----------------------*/
 
-/*Помещения/залы/комнаты/рабочие места*/
+/*Группы услуг - Помещения/залы/комнаты/рабочие места*/
 CREATE SEQUENCE room_id_seq START WITH 1;
 
 CREATE TABLE "room" (

@@ -85,8 +85,9 @@ public class UserRestController {
     /**
      * Запрос работников для текущего сис.пользователя
      * */
+    //ToDo: переделать. Не нужно тут userId
     @RequestMapping(value="/cabinet/users/json-users/", method = RequestMethod.GET)
-    public Set<User> getUsers(Integer userId, Principal principal) {
+    public Set<User> getWorkers(Integer userId, Principal principal) {
         User user = userService.findUserById(userId);
         User ownerUser = user.getOwnerUser();
 
@@ -97,6 +98,23 @@ public class UserRestController {
         //}
         return users;
     }
+
+
+    /**
+     * Запрос посетителей для текущего сис.пользователя
+     * */
+    @RequestMapping(value="/cabinet/users/json-get-clients/", method = RequestMethod.GET)
+    public Set<User> getSysUserClients(Principal principal) {
+        User ownerUser = userService.findUserByEmail( principal.getName() );
+
+        Set<User> clients = null;
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        clients = userService.findClientsByOwner(ownerUser);
+        //}
+        return clients;
+    }
+
 
 
     @RequestMapping(value="/cabinet/users/json-sysusers/", method = RequestMethod.GET)

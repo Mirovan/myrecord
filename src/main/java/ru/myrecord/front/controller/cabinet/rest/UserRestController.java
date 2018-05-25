@@ -116,6 +116,21 @@ public class UserRestController {
     }
 
 
+    /**
+     * Запрос сотрудников для текущего сис.пользователя
+     * */
+    @RequestMapping(value="/cabinet/users/json-get-workers/", method = RequestMethod.GET)
+    public Set<User> getSysUserWorkers(Principal principal) {
+        User ownerUser = userService.findUserByEmail( principal.getName() );
+
+        Set<User> workers = null;
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        //if ( Utils.userEquals(userService.findUserByEmail(principal.getName()).getId(), ownerUser.getId()) ) {
+        workers = userService.findWorkersByOwner(ownerUser);
+        //}
+        return workers;
+    }
+
 
     @RequestMapping(value="/cabinet/users/json-sysusers/", method = RequestMethod.GET)
     public Set<User> getSysUsers(Principal principal) {

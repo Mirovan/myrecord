@@ -26,6 +26,11 @@ $(document).ready(
                     function(records) {
                         $('#calendar').fullCalendar({
                             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                            header: {
+                                left: 'title',
+                                right: ''
+                            },
+                            locale: 'ru',
                             defaultView: 'timelineDay',
                             now: now,
                             height: 300,

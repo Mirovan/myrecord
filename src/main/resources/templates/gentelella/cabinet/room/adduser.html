@@ -29,7 +29,7 @@
                         <div class="x_panel">
 
                             <div class="x_title">
-                                <h2>Группы услуг</h2>
+                                <h2>Добавление оказываемых услуг для сотрудника</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -42,22 +42,31 @@
                                     <p>Выберите существующего сотрудника и помещения в которых он оказывает услуги</p>
                                 </div>
 
-                                <form th:action="@{'/cabinet/rooms/users/add/'}" method="post">
-                                    <input type="hidden" name="userId" id="userId" />
+                                <form th:action="@{'/cabinet/rooms/users/add/'}" method="post" class="form-horizontal form-label-left">
+                                    <input type="hidden" name="userId" id="workerId" />
                                     <input type="hidden" name="roomId" id="roomId" th:value="${roomId}" />
 
-                                    <div class="ui-widget">
-                                        <label for="input-user-selection">Сотрудник: </label>
-                                        <input type="text" name="user" id="input-user-selection" />
-                                        <a href="/cabinet/users/add/">Добавить нового сотрудника</a>
-                                    </div>
-
-                                    <div th:each="product : ${products}" style="display: block;">
-                                        <input type="checkbox" th:name="products[]" th:value="${product.id}" th:text="${product.name}" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-1 col-sm-3 col-xs-12" for="worker">Сотрудник</label>
+                                        <div class="col-md-5 col-sm-9 col-xs-12">
+                                            <input type="text" id="worker" required="required" class="form-control col-md-7 col-xs-12" />
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <input value="Add user" class="btn btn-primary" type="submit" />
+                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                            <div class="checkbox" th:each="product : ${products}">
+                                                <label>
+                                                    <input type="checkbox" th:name="products[]" th:value="${product.id}" th:text="${product.name}" />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-1">
+                                            <input value="Сохранить" class="btn btn-primary" type="submit" />
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -77,28 +86,10 @@
 
 <div th:include="cabinet/inc/js.inc::js"></div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(
-        function() {
-            var users = /*[[${users}]]*/;
-
-            var usersArray = $.map(
-                users,
-                function(user) {
-                    return { value: user.name + ' ' + user.sirname, data: user.id };
-                }
-            );
-            $('#input-user-selection').autocomplete({
-                source: usersArray,
-                select: function(event, ui) {
-                    $('#userId').val(ui.item.data);
-                }
-            });
-        }
-    );
-    /*]]>*/
-</script>
+<!--Select client-->
+<script src="/static/gentelella/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+<script src='/static/includes/js/get-workers.js'></script>
+<!--End Select client-->
 
 </body>
 </html>

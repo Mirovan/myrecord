@@ -38,22 +38,19 @@
                             </div>
 
                             <div class="x_content">
+                                <h4>Выберите всех сотрудников кто оказывает данную услугу</h4>
                                 <div>
-                                    <strong>Услуга:</strong><span th:text="${product.name}"></span>
-                                    <br />
-                                    <strong>Помещение:</strong><span th:text="${room.name}"></span>
+                                    <p>
+                                        <strong>Услуга:</strong> <span th:text="${product.name}"></span> [<span th:text="${room.name}"></span>]
+                                    </p>
                                 </div>
 
-                                <form th:action="@{'/cabinet/products/addusers/'}" method="post" class="form-horizontal">
+                                <form th:action="@{'/cabinet/products/addusers/'}" method="post" class="form-horizontal form-label-left">
                                     <input type="hidden" th:name="productId" th:value="${product.id}" />
-
-                                    <div>
-                                        <strong>Услуга оказывается сотрудниками:</strong>
-                                    </div>
 
                                     <div th:each="user : ${involveUsers}" class="col-sm-10">
                                         <input name="involveUsers[]" th:value="${user.id}" type="checkbox" checked="checked" />
-                                        <label th:text="${user.name}"></label>
+                                        <label th:text="@{${user.name} + ' ' + ${user.sirname}}"></label>
                                     </div>
 
                                     <div th:each="user : ${freeUsers}" class="col-sm-10">

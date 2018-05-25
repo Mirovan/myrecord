@@ -54,7 +54,7 @@
                                     <div th:each="roomProduct : ${roomProducts}" class="container">
                                         <div th:each="room : ${roomProduct.room}" class="col-lg-12">
                                             <div>
-                                                <strong>Помещение</strong>
+                                                <strong>Группа услуг</strong>
                                                 <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
                                                     <span th:text="${room.name}"></span>
                                                 </a>

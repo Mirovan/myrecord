@@ -27,6 +27,146 @@
                     <div class="col-md-12">
 
                         <div class="x_panel">
+
+                            <div class="x_title">
+                                <h2>Запись</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                        <li role="presentation" class="active">
+                                            <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Существующий клиент</a>
+                                        </li>
+                                        <li role="presentation" class="">
+                                            <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Новый клиент</a>
+                                        </li>
+                                    </ul>
+
+                                    <div id="myTabContent" class="tab-content">
+                                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                                            <form action="/cabinet/clients/record/add/exist/" method="post" class="form-horizontal form-label-left">
+                                                <input type="hidden" name="clientId" id="clientId" />
+                                                <input type="hidden" name="date" th:value="${date}" />
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="firstname">Имя</label>
+                                                    <div class="col-md-5 col-sm-9 col-xs-12">
+                                                        <input type="text" id="client" required="required" class="form-control col-md-7 col-xs-12" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Услуга</label>
+                                                    <div class="col-md-5 col-sm-9 col-xs-12">
+                                                        <select name="productId" class="form-control">
+                                                            <option th:each="product : ${products}"
+                                                                    th:value="${product.id}"
+                                                                    th:text="${product.name}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Сотрудник</label>
+                                                    <div class="col-md-5 col-sm-9 col-xs-12">
+                                                        <select name="workerId" class="form-control">
+                                                            <option th:each="worker : ${workers}"
+                                                                    th:value="${worker.id}"
+                                                                    th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="time1">Время</label>
+                                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                                        <input name="time" type="text" id="time1" data-inputmask="'mask': '99:99'" required="required" class="form-control col-md-7 col-xs-12" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-1">
+                                                        <input value="Записать" class="btn btn-primary" type="submit" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                                            <form th:object="${client}" th:action="@{'/cabinet/clients/record/add/new/'}" method="post" class="form-horizontal form-label-left">
+                                                <input type="hidden" th:field="*{id}" />
+                                                <input type="hidden" name="date" th:value="${date}" />
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="firstname">Имя</label>
+                                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                                        <input th:field="*{name}" type="text" id="firstname" required="required" class="form-control col-md-7 col-xs-12" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="sirname">Фамилия</label>
+                                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                                        <input th:field="*{sirname}" type="text" id="sirname" required="required" class="form-control col-md-7 col-xs-12" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="phone">Телефон</label>
+                                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                                        <input th:field="*{phone}" type="text" id="phone" data-inputmask="'mask': '+9-(999)-999-99-99'" required="required" class="form-control col-md-7 col-xs-12" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Услуга</label>
+                                                    <div class="col-md-5 col-sm-9 col-xs-12">
+                                                        <select name="productId" class="form-control">
+                                                            <option th:each="product : ${products}"
+                                                                    th:value="${product.id}"
+                                                                    th:text="${product.name}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Сотрудник</label>
+                                                    <div class="col-md-5 col-sm-9 col-xs-12">
+                                                        <select name="workerId" class="form-control">
+                                                            <option th:each="worker : ${workers}"
+                                                                    th:value="${worker.id}"
+                                                                    th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="time2">Время</label>
+                                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                                        <input name="time" type="text" id="time2" data-inputmask="'mask': '99:99'" required="required" class="form-control col-md-7 col-xs-12" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-1">
+                                                        <input value="Записать" class="btn btn-primary" type="submit" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="x_panel">
                             <div class="x_title">
                                 <h2>Каледарь работы сотрудников</h2>
                                 <ul class="nav navbar-right panel_toolbox">
@@ -60,144 +200,6 @@
                             </div>
                         </div>
 
-                        <div class="x_panel">
-
-                            <div class="x_title">
-                                <h2>Запись</h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-
-                            <div class="x_content">
-                                <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                                        <li role="presentation" class="active">
-                                            <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Существующий клиент</a>
-                                        </li>
-                                        <li role="presentation" class="">
-                                            <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Новый клиент</a>
-                                        </li>
-                                    </ul>
-
-                                    <div id="myTabContent" class="tab-content">
-                                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-                                            <form action="/cabinet/clients/record/add/exist/" method="post" class="form-horizontal form-label-left">
-                                                <input type="text" name="clientId" id="clientId" />
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="firstname">Имя</label>
-                                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                                        <input type="text" id="client" required="required" class="form-control col-md-7 col-xs-12" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Услуга</label>
-                                                    <div class="col-md-3 col-sm-9 col-xs-12">
-                                                        <select name="productId" class="form-control">
-                                                            <option th:each="product : ${products}"
-                                                                    th:value="${product.id}"
-                                                                    th:text="${product.name}"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Сотрудник</label>
-                                                    <div class="col-md-3 col-sm-9 col-xs-12">
-                                                        <select name="masterId" class="form-control">
-                                                            <option th:each="worker : ${workers}"
-                                                                    th:value="${worker.id}"
-                                                                    th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="datetimepicker1">Время и дата</label>
-                                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                                        <input name="date" id="datetimepicker1" th:value="${date}" type="text" required="required" class="datetimepicker form-control col-md-7 col-xs-12" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-3">
-                                                        <input value="Записать" class="btn btn-primary" type="submit" />
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-                                            <form th:object="${client}" th:action="@{'/cabinet/clients/record/add/new/'}" method="post" class="form-horizontal form-label-left">
-                                                <input type="hidden" th:field="*{id}" />
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="firstname">Имя</label>
-                                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                                        <input th:field="*{name}" type="text" id="firstname" required="required" class="form-control col-md-7 col-xs-12" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="sirname">Фамилия</label>
-                                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                                        <input th:field="*{sirname}" type="text" id="sirname" required="required" class="form-control col-md-7 col-xs-12" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="phone">Телефон</label>
-                                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                                        <input th:field="*{phone}" type="text" id="phone" required="required" class="form-control col-md-7 col-xs-12" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Услуга</label>
-                                                    <div class="col-md-3 col-sm-9 col-xs-12">
-                                                        <select name="productId" class="form-control">
-                                                            <option th:each="product : ${products}"
-                                                                    th:value="${product.id}"
-                                                                    th:text="${product.name}"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12">Сотрудник</label>
-                                                    <div class="col-md-3 col-sm-9 col-xs-12">
-                                                        <select name="masterId" class="form-control">
-                                                            <option th:each="worker : ${workers}"
-                                                                    th:value="${worker.id}"
-                                                                    th:text="@{${worker.name} + ' ' + ${worker.sirname}}"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="datetimepicker2">Время и дата</label>
-                                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                                        <input name="date" id="datetimepicker2" th:value="${date}" type="text" required="required" class="datetimepicker form-control col-md-7 col-xs-12" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-3">
-                                                        <input value="Записать" class="btn btn-primary" type="submit" />
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -219,20 +221,17 @@
 
 <script src='/static/gentelella/vendors/fullcalendar-3.9.0/lib/moment.min.js'></script>
 <script src='/static/gentelella/vendors/fullcalendar-3.9.0/fullcalendar.min.js'></script>
+<script src='/static/gentelella/vendors/fullcalendar-3.9.0/locale-all.js'></script>
 <script src='/static/gentelella/vendors/fullcalendar-scheduler-1.9.4/scheduler.min.js'></script>
 <!-- end calendar -->
 
 <script th:src="@{/static/includes/js/record-day-calendar.js}"></script>
 
-<!-- datetime picker -->
-<link rel="stylesheet" type="text/css" href="/static/default/vendor/datetimepicker/jquery.datetimepicker.min.css"/>
-<script src='/static/default/vendor/datetimepicker/jquery.datetimepicker.full.js'></script>
-<script src='/static/includes/js/datetime-pick.js'></script>
-<!-- end datetime picker -->
+<script src="/static/gentelella/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 
 <!--Select client-->
 <script src="/static/gentelella/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-<script src='/static/includes/js/user-clients.js'></script>
+<script src='/static/includes/js/get-clients.js'></script>
 <!--End Select client-->
 
 </body>

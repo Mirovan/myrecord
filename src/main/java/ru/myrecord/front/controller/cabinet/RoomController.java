@@ -170,13 +170,13 @@ public class RoomController/* implements ErrorController*/{
      * */
     @RequestMapping(value="/cabinet/rooms/users/add/", method = RequestMethod.POST)
     public ModelAndView addUsersToRoomPost(@RequestParam Integer roomId,
-                                           @RequestParam Integer userId,
+                                           @RequestParam Integer workerId,
                                            @RequestParam(value="products[]", required = false) List<Integer> productsIds,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) && userService.hasRoom(principal, roomId) && userService.hasProducts(principal, productsIds) ) {
+        if ( userService.hasUser(principal, workerId) && userService.hasRoom(principal, roomId) && userService.hasProducts(principal, productsIds) ) {
             Room room = roomService.findRoomById(roomId);
-            User user = userService.findUserById(userId);
+            User worker = userService.findUserById(workerId);
             Set<Product> products = new HashSet<>();
             for (Integer item: productsIds) {
                 products.add(productService.findProductById(item));
@@ -185,18 +185,18 @@ public class RoomController/* implements ErrorController*/{
             //Линкуем пользователя к услугам
             for (Product product: products) {
                 //Если нет такой услуги, то создаем линк
-                if ( !userProductService.hasUserProductAnyLink(user, product) ) {
-                    UserProduct userProduct = new UserProduct(user, product);
+                if ( !userProductService.hasUserProductAnyLink(worker, product) ) {
+                    UserProduct userProduct = new UserProduct(worker, product);
                     userProduct.setActive(true);
                     userProductService.add(userProduct);
                 }
                 //Если линк у юзера к продукту есть, но он не активен, то активируем
-                else if ( userProductService.hasUserProductActiveLink(user, product) ) {
-                    UserProduct userProduct = userProductService.findByUserAndProductAnyLink(user, product);
+                else if ( userProductService.hasUserProductActiveLink(worker, product) ) {
+                    UserProduct userProduct = userProductService.findByUserAndProductAnyLink(worker, product);
                     userProduct.setActive(true);
                     userProductService.update(userProduct);
                 } else {
-                    UserProduct userProduct = userProductService.findByUserAndProductActiveLink(user, product);
+                    UserProduct userProduct = userProductService.findByUserAndProductActiveLink(worker, product);
                 }
             }
 

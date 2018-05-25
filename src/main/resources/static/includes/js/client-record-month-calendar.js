@@ -103,6 +103,7 @@ function drawCalendar(eventData) {
             center: 'title',
             right: 'today'
         },
+        locale: 'ru',
         firstDay: 1,
         //events: eventData,
         dayClick: function(dateData) {
@@ -110,7 +111,13 @@ function drawCalendar(eventData) {
             var day = d.getDate();
             var month = d.getMonth() + 1;
             var year = d.getFullYear();
-            var url = "/cabinet/clients/record-day/" + day + "/" + month + "/" + year + "/";
+            var url = "/cabinet/clients/record-day/?";
+
+            if ((day + "").length < 2) day = "0" + day;
+            if ((month + "").length < 2) month = "0" + month;
+            var date = "date=" + day + "-" + month + "-" + year;
+
+            url += date;
             $(location).attr('href', url);
         }
     });

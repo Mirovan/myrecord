@@ -129,16 +129,16 @@ public class ClientRecordRestController {
             LocalDateTime start = item.getSdate();
             LocalDateTime end = item.getSdate().plusHours(2);   //ToDo: сделать наминальное время оказания услуги
 
-            String name = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
-            UserAdapter master = userService.getUserAdapter(item.getWorker());
+            String workerName = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
+            UserAdapter worker = userService.getUserAdapter(item.getWorker());
 
             CalendarRecord calendarRecord = new CalendarRecord(
                     String.valueOf(item.getId()),
-                    name,
+                    workerName,
                     start.format(formatter),
                     end.format(formatter)
             );
-            calendarRecord.setResourceId( String.valueOf(master.getId()) );
+            calendarRecord.setResourceId( String.valueOf(worker.getId()) );
             calendarMap.add(calendarRecord);
         }
 
@@ -165,7 +165,8 @@ public class ClientRecordRestController {
             //Находим всех мастеров без учета расписания
             Set<User> workers = userService.findWorkersByOwner(ownerUser);
             for (User worker: workers) {
-                calendarWorkers.add(new CalendarWorker(worker.getId(), worker.getName()));
+                String name = worker.getName() +  " " + worker.getSirname();
+                calendarWorkers.add(new CalendarWorker(worker.getId(),name));
             }
         } else {
             //Находим всех мастеров кто работает в этот день

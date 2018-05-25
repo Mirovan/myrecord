@@ -7,7 +7,9 @@ $(document).ready(
                 var dataArray = $.map(
                     users,
                     function (user) {
-                        return {value: user.name + ' ' + user.sirname + ' [' + user.phone + ']', data: user.id};
+                        var phone = "";
+                        if (user.phone != null) phone = user.phone.replace(/\-/g, "").replace(/\+/g, "").replace(/\(/g, "").replace(/\)/g, "");
+                        return {value: user.name + ' ' + user.sirname + ' [' + phone + ']', data: user.id};
                     }
                 );
 

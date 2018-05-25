@@ -25,7 +25,7 @@ $(document).ready(
                 }
                 $('#monthInput').val(month);
                 $('#yearInput').val(year);
-                showSchedule()
+                showSchedule();
             }
         );
 
@@ -40,7 +40,7 @@ $(document).ready(
                 }
                 $('#monthInput').val(month);
                 $('#yearInput').val(year);
-                showSchedule()
+                showSchedule();
             }
         );
     }

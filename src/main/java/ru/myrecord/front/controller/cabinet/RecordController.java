@@ -220,11 +220,11 @@ public class RecordController/* implements ErrorController*/{
 
 
     /**
-     * Сохранение записи клиента
+     * Сохранение записи клиента - новый клиент
      * */
     //ToDo: do
-    @RequestMapping(value="/cabinet/clients/record/add/", method = RequestMethod.POST)
-    public ModelAndView editClientRecordPost(User client,
+    @RequestMapping(value="/cabinet/clients/record/add/new/", method = RequestMethod.POST)
+    public ModelAndView addClientRecordPost(User client,
                                              Integer productId,
                                              Integer masterId,
                                              String date,
@@ -255,6 +255,26 @@ public class RecordController/* implements ErrorController*/{
             clientRecordProduct.setSdate(recordDateTime);
             clientRecordProductService.add(clientRecordProduct);
 
+            return new ModelAndView("redirect:/cabinet/clients/record/");
+        } else {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+    }
+
+
+    /**
+     * Сохранение записи клиента - существующий клиент
+     * */
+    //ToDo: do
+    @RequestMapping(value="/cabinet/clients/record/add/exist/", method = RequestMethod.POST)
+    public ModelAndView addClientRecordPost(Integer clientId,
+                                            Integer productId,
+                                            Integer masterId,
+                                            String date,
+                                            Principal principal) {
+        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+        if ( true ) {
+            //ToDo: do
             return new ModelAndView("redirect:/cabinet/clients/record/");
         } else {
             return new ModelAndView("redirect:/cabinet/");

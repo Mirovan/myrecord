@@ -225,10 +225,10 @@ public class RecordController/* implements ErrorController*/{
     //ToDo: do
     @RequestMapping(value="/cabinet/clients/record/add/new/", method = RequestMethod.POST)
     public ModelAndView addClientRecordPost(User client,
-                                             Integer productId,
-                                             Integer masterId,
-                                             String date,
-                                             Principal principal) {
+                                            Integer productId,
+                                            Integer masterId,
+                                            String date,
+                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( true ) {
             //ToDo: принадлежит сист.пользователю продуктЫ, клиент
@@ -272,9 +272,30 @@ public class RecordController/* implements ErrorController*/{
                                             Integer masterId,
                                             String date,
                                             Principal principal) {
+        User ownerUser = userService.findUserByEmail(principal.getName());
+
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( true ) {
-            //ToDo: do
+        //ToDo: принадлежит сист.пользователю продуктЫ, клиент
+        if ( userService.hasUser(ownerUser, clientId) ) {
+            User client = userService.findUserById(clientId);
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            LocalDateTime recordDateTime = LocalDateTime.parse(date, timeFormatter);
+            LocalDate recordDate = LocalDate.parse(date, timeFormatter);
+
+            ClientRecord clientRecord = new ClientRecord(client, recordDate);
+            clientRecord = clientRecordService.add(clientRecord, ownerUser);
+
+            ClientRecordProduct clientRecordProduct = new ClientRecordProduct();
+            clientRecordProduct.setClientRecord(clientRecord);
+            Product product = productService.findProductById(productId);
+            clientRecordProduct.setProduct(product);
+
+            User master = userService.findUserById(masterId);
+            clientRecordProduct.setWorker(master);
+            clientRecordProduct.setSdate(recordDateTime);
+            clientRecordProductService.add(clientRecordProduct);
+
             return new ModelAndView("redirect:/cabinet/clients/record/");
         } else {
             return new ModelAndView("redirect:/cabinet/");

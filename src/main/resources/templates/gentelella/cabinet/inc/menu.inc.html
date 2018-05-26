@@ -1,8 +1,8 @@
 <div th:fragment="menu">
     <ul class="nav side-menu">
         <li th:classappend="${menuSelect} == 'home' ? current-page : ''"><a href="/cabinet/"><i class="fa fa-home"></i> Главная</a></li>
-        <li><a><i class="fa fa-folder-open"></i> Услуги <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
+        <li th:classappend="${menuSelect} == 'rooms' or ${menuSelect} == 'products' ? 'current-page active' : ''"><a><i class="fa fa-folder-open"></i> Услуги <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu" th:style="${menuSelect} == 'rooms' or ${menuSelect} == 'products' ? 'display:block' : 'display:none'">
                 <li th:classappend="${menuSelect} == 'rooms' ? current-page : ''"><a href="/cabinet/rooms/">Группы услуг</a></li>
                 <li th:classappend="${menuSelect} == 'products' ? current-page : ''"><a href="/cabinet/products/">Услуги</a></li>
             </ul>

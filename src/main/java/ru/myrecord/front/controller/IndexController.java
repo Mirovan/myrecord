@@ -6,15 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ru.myrecord.front.data.model.adapters.UserProductAdapter;
-import ru.myrecord.front.data.model.entities.ClientRecordProduct;
-import ru.myrecord.front.data.model.entities.UserProduct;
+import ru.myrecord.front.data.model.entities.User;
 import ru.myrecord.front.service.iface.ClientRecordProductService;
+import ru.myrecord.front.service.iface.UserService;
 
+import java.security.Principal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by max on 12.11.2017.
@@ -24,32 +22,32 @@ import java.util.Set;
 public class IndexController/* implements ErrorController*/{
 
     @Autowired
-    ClientRecordProductService clientRecordProductService;
+    private ClientRecordProductService clientRecordProductService;
+
+    @Autowired
+    private UserService userService;
+
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public ModelAndView index(){
         return new ModelAndView("redirect:/cabinet/");
     }
 
+
     @RequestMapping(value={"/cabinet/", "/cabinet"}, method = RequestMethod.GET)
-    public ModelAndView cabinet() {
+    public ModelAndView cabinet(Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
 
-        //Клиенты сегодня
-        List<UserProductAdapter> todayClients = new ArrayList<>();
+        User ownerUser = userService.findUserByEmail(principal.getName());
 
-        Set<ClientRecordProduct> clientRecords = clientRecordProductService.findByDate(LocalDate.now());
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        for (ClientRecordProduct item : clientRecords) {
-            UserProductAdapter userProduct = new UserProductAdapter(
-                    item.getClientRecord().getUser(),
-                    item.getProduct(),
-                    item.getSdate().format(timeFormatter)
-            );
-            todayClients.add( userProduct );
-        }
+        //Клиенты сегодня
+        List<UserProductAdapter> todayClients = clientRecordProductService.getClientsByDate(ownerUser, LocalDate.now());
+
+        //Клиенты кто пришел к нам n-дней назад
+        List<UserProductAdapter> remindClients = clientRecordProductService.getRemindClientsByDate(ownerUser, LocalDate.now());
 
         modelAndView.addObject("todayClients", todayClients);
+        modelAndView.addObject("remindClients", remindClients);
         modelAndView.addObject("menuSelect", "home");
         modelAndView.setViewName("cabinet/index");
         return modelAndView;

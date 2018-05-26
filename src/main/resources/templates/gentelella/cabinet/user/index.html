@@ -41,7 +41,7 @@
                         <div class="x_panel">
 
                             <div class="x_title">
-                                <h2>Профиль пользователя</h2>
+                                <h2>Список сотрудников</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -55,6 +55,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Настройки сотрудник</th>
+                                        <th>Условия оплаты</th>
                                         <th>Расписание</th>
                                         <th>Редактировать данные</th>
                                         <th>Удалить</th>
@@ -64,18 +65,19 @@
                                     <tr th:each="user, iterator : ${users}">
                                         <th scope="row" th:text="@{${iterator.index} + 1}"></th>
                                         <td>
-                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">
-                                                <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
-                                            </a>
+                                            <span th:text="@{${user.name} + ' ' + ${user.sirname}}"></span>
                                         </td>
                                         <td>
-                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/schedule/'}">== Расписание ==</a>
+                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/salary/'}">Оплата</a>
                                         </td>
                                         <td>
-                                            <a th:href="@{'/cabinet/users/edit/' + ${user.id} + '/'}">[Edit]</a>
+                                            <a th:href="@{'/cabinet/users/' + ${user.id} + '/schedule/'}">Расписание</a>
                                         </td>
                                         <td>
-                                            <a th:href="@{'/cabinet/users/delete/' + ${user.id} + '/'}">[Delete]</a>
+                                            <a th:href="@{'/cabinet/users/edit/' + ${user.id} + '/'}">Редактировать</a>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{'/cabinet/users/delete/' + ${user.id} + '/'}">Удалить</a>
                                         </td>
                                     </tr>
                                     </tbody>

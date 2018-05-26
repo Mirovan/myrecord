@@ -123,7 +123,7 @@ public class ClientRecordRestController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDate date = LocalDate.of(year, month, day);
 
-        Set<ClientRecordProduct> clientRecords = clientRecordProductService.findByDate(date);
+        Set<ClientRecordProduct> clientRecords = clientRecordProductService.findByDate(ownerUser, date);
 
         for (ClientRecordProduct item : clientRecords) {
             LocalDateTime start = item.getSdate();

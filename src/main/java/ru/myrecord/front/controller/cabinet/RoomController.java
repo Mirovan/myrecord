@@ -48,7 +48,7 @@ public class RoomController/* implements ErrorController*/{
         User user = userService.findUserByEmail( principal.getName() );
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject( "rooms", roomService.findRoomsByActive(user) );
-        modelAndView.addObject("menuSelect", "");
+        modelAndView.addObject("menuSelect", "rooms");
         modelAndView.setViewName("cabinet/room/index");
         return modelAndView;
     }
@@ -68,6 +68,7 @@ public class RoomController/* implements ErrorController*/{
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("products", products);
             modelAndView.addObject("users", users);
+            modelAndView.addObject("menuSelect", "rooms");
             modelAndView.setViewName("cabinet/room/product");
             return modelAndView;
         } else {
@@ -81,6 +82,7 @@ public class RoomController/* implements ErrorController*/{
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("action", "add");
         modelAndView.addObject("room", new Room());
+        modelAndView.addObject("menuSelect", "rooms");
         modelAndView.setViewName("cabinet/room/edit");
         return modelAndView;
     }
@@ -100,15 +102,12 @@ public class RoomController/* implements ErrorController*/{
     public ModelAndView roomUpdate(@PathVariable Integer roomId, Principal principal) {
         Room room = roomService.findRoomById(roomId);
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasRoom(principal, roomId) ) {
+        if ( userService.hasRoom(principal, roomId) && room.getActive() ) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("action", "edit");
-            if (room.getActive() == true) {
-                modelAndView.addObject("room", room);
-                modelAndView.setViewName("cabinet/room/edit");
-            } else {
-                return new ModelAndView("redirect:/cabinet/rooms/");
-            }
+            modelAndView.addObject("room", room);
+            modelAndView.addObject("menuSelect", "rooms");
+            modelAndView.setViewName("cabinet/room/edit");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/rooms/");
@@ -157,6 +156,7 @@ public class RoomController/* implements ErrorController*/{
             modelAndView.addObject("roomId", roomId);
             modelAndView.addObject("users", users);
             modelAndView.addObject("products", products);
+            modelAndView.addObject("menuSelect", "rooms");
             modelAndView.setViewName("cabinet/room/adduser");
             return modelAndView;
         } else {
@@ -220,10 +220,12 @@ public class RoomController/* implements ErrorController*/{
 
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("users", users);
+            modelAndView.addObject("menuSelect", "rooms");
             modelAndView.setViewName("cabinet/room/users/index");
             return modelAndView;
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }
     }
+
 }

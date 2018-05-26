@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 @Controller
-public class    RecordController/* implements ErrorController*/{
+public class RecordController/* implements ErrorController*/{
 
     @Autowired
     private UserService userService;

@@ -64,7 +64,18 @@
                             </div>
 
                             <div class="x_content">
-                                В разработке
+                                <ul class="list-unstyled scroll-view">
+                                    <li class="media event" th:each="item: ${remindClients}">
+                                        <a class="pull-left border-aero profile_thumb">
+                                            <i class="fa fa-user aero"></i>
+                                        </a>
+                                        <div class="media-body">
+                                            <a class="title" href="#" th:text="@{${item.client.name} + ' ' + ${item.client.sirname}}"></a>
+                                            <p><strong th:text="${item.date}"></strong> <span th:text="${item.product.name}"></span></p>
+                                            <p><small th:text="${item.client.phone}">Услуга:</small></p>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

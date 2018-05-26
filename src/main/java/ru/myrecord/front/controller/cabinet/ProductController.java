@@ -1,6 +1,7 @@
 package ru.myrecord.front.controller.cabinet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import ru.myrecord.front.service.iface.UserProductService;
 import ru.myrecord.front.service.iface.UserService;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -153,36 +155,48 @@ public class ProductController/* implements ErrorController*/{
     /**
      * Добавление услуг в опреденное помещение
      * */
-    @RequestMapping(value="/cabinet/rooms/{roomId}/addproduct/", method = RequestMethod.GET)
-    public ModelAndView addProductToRoom(@PathVariable Integer roomId, Principal principal) {
-        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasRoom(principal, roomId) ) {
-            Room room = roomService.findRoomById(roomId);
-            User user = room.getOwnerUser();
-            List<Room> rooms = roomService.findRoomsByActive(user);
-            Product product = new Product();
-            product.setRoom(room);
-
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("action", "add");
-            modelAndView.addObject("rooms", rooms);
-            modelAndView.addObject("product", product);
-            modelAndView.addObject("menuSelect", "products");
-            modelAndView.setViewName("cabinet/room/product/editproduct");
-            return modelAndView;
-        } else {
-            return new ModelAndView("redirect:/cabinet/");
-        }
-    }
+//    @RequestMapping(value="/cabinet/rooms/{roomId}/addproduct/", method = RequestMethod.GET)
+//    public ModelAndView addProductToRoom(@PathVariable Integer roomId, Principal principal) {
+//        //Проверка - имеет ли текущий сис.пользователь доступ к сущности
+//        if ( userService.hasRoom(principal, roomId) ) {
+//            Room room = roomService.findRoomById(roomId);
+//            User user = room.getOwnerUser();
+//            List<Room> rooms = roomService.findRoomsByActive(user);
+//            Product product = new Product();
+//            product.setRoom(room);
+//            product.setDuration(1f);
+//            product.setRemindPeriod(30);
+//
+//            ModelAndView modelAndView = new ModelAndView();
+//            modelAndView.addObject("action", "add");
+//            modelAndView.addObject("rooms", rooms);
+//            modelAndView.addObject("product", product);
+//            modelAndView.addObject("menuSelect", "products");
+//            modelAndView.setViewName("cabinet/room/product/editproduct");
+//            return modelAndView;
+//        } else {
+//            return new ModelAndView("redirect:/cabinet/");
+//        }
+//    }
 
     /**
      * Добавление услуги без привязки к комнате
      * */
     @RequestMapping(value="/cabinet/rooms/addproduct/", method = RequestMethod.GET)
-    public ModelAndView addProductToRoom(Principal principal) {
+    public ModelAndView addProductToRoom(
+            @RequestParam(required = false) Integer roomId,
+            Principal principal) {
+        if ( roomId != null && !userService.hasRoom(principal, roomId) ) {
+            return new ModelAndView("redirect:/cabinet/");
+        }
+
         User ownerUser = userService.findUserByEmail( principal.getName() );
         List<Room> rooms = roomService.findRoomsByActive(ownerUser);
         Product product = new Product();
+        if (roomId != null) {
+            Room room = roomService.findRoomById(roomId);
+            product.setRoom(room);
+        }
         product.setDuration(1f);
         product.setRemindPeriod(30);
 
@@ -203,7 +217,8 @@ public class ProductController/* implements ErrorController*/{
         if ( userService.hasRoom(principal, room.getId()) ) {
             product.setActive(true);
             productService.add(product);
-            return new ModelAndView("redirect:/cabinet/rooms/" + room.getId() + "/");
+            return new ModelAndView("redirect:/cabinet/products/");
+            //return new ModelAndView("redirect:/cabinet/rooms/" + room.getId() + "/");
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }

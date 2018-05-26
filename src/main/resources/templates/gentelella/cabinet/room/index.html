@@ -55,11 +55,10 @@
                                     <tr th:each="room, iterator : ${rooms}">
                                         <th scope="row" th:text="@{${iterator.index} + 1}"></th>
                                         <td>
-                                            <a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}">
-                                                <span th:text="${room.name}"></span>
-                                            </a>
+                                            <!--<a th:href="@{'/cabinet/rooms/' + ${room.id} + '/'}"></a>-->
+                                            <span th:text="${room.name}"></span>
                                         </td>
-                                        <td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addproduct/'}">Добавить услугу</a></td>
+                                        <td><a th:href="@{'/cabinet/rooms/addproduct/?roomId=' + ${room.id}}">Добавить услугу</a></td>
                                         <!--<td><a th:href="@{'/cabinet/rooms/' + ${room.id} + '/addusers/'}">Добавить сотрудника</a></td>-->
                                         <td><a th:href="@{'/cabinet/rooms/edit/' + ${room.id} + '/'}">Редактировать</a></td>
                                         <td><a th:href="@{'/cabinet/rooms/delete/' + ${room.id} + '/'}">Удалить</a></td>

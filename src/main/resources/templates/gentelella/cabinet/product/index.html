@@ -67,6 +67,7 @@
                                                         <tr>
                                                             <th width="100">#</th>
                                                             <th width="400">Услуга</th>
+                                                            <th>Сотрудники</th>
                                                             <th>Редактировать</th>
                                                         </tr>
                                                         </thead>
@@ -74,7 +75,10 @@
                                                         <tr th:each="product, iterator : ${roomProduct.products}">
                                                             <th scope="row" th:text="@{${iterator.index} + 1}"></th>
                                                             <td>
-                                                                <a th:href="@{'/cabinet/products/' + ${product.id} + '/users/'}" th:text="${product.name}"></a>
+                                                                <span th:text="${product.name}"></span>
+                                                            </td>
+                                                            <td>
+                                                                <a th:href="@{'/cabinet/products/' + ${product.id} + '/users/'}">Установить сотрудников</a>
                                                             </td>
                                                             <td>
                                                                 <a th:href="@{'/cabinet/products/edit/' + ${product.id} + '/'}">Редактировать</a>

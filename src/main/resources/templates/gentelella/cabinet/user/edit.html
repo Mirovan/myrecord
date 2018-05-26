@@ -48,6 +48,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="control-label col-md-1 col-sm-4 col-xs-12" for="phone">Телефон</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input th:field="*{phone}" id="phone" type="text" data-inputmask="'mask': '+9-(999)-999-99-99'" required="required" class="form-control col-md-7 col-xs-12" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="control-label col-md-1 col-sm-4 col-xs-12" for="pass">Пароль</label>
                                         <div class="col-md-4 col-sm-4 col-xs-12">
                                             <input th:field="*{pass}" id="pass" type="text" required="required" class="form-control col-md-7 col-xs-12" />
@@ -99,6 +105,8 @@
 </div>
 
 <div th:include="cabinet/inc/js.inc::js"></div>
+
+<script src="/static/gentelella/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 
 </body>
 </html>

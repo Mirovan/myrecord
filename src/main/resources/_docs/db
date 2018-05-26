@@ -77,6 +77,8 @@ CREATE TABLE "product" (
     id INTEGER NOT NULL default nextval('product_id_seq') PRIMARY KEY,
     name VARCHAR(240) NOT NULL,
     room_id INTEGER REFERENCES "room"(id),
+    duration REAL DEFAULT 1,              /*Длительность услуги в часах, 0,5 часа = 30 мин*/
+    remind_period INTEGER DEFAULT 30,        /*Время в днях через которое стоит напомнить о повторной услуг*/
     active BOOLEAN
 );
 ALTER SEQUENCE product_id_seq owned by "product".id;

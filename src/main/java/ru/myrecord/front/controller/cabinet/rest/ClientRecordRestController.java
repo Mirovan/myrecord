@@ -127,7 +127,9 @@ public class ClientRecordRestController {
 
         for (ClientRecordProduct item : clientRecords) {
             LocalDateTime start = item.getSdate();
-            LocalDateTime end = item.getSdate().plusHours(2);   //ToDo: сделать наминальное время оказания услуги
+            int hour = item.getProduct().getDuration().intValue();
+            int minute = (int) ((item.getProduct().getDuration() - hour) * 60);
+            LocalDateTime end = item.getSdate().plusHours( hour ).plusMinutes( minute );
 
             String workerName = item.getClientRecord().getUser().getName() +  " " + item.getClientRecord().getUser().getSirname();
             UserAdapter worker = userService.getUserAdapter(item.getWorker());

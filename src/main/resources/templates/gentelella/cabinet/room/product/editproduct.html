@@ -40,14 +40,16 @@
                             <div class="x_content">
                                 <form th:object="${product}" th:action="@{'/cabinet/products/' + ${action} + '/'}" method="post" class="form-horizontal">
                                     <input type="hidden" th:field="*{id}" />
+
                                     <div class="form-group row">
                                         <label class="col-sm-2 form-control-label">Название</label>
                                         <div class="col-sm-4">
                                             <input type="text" th:field="*{name}" class="form-control" />
                                         </div>
                                     </div>
+
                                     <div class="form-group row">
-                                        <label class="col-sm-2 form-control-label">Помещение</label>
+                                        <label class="col-sm-2 form-control-label">Группа услуг</label>
                                         <div class="col-sm-4 mb-3">
                                             <select th:field="*{room}" class="form-control">
                                                 <option th:each="r : ${rooms}"
@@ -56,6 +58,21 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Длительность оказания услуги (часов)</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" th:field="*{duration}" data-inputmask="'mask': '9.9'" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Напоминание о повторном визите (дней)</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" th:field="*{remindPeriod}" class="form-control" />
+                                        </div>
+                                    </div>
+
                                     <div class="form-group">
                                         <input type="submit" class="btn btn-primary" />
                                     </div>
@@ -97,6 +114,8 @@
 </div>
 
 <div th:include="cabinet/inc/js.inc::js"></div>
+
+<script src="/static/gentelella/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 
 </body>
 </html>

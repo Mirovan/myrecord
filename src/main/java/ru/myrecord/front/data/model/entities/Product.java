@@ -21,6 +21,12 @@ public class Product {
     @JsonIgnore
     private Room room;
 
+    @Column(name = "duration")
+    private Float duration;
+
+    @Column(name = "remind_period")
+    private Integer remindPeriod;
+
     @ManyToMany
     @JoinTable(
             name = "user_product",
@@ -32,6 +38,7 @@ public class Product {
 
     @Column(name = "active")
     private Boolean active;
+
 
     public Integer getId() {
         return id;
@@ -49,14 +56,6 @@ public class Product {
         this.name = name;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
     public Room getRoom() {
         return room;
     }
@@ -65,11 +64,35 @@ public class Product {
         this.room = room;
     }
 
+    public Float getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Float duration) {
+        this.duration = duration;
+    }
+
+    public Integer getRemindPeriod() {
+        return remindPeriod;
+    }
+
+    public void setRemindPeriod(Integer remindPeriod) {
+        this.remindPeriod = remindPeriod;
+    }
+
     public Set<User> getUsers() {
         return users;
     }
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

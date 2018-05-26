@@ -183,6 +183,8 @@ public class ProductController/* implements ErrorController*/{
         User ownerUser = userService.findUserByEmail( principal.getName() );
         List<Room> rooms = roomService.findRoomsByActive(ownerUser);
         Product product = new Product();
+        product.setDuration(1f);
+        product.setRemindPeriod(30);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("action", "add");
@@ -236,7 +238,10 @@ public class ProductController/* implements ErrorController*/{
         if ( userService.hasProduct(principal, productUpd.getId()) ) {
             product.setName( productUpd.getName() );
             product.setRoom( productUpd.getRoom() );
+            product.setDuration( productUpd.getDuration() );
+            product.setRemindPeriod( productUpd.getRemindPeriod() );
             productService.update(product);
+            return new ModelAndView("redirect:/cabinet/products/");
         }
         return new ModelAndView("redirect:/cabinet/");
     }

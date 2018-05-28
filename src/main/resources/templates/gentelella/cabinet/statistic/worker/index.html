@@ -95,7 +95,7 @@
                                             <span th:text="@{${item.earnedMoney} - ${item.primeCostSum}}"></span>
                                         </td>
                                         <td>
-                                            <span th:text="@{${item.primeCostSum} - ${item.workerInterestSalary} - ${item.workerInterestProductSalary}}"></span>
+                                            <span th:text="@{${item.earnedMoney} - ${item.primeCostSum} - ${item.workerInterestSalary} - ${item.workerInterestProductSalary}}"></span>
                                         </td>
 
                                         <td>
@@ -108,7 +108,7 @@
                                             <strong th:text="@{${item.workerPeriodSalary} + ${item.workerInterestSalary} + ${item.workerInterestProductSalary}}"></strong>
                                         </td>
                                         <td>
-                                            <span>В разработке</span>
+                                            <a th:href="@{'/cabinet/statistics/workers/salary/?workerId=' + ${item.worker.id}+ '&fromDate=' + ${fromDate} + '&toDate=' + ${toDate}}">Просмотреть</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -124,7 +124,7 @@
                                             <span th:text="@{${resPeriodMoneyStatistic.earnedMoney} - ${resPeriodMoneyStatistic.primeCostSum}}"></span>
                                         </th>
                                         <th scope="row">
-                                            <span th:text="@{${resPeriodMoneyStatistic.primeCostSum} - ${resPeriodMoneyStatistic.workerInterestSalary} - ${resPeriodMoneyStatistic.workerInterestProductSalary}}"></span>
+                                            <span th:text="@{${resPeriodMoneyStatistic.earnedMoney} - ${resPeriodMoneyStatistic.primeCostSum} - ${resPeriodMoneyStatistic.workerInterestSalary} - ${resPeriodMoneyStatistic.workerInterestProductSalary}}"></span>
                                         </th>
 
                                         <th scope="row">

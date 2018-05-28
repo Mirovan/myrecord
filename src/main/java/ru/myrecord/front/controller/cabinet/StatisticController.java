@@ -42,9 +42,10 @@ public class StatisticController/* implements ErrorController*/{
      * Страница отображения всех пользователей и их з/п за период
      * */
     @RequestMapping(value="/cabinet/statistics/workers/", method = RequestMethod.GET)
-    public ModelAndView showPeriodRecords(Principal principal,
-                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
-                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate) {
+    public ModelAndView showPeriodRecords(
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate,
+            Principal principal) {
 
         //Если даты не выбирали
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -112,9 +113,9 @@ public class StatisticController/* implements ErrorController*/{
             for (ClientPaymentProduct item: clientPaymentProductsByWorker) {
                 if (!productProfitMap.containsKey(item.getProduct().getId()))  //Добавляем в map
                     productProfitMap.put(item.getProduct().getId(), item.getPrice());
-                else    //обновляем, прибавляя оплату
+                else    //обновляем, прибавляя оплату, вычитая себестоимость
                     productProfitMap.put(
-                            item.getProduct().getId(), productProfitMap.get(item.getProduct().getId()) + item.getPrice()
+                            item.getProduct().getId(), productProfitMap.get(item.getProduct().getId()) + item.getPrice() - item.getProduct().getPrimeCost()
                     );
             }
             //З/п сотрудника по услугам - фиксированная и общий процент
@@ -145,6 +146,29 @@ public class StatisticController/* implements ErrorController*/{
         modelAndView.addObject("toDate", toDate.format(timeFormatter));
         modelAndView.addObject("menuSelect", "statistics");
         modelAndView.setViewName("cabinet/statistic/worker/index");
+        return modelAndView;
+    }
+
+
+    /**
+     * Страница отображения всех пользователей и их з/п за период
+     * */
+    @RequestMapping(value="/cabinet/statistics/workers/salary/", method = RequestMethod.GET)
+    public ModelAndView showWorkerStaticByPeriod(
+            @RequestParam(required = false) Integer workerId,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate,
+            Principal principal) {
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if (fromDate == null) fromDate = LocalDate.now();
+        if (toDate == null) toDate = LocalDate.now();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
+        modelAndView.addObject("toDate", toDate.format(timeFormatter));
+        modelAndView.addObject("menuSelect", "statistics");
+        modelAndView.setViewName("cabinet/statistic/worker/product");
         return modelAndView;
     }
 

@@ -231,7 +231,7 @@ public class ProductController/* implements ErrorController*/{
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
         if ( userService.hasProduct(principal, productId) ) {
             Product product = productService.findProductById(productId);
-            User ownerUser = product.getRoom().getOwnerUser();   //пользователь которому принадлежит помещение с этой услугой
+            User ownerUser = product.getRoom().getOwnerUser();   //пользователь которому принадлежит "группа-услуг" с этой услугой
             List<Room> rooms = roomService.findRoomsByActive(ownerUser);
 
             ModelAndView modelAndView = new ModelAndView();

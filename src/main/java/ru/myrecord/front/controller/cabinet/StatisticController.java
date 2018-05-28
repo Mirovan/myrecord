@@ -7,16 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.adapters.WorkerSalary;
+import ru.myrecord.front.data.model.adapters.MoneyStatistic;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class StatisticController/* implements ErrorController*/{
@@ -43,10 +42,12 @@ public class StatisticController/* implements ErrorController*/{
      * Страница отображения всех пользователей и их з/п за период
      * */
     @RequestMapping(value="/cabinet/statistics/workers/", method = RequestMethod.GET)
-    public ModelAndView showPeriodRecords(Principal principal,
-                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
-                                          @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate) {
+    public ModelAndView showPeriodRecords(
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate,
+            Principal principal) {
 
+        //Если даты не выбирали
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         if (fromDate == null) fromDate = LocalDate.now().withDayOfMonth(1);
         if (toDate == null) toDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
@@ -65,38 +66,109 @@ public class StatisticController/* implements ErrorController*/{
         //находим все оплаты услуг
         List<ClientPaymentProduct> clientPaymentProducts = clientPaymentProductService.findByPaymentsAndWorkers(clientPayments);
 
-        List<WorkerSalary> workerSalaries = new ArrayList<>();
+        //результат ИТОГО
+        MoneyStatistic resPeriodMoneyStatistic = new MoneyStatistic(null, 0, 0, 0, 0, 0);
+
+        List<MoneyStatistic> moneyStatisticList = new ArrayList<>();
         for (User worker : workers) {
-            Integer salaryByRenderProducts = 0;
-            Integer monthSalary = 0;
-            Integer salaryByPercent = 0;
-            Integer salaryByPercentProducts = 0;
+            Integer earnedMoney = 0;    //Доход
+            Integer primeCostSum = 0;   //Себестоимость
+            Integer allNetProfit = 0;  //Вся чистая прибыль
+            Integer workerPeriodSalary = 0;  //Фиксированная з/п сотрудника
+            Integer workerInterestSalary = 0;    //З/п от прибыли
+            Integer workerInterestProductSalary = 0;    //З/п от каждой услуги  //ToDo: реализовать з/п сотрудника как процент от каждой услуги
 
-            //суммируем доход от оказанных услуг
-            for (ClientPaymentProduct item : clientPaymentProducts) {
-                if ( item.getWorker() != null && item.getWorker().getId().equals(worker.getId()) ) {
-                    salaryByRenderProducts += item.getPrice();
+            //Выбираем только услуги оказанные нужным сотрудником
+            Set<ClientPaymentProduct> clientPaymentProductsByWorker = clientPaymentProducts
+                    .stream()
+                    .filter(f -> f.getWorker().equals(worker))
+                    .collect(Collectors.toSet());
+            //Находим сумму по полученным деньгам за оказанные услуги
+            for (ClientPaymentProduct item : clientPaymentProductsByWorker) {
+                earnedMoney += item.getPrice();                         //суммируем доход от оказанных услуг
+                primeCostSum += item.getProduct().getPrimeCost();       //суммируем себестоимость оказанных услуг
+            }
 
-                    //UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(worker, item.getProduct());
+            //Вся Чистая прибыль
+            allNetProfit = earnedMoney - primeCostSum;
+
+            //З/п сотрудника фиксированная и общий процент
+            UserSalary userSalary = userSalaryService.findByUser(worker);
+            if ( userSalary != null ) {
+                workerPeriodSalary += userSalary.getSalary().intValue();      //Фиксированная составляющая з/п сотрудника
+                workerInterestSalary += ((Float) ((float) allNetProfit / 100 * userSalary.getSalaryPercent())).intValue();     //З/п сотрудника - Процент от прибыли
+            }
+
+
+            //Услуги, оказанные сотрудником
+            Set<Product> renderedWorkerProducts = clientPaymentProductsByWorker
+                    .stream()
+                    .map(ClientPaymentProduct::getProduct)
+                    .collect(Collectors.toSet());
+
+
+            //Находим суммарную выручку за определенную услугу
+            Map<Integer, Integer> productProfitMap = new HashMap();    //<Id услуги, сумма выручки>
+            //Просматриваем все оплаченные услуги и добавляем в Map пары - <Id услуги, сумма>
+            for (ClientPaymentProduct item: clientPaymentProductsByWorker) {
+                if (!productProfitMap.containsKey(item.getProduct().getId()))  //Добавляем в map
+                    productProfitMap.put(item.getProduct().getId(), item.getPrice());
+                else    //обновляем, прибавляя оплату, вычитая себестоимость
+                    productProfitMap.put(
+                            item.getProduct().getId(), productProfitMap.get(item.getProduct().getId()) + item.getPrice() - item.getProduct().getPrimeCost()
+                    );
+            }
+            //З/п сотрудника по услугам - фиксированная и общий процент
+            for (Product product : renderedWorkerProducts) {
+                UserProductSalary userProductSalary = userProductSalaryService.findByWorkerAndProduct(worker, product);
+                if (userProductSalary != null) {
+                    workerPeriodSalary += userProductSalary.getSalary().intValue();      //Фиксированная составляющая з/п сотрудника
+
+                    //Вычитаем себестоимость из выручки за определенную услугу
+                    int productProfit = productProfitMap.get(product.getId()) - product.getPrimeCost();
+
+                    workerInterestProductSalary += ((Float) ((float) productProfit / 100 * userProductSalary.getSalaryPercent())).intValue();     //З/п сотрудника - Процент от прибыли
                 }
             }
 
-            UserSalary userSalary = userSalaryService.findByUser(worker);
-            if ( userSalary != null ) {
-                monthSalary = userSalary.getSalary().intValue();
-                salaryByPercent = ((Float) (salaryByRenderProducts / 100 * userSalary.getSalaryPercent())).intValue();
-            }
 
-            WorkerSalary workerSalary = new WorkerSalary(worker, salaryByRenderProducts, monthSalary, salaryByPercent, salaryByPercentProducts);
-            workerSalaries.add(workerSalary);
+            MoneyStatistic moneyStatistic = new MoneyStatistic(worker, earnedMoney, primeCostSum, workerPeriodSalary, workerInterestSalary, workerInterestProductSalary);
+            moneyStatisticList.add(moneyStatistic);
+
+            //добавляем в ИТОГО
+            resPeriodMoneyStatistic.plus(earnedMoney, primeCostSum, workerPeriodSalary, workerInterestSalary, workerInterestProductSalary);
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("workerSalaries", workerSalaries);
+        modelAndView.addObject("resPeriodMoneyStatistic", resPeriodMoneyStatistic);
+        modelAndView.addObject("moneyStatisticList", moneyStatisticList);
         modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
         modelAndView.addObject("toDate", toDate.format(timeFormatter));
         modelAndView.addObject("menuSelect", "statistics");
         modelAndView.setViewName("cabinet/statistic/worker/index");
+        return modelAndView;
+    }
+
+
+    /**
+     * Страница отображения всех пользователей и их з/п за период
+     * */
+    @RequestMapping(value="/cabinet/statistics/workers/salary/", method = RequestMethod.GET)
+    public ModelAndView showWorkerStaticByPeriod(
+            @RequestParam(required = false) Integer workerId,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd-MM-yyyy") LocalDate toDate,
+            Principal principal) {
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if (fromDate == null) fromDate = LocalDate.now();
+        if (toDate == null) toDate = LocalDate.now();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
+        modelAndView.addObject("toDate", toDate.format(timeFormatter));
+        modelAndView.addObject("menuSelect", "statistics");
+        modelAndView.setViewName("cabinet/statistic/worker/product");
         return modelAndView;
     }
 

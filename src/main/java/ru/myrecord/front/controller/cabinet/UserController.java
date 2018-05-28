@@ -241,17 +241,17 @@ public class UserController/* implements ErrorController*/{
      * Сохранение системы оклада пользователя
      * */
     @RequestMapping(value="/cabinet/users/salary/", method = RequestMethod.POST)
-    public ModelAndView editUserSalaryPost(@RequestParam Integer userId,
+    public ModelAndView editUserSalaryPost(@RequestParam Integer workerId,
                                            UserSalary userSalary,
                                            Principal principal) {
         //Проверка - имеет ли текущий сис.пользователь доступ к сущности
-        if ( userService.hasUser(principal, userId) && userSalary.getWorker().getId().equals(userId) ) {
-            User user = userService.findUserById(userId);
+        if ( userService.hasUser(principal, workerId) && userSalary.getWorker().getId().equals(workerId) ) {
+            User user = userService.findUserById(workerId);
             userSalary.setStartdate(LocalDateTime.now());
             //ToDo: если процент и оклад остались такими же то просто обновить, а не добавлять заново
             userSalaryService.add(userSalary);
 
-            return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(userId) + "/salary/");
+            return new ModelAndView("redirect:/cabinet/users/" + String.valueOf(workerId) + "/salary/");
         } else {
             return new ModelAndView("redirect:/cabinet/");
         }
@@ -274,7 +274,7 @@ public class UserController/* implements ErrorController*/{
             for (UserProduct userProduct: userProducts) {
                 Product product = userProduct.getProduct();
                 //products.add(product);
-                UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(worker, product);
+                UserProductSalary userProductSalary = userProductSalaryService.findByWorkerAndProduct(worker, product);
                 //Если з/п у сотрудника еще не установлена
                 if ( userProductSalary == null ) {
                     userProductSalary = new UserProductSalary(worker, product, 0F, 0F);
@@ -307,7 +307,7 @@ public class UserController/* implements ErrorController*/{
             User worker = userService.findUserById(workerId);
             Product product = productService.findProductById(productId);
 
-            UserProductSalary userProductSalary = userProductSalaryService.findByUserAndProduct(worker, product);
+            UserProductSalary userProductSalary = userProductSalaryService.findByWorkerAndProduct(worker, product);
             //Если з/п у сотрудника еще не установлена
             if ( userProductSalary == null ) {
                 userProductSalary = new UserProductSalary(worker, product, 0F, 0F);
@@ -343,7 +343,7 @@ public class UserController/* implements ErrorController*/{
             Product product = productService.findProductById(productId);
 
             //Обновляем старую запись о з/п
-            UserProductSalary oldUserProductSalary = userProductSalaryService.findByUserAndProduct(user, product);
+            UserProductSalary oldUserProductSalary = userProductSalaryService.findByWorkerAndProduct(user, product);
             if (oldUserProductSalary != null) {
                 oldUserProductSalary.setEnddate(LocalDateTime.now());
                 userProductSalaryService.update(oldUserProductSalary);

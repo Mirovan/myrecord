@@ -82,11 +82,6 @@ public class PaymentController/* implements ErrorController*/{
 
         List<ClientRecord> clientRecords = clientRecordService.findByDates(fromDate, toDate, ownerUser);
 
-        for (ClientRecord item : clientRecords) {
-            User user = new User(item.getUser().getId(), item.getUser().getName(), item.getUser().getSirname());
-            item.setUser(user);
-        }
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("records", clientRecords);
         modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
@@ -136,10 +131,12 @@ public class PaymentController/* implements ErrorController*/{
         clientPayment = clientPaymentService.add(clientPayment);    //получаем сохранённый объект с Id
 
         for (int i=0; i<products.size(); i++) {
-            Product product = productService.findProductById(products.get(i));
-            User worker = userService.findUserById(workers.get(i));
-            ClientPaymentProduct clientRecordProduct = new ClientPaymentProduct(clientPayment, product, prices.get(i), worker);
-            clientPaymentProductService.add(clientRecordProduct);
+            if (prices.get(i) != null) {
+                Product product = productService.findProductById(products.get(i));
+                User worker = userService.findUserById(workers.get(i));
+                ClientPaymentProduct clientRecordProduct = new ClientPaymentProduct(clientPayment, product, prices.get(i), worker);
+                clientPaymentProductService.add(clientRecordProduct);
+            }
         }
 
         clientPayment.setPaid(true);

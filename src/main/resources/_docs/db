@@ -77,8 +77,9 @@ CREATE TABLE "product" (
     id INTEGER NOT NULL default nextval('product_id_seq') PRIMARY KEY,
     name VARCHAR(240) NOT NULL,
     room_id INTEGER REFERENCES "room"(id),
-    duration REAL DEFAULT 1,              /*Длительность услуги в часах, 0,5 часа = 30 мин*/
-    remind_period INTEGER DEFAULT 30,        /*Время в днях через которое стоит напомнить о повторной услуг*/
+    duration REAL DEFAULT 1,                /*Длительность услуги в часах, 0,5 часа = 30 мин*/
+    remind_period INTEGER DEFAULT 30,       /*Время в днях через которое стоит напомнить о повторной услуг*/
+    primecost INTEGER DEFAULT 0,            /*Себестоимость услуги*/
     active BOOLEAN
 );
 ALTER SEQUENCE product_id_seq owned by "product".id;
@@ -114,7 +115,7 @@ CREATE TABLE "user_salary" (
     worker_id INTEGER REFERENCES "users"(id),
 	salary REAL,
 	salarypercent REAL,
-	startdate TIMESTAMP /*начало действия этой истемы оплаты - текущая дата*/
+	startdate TIMESTAMP         /*начало действия этой системы оплаты - текущая дата*/
 );
 ALTER SEQUENCE usersalary_id_seq owned by "user_salary".id;
 
@@ -128,7 +129,7 @@ CREATE TABLE "user_product_salary" (
     product_id INTEGER REFERENCES "product"(id),
 	salary REAL,
 	salarypercent REAL,
-	startdate TIMESTAMP,
+	startdate TIMESTAMP,                /*Начало этой системы оплаты, она может поменяться*/
 	enddate TIMESTAMP DEFAULT NULL
 );
 ALTER SEQUENCE user_product_salary_id_seq owned by "user_product_salary".id;

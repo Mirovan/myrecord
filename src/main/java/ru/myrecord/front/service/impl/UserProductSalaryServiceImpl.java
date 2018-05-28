@@ -33,13 +33,12 @@ public class UserProductSalaryServiceImpl implements UserProductSalaryService {
     }
 
     @Override
-    public UserProductSalary findByUserAndProduct(User user, Product product) {
-        Set<UserProductSalary> userProductSalaries = userProductSalaryDAO.findByWorkerAndProductOrderByStartdateDesc(user, product);
+    public UserProductSalary findByWorkerAndProduct(User worker, Product product) {
+        Set<UserProductSalary> userProductSalaries = userProductSalaryDAO.findByWorkerAndProductOrderByStartdateDesc(worker, product);
         if (userProductSalaries != null && userProductSalaries.iterator().hasNext())
             return userProductSalaries.iterator().next();
         else
             return null;
     }
-
 
 }

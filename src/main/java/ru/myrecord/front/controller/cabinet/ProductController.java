@@ -180,7 +180,7 @@ public class ProductController/* implements ErrorController*/{
 //    }
 
     /**
-     * Добавление услуги без привязки к комнате
+     * Форма Добавление услуги
      * */
     @RequestMapping(value="/cabinet/rooms/addproduct/", method = RequestMethod.GET)
     public ModelAndView addProductToRoom(
@@ -199,6 +199,7 @@ public class ProductController/* implements ErrorController*/{
         }
         product.setDuration(1f);
         product.setRemindPeriod(30);
+        product.setPrimeCost(0);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("action", "add");
@@ -255,6 +256,7 @@ public class ProductController/* implements ErrorController*/{
             product.setRoom( productUpd.getRoom() );
             product.setDuration( productUpd.getDuration() );
             product.setRemindPeriod( productUpd.getRemindPeriod() );
+            product.setPrimeCost( productUpd.getPrimeCost() );
             productService.update(product);
             return new ModelAndView("redirect:/cabinet/products/");
         }

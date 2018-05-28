@@ -5,15 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import ru.myrecord.front.data.model.adapters.WorkerSalary;
 import ru.myrecord.front.data.model.entities.*;
 import ru.myrecord.front.service.iface.*;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Controller
 public class ConfigController/* implements ErrorController*/{

@@ -65,38 +65,78 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Сотрудник</th>
-                                        <th>Оказано услуг на сумму</th>
+
+                                        <th>Выручка</th>
+                                        <th>Себестоимость услуг</th>
+                                        <th>Общая прибыль</th>
+                                        <th>Прибыль организации</th>
+
                                         <th>Фиксированная з/п</th>
-                                        <th>% за услуги</th>
+                                        <th>З/п за процент от прибыли</th>
                                         <!--<th>% за услуги по продуктам</th>-->
                                         <th>З/п итого</th>
                                         <th>Оказанные услуги</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="item, iterator : ${workerSalaries}">
+                                    <tr th:each="item, iterator : ${moneyStatisticList}">
                                         <th scope="row" th:text="@{${iterator.index} + 1}"></th>
                                         <td>
                                             <span th:text="@{${item.worker.name} + ' ' + ${item.worker.sirname}}"></span>
                                         </td>
+
                                         <td>
-                                            <span th:text="${item.salaryByRenderProducts}"></span>
+                                            <span th:text="${item.earnedMoney}"></span>
                                         </td>
                                         <td>
-                                            <span th:text="${item.monthSalary}"></span>
+                                            <span th:text="${item.primeCostSum}"></span>
                                         </td>
                                         <td>
-                                            <span th:text="${item.salaryByPercent}"></span>
+                                            <span th:text="@{${item.earnedMoney} - ${item.primeCostSum}}"></span>
                                         </td>
-                                        <!--<td>-->
-                                        <!--<span th:text="${item.salaryByPercentProducts}"></span>-->
-                                        <!--</td>-->
                                         <td>
-                                            <strong th:text="@{${item.salaryByRenderProducts} + ${item.monthSalary} + ${item.salaryByPercent}}"></strong>
+                                            <span th:text="@{${item.primeCostSum} - ${item.workerInterestSalary} - ${item.workerInterestProductSalary}}"></span>
+                                        </td>
+
+                                        <td>
+                                            <span th:text="${item.workerPeriodSalary}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:text="@{${item.workerInterestSalary} + ${item.workerInterestProductSalary}}"></span>
+                                        </td>
+                                        <td>
+                                            <strong th:text="@{${item.workerPeriodSalary} + ${item.workerInterestSalary} + ${item.workerInterestProductSalary}}"></strong>
                                         </td>
                                         <td>
                                             <span>В разработке</span>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <th scope="row">Итого</th>
+                                        <th scope="row">
+                                            <span th:text="${resPeriodMoneyStatistic.earnedMoney}"></span>
+                                        </th>
+                                        <th scope="row">
+                                            <span th:text="${resPeriodMoneyStatistic.primeCostSum}"></span>
+                                        </th>
+                                        <th scope="row">
+                                            <span th:text="@{${resPeriodMoneyStatistic.earnedMoney} - ${resPeriodMoneyStatistic.primeCostSum}}"></span>
+                                        </th>
+                                        <th scope="row">
+                                            <span th:text="@{${resPeriodMoneyStatistic.primeCostSum} - ${resPeriodMoneyStatistic.workerInterestSalary} - ${resPeriodMoneyStatistic.workerInterestProductSalary}}"></span>
+                                        </th>
+
+                                        <th scope="row">
+                                            <span th:text="${resPeriodMoneyStatistic.workerPeriodSalary}"></span>
+                                        </th>
+                                        <th scope="row">
+                                            <span th:text="@{${resPeriodMoneyStatistic.workerInterestSalary} + ${resPeriodMoneyStatistic.workerInterestProductSalary}}"></span>
+                                        </th>
+                                        <th scope="row">
+                                            <strong th:text="@{${resPeriodMoneyStatistic.workerPeriodSalary} + ${resPeriodMoneyStatistic.workerInterestSalary} + ${resPeriodMoneyStatistic.workerInterestProductSalary}}"></strong>
+                                        </th>
+                                        <td></td>
                                     </tr>
                                     </tbody>
                                 </table>

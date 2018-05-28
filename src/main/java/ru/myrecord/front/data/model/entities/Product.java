@@ -36,9 +36,11 @@ public class Product {
     @JsonIgnore
     private Set<User> users;
 
+    @Column(name = "primecost")
+    private Integer primeCost;
+
     @Column(name = "active")
     private Boolean active;
-
 
     public Integer getId() {
         return id;
@@ -86,6 +88,14 @@ public class Product {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Integer getPrimeCost() {
+        return primeCost;
+    }
+
+    public void setPrimeCost(Integer primeCost) {
+        this.primeCost = primeCost;
     }
 
     public Boolean getActive() {

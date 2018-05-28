@@ -82,11 +82,6 @@ public class PaymentController/* implements ErrorController*/{
 
         List<ClientRecord> clientRecords = clientRecordService.findByDates(fromDate, toDate, ownerUser);
 
-        for (ClientRecord item : clientRecords) {
-            User user = new User(item.getUser().getId(), item.getUser().getName(), item.getUser().getSirname());
-            item.setUser(user);
-        }
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("records", clientRecords);
         modelAndView.addObject("fromDate", fromDate.format(timeFormatter));
